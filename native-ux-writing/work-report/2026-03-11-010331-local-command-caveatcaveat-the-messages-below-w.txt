@@ -1,0 +1,2588 @@
+╭─── Claude Code v2.1.72 ──────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                 Welcome back 유나!                 │ started                 │
+│                                                    │ Run /init to create a … │
+│                      ▗ ▗   ▖ ▖                     │ ─────────────────────── │
+│                                                    │ Recent activity         │
+│                        ▘▘ ▝▝                       │ No recent activity      │
+│    Sonnet 4.6 · Claude Pro · nolta7@gmail.com's    │                         │
+│    Organization                                    │                         │
+│     ~/Desktop/workspace/native-ux-writing/docs     │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ /login                                                                        
+  ⎿  Login successful
+
+❯ 현재 디렉토리에 Native 앱 UX 라이팅 자동화를 위한 폴더 구조를 생성해 줘.      
+                                                                                
+                                                                                
+                                                                                
+📦 native-ux-writing                                                            
+                                                                                
+ ┣ 📂 .claude/                                                                  
+                                                                                
+ ┃ ┗ 📜 CLAUDE.md                 # AI가 참고할 전체적인 시스템 톤앤매너 규칙   
+                                                                                
+ ┣ 📂 docs/                                                                     
+                                                                                
+ ┃ ┣ 📜 01-os-guidelines.md       # iOS vs Android 용어 차이 (예: 생체인증      
+가이드)                                                                         
+                                                                                
+ ┃ ┗ 📜 02-glossary.md            # 공통 용어집                                 
+                                                                                
+ ┣ 📂 strings/                    # [핵심] Figma Page 대분류 기준 텍스트        
+                                                                                
+ ┃ ┣ 📂 01-common/                # 공통 버튼, 공통 얼럿                        
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┣ 📂 02-auth/                  # PIN 인증, 생체 인증, 로그인                 
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┣ 📂 03-onboarding/            # 서비스 초기 진입 및 가이드                  
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┣ 📂 04-home/                  # 메인 지갑 화면                              
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┣ 📂 05-token/                 # 코인/토큰 목록 및 상세                      
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┣ 📂 06-nft/                   # NFT 목록 및 상세                            
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┣ 📂 07-more/                  # 더보기 (설정, 내 정보, 고객센터 등)         
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┣ 📂 08-send/                  # 토큰/NFT 전송(송금) 프로세스                
+                                                                                
+ ┃ ┃ ┗ 📜 texts.json                                                            
+                                                                                
+ ┃ ┗ 📂 09-a2a/                   # App-to-App 연동 (타 서비스와의 서명/연결)   
+                                                                                
+ ┃   ┗ 📜 texts.json                                                            
+                                                                                
+ ┣ 📂 scripts/                                                                  
+                                                                                
+ ┃ ┗ 📜 split-csv-to-json.js      # CSV를 읽어 위 9개 폴더별로 JSON을 자동      
+분리하는 스크립트                                                               
+                                                                                
+ ┣ 📜 package.json                                                              
+                                                                                
+ ┗ 📜 README.md                                                                 
+
+⏺ Bash(mkdir -p /Users/yuna/Desktop/workspace/native-ux-writing/{.claude,docs,st
+      rings/{01-common,02-auth,03-onboarding,04-home,05-token,06-nft,07-more,08-
+      send,09-a2a},…)
+  ⎿  Done
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/.claude/CLAUDE.md)
+  ⎿  Wrote 47 lines to ../.claude/CLAUDE.md
+       1 # Native UX Writing - AI 시스템 가이드
+       2 
+       3 ## 프로젝트 개요
+       4 이 프로젝트는 Native 앱(iOS/Android)의 UX 라이팅을 자동화하기 위
+         한 텍스트 관리 시스템입니다.
+       5 
+       6 ## 톤 앤 매너 원칙
+       7 
+       8 ### 기본 원칙
+       9 - **명확성**: 사용자가 다음에 무엇을 해야 할지 항상 명확하게 안
+         내한다.
+      10 - **간결성**: 불필요한 단어를 제거하고 핵심 정보만 전달한다.
+     … +37 lines (ctrl+o to expand)
+
+⏺ Write(01-os-guidelines.md)
+  ⎿  Wrote 63 lines to 01-os-guidelines.md
+      1 # OS별 용어 가이드라인
+      2 
+      3 ## 기본 원칙
+      4 iOS와 Android는 동일한 기능에 다른 용어를 사용하는 경우가 있습니
+        다.
+      5 텍스트 작성 시 `os` 필드를 활용해 분기 처리하세요.
+      6 
+      7 ---
+      8 
+      9 ## 생체 인증
+     … +53 lines (ctrl+o to expand)
+
+⏺ Write(02-glossary.md)
+  ⎿  Wrote 72 lines to 02-glossary.md
+       1 # 공통 용어집
+       2 
+       3 > 이 용어집에 정의된 단어는 앱 전체에서 일관되게 사용해야 합니다
+         .
+       4 > 동의어나 유사어는 사용하지 않습니다.
+       5 
+       6 ---
+       7 
+       8 ## 지갑 / 자산
+       9 
+      10 | 표준 용어 | 사용 금지 동의어 | 설명 |
+     … +62 lines (ctrl+o to expand)
+
+⏺ 이제 각 strings 폴더의 texts.json 파일들을 생성합니다.
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/01-common/texts.json)
+  ⎿  Wrote 90 lines to ../strings/01-common/texts.json
+       1 [
+       2   {
+       3     "key": "btn_confirm",
+       4     "ko": "확인",
+       5     "en": "Confirm",
+       6     "context": "긍정 액션 공통 버튼",
+       7     "os": "all",
+       8     "type": "button"
+       9   },
+      10   {
+     … +80 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/02-auth/texts.json)
+  ⎿  Wrote 90 lines to ../strings/02-auth/texts.json
+       1 [
+       2   {
+       3     "key": "auth_pin_title",
+       4     "ko": "PIN을 입력해 주세요",
+       5     "en": "Enter Your PIN",
+       6     "context": "PIN 입력 화면 제목",
+       7     "os": "all",
+       8     "type": "title"
+       9   },
+      10   {
+     … +80 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/03-onboarding/texts.json)
+  ⎿  Wrote 90 lines to ../strings/03-onboarding/texts.json
+       1 [
+       2   {
+       3     "key": "onboarding_welcome_title",
+       4     "ko": "환영합니다",
+       5     "en": "Welcome",
+       6     "context": "온보딩 첫 화면 제목",
+       7     "os": "all",
+       8     "type": "title"
+       9   },
+      10   {
+     … +80 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/04-home/texts.json)
+  ⎿  Wrote 74 lines to ../strings/04-home/texts.json
+       1 [
+       2   {
+       3     "key": "home_total_assets_label",
+       4     "ko": "총 자산",
+       5     "en": "Total Assets",
+       6     "context": "홈 화면 총 자산 합계 레이블",
+       7     "os": "all",
+       8     "type": "label"
+       9   },
+      10   {
+     … +64 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/05-token/texts.json)
+  ⎿  Wrote 74 lines to ../strings/05-token/texts.json
+       1 [
+       2   {
+       3     "key": "token_list_title",
+       4     "ko": "토큰",
+       5     "en": "Tokens",
+       6     "context": "토큰 목록 화면 제목",
+       7     "os": "all",
+       8     "type": "title"
+       9   },
+      10   {
+     … +64 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/06-nft/texts.json)
+  ⎿  Wrote 82 lines to ../strings/06-nft/texts.json
+       1 [
+       2   {
+       3     "key": "nft_list_title",
+       4     "ko": "NFT",
+       5     "en": "NFTs",
+       6     "context": "NFT 목록 화면 제목",
+       7     "os": "all",
+       8     "type": "title"
+       9   },
+      10   {
+     … +72 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/07-more/texts.json)
+  ⎿  Wrote 122 lines to ../strings/07-more/texts.json
+       1 [
+       2   {
+       3     "key": "more_title",
+       4     "ko": "더보기",
+       5     "en": "More",
+       6     "context": "더보기 탭 제목",
+       7     "os": "all",
+       8     "type": "title"
+       9   },
+      10   {
+     … +112 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/08-send/texts.json)
+  ⎿  Wrote 122 lines to ../strings/08-send/texts.json
+       1 [
+       2   {
+       3     "key": "send_title",
+       4     "ko": "전송",
+       5     "en": "Send",
+       6     "context": "전송 화면 제목",
+       7     "os": "all",
+       8     "type": "title"
+       9   },
+      10   {
+     … +112 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/09-a2a/texts.json)
+  ⎿  Wrote 106 lines to ../strings/09-a2a/texts.json
+       1 [
+       2   {
+       3     "key": "a2a_connect_title",
+       4     "ko": "연결 요청",
+       5     "en": "Connection Request",
+       6     "context": "A2A 서비스 연결 요청 화면 제목",
+       7     "os": "all",
+       8     "type": "title"
+       9   },
+      10   {
+     … +96 lines (ctrl+o to expand)
+
+⏺ 이제 스크립트와 설정 파일을 생성합니다.
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/scripts/split-csv-to-json.js)
+  ⎿  Wrote 189 lines to ../scripts/split-csv-to-json.js
+       1 #!/usr/bin/env node
+       2 /**
+       3  * split-csv-to-json.js
+       4  *
+       5  * CSV 파일을 읽어 strings/ 하위 9개 폴더의 texts.json으로 자동 
+         분리하는 스크립트.
+       6  *
+       7  * [CSV 컬럼 형식]
+       8  * section, key, ko, en, context, os, type
+       9  *
+      10  * [section 값 → 폴더 매핑]
+     … +179 lines (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/package.json)
+  ⎿  Wrote 11 lines to ../package.json
+       1 {
+       2   "name": "native-ux-writing",
+       3   "version": "1.0.0",
+       4   "description": "Native 앱 UX 라이팅 자동화 텍스트 관리 시스템"
+         ,
+       5   "scripts": {
+       6     "split": "node scripts/split-csv-to-json.js",
+       7     "split:dry": "node scripts/split-csv-to-json.js --dry-run"
+       8   },
+       9   "keywords": ["ux-writing", "i18n", "native-app"],
+      10   "license": "MIT"
+     … +1 line (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/README.md)
+  ⎿  Wrote 72 lines to ../README.md
+       1 # Native UX Writing
+       2 
+       3 Native 앱(iOS/Android)의 UX 라이팅을 체계적으로 관리하고 자동화
+         하기 위한 텍스트 관리 시스템입니다.
+       4 
+       5 ## 폴더 구조
+       6 
+       7 ```
+       8 native-ux-writing/
+       9 ├── .claude/
+      10 │   └── CLAUDE.md          # AI 참고용 톤앤매너 및 시스템 규칙
+     … +62 lines (ctrl+o to expand)
+
+⏺ Searched for 1 pattern (ctrl+o to expand)
+
+⏺ 폴더 구조 생성이 완료되었습니다. 생성된 내용 요약입니다:
+
+  파일 14개 / 디렉토리 12개
+
+  ┌──────────────────────────────┬───────────────────────────────────────────┐
+  │             파일             │                   내용                    │
+  ├──────────────────────────────┼───────────────────────────────────────────┤
+  │ .claude/CLAUDE.md            │ 톤앤매너, 문체 규칙, 폴더-화면 매핑, JSON │
+  │                              │  스키마 정의                              │
+  ├──────────────────────────────┼───────────────────────────────────────────┤
+  │ docs/01-os-guidelines.md     │ 생체 인증·권한·앱스토어 등 iOS/Android    │
+  │                              │ 용어 차이 표                              │
+  ├──────────────────────────────┼───────────────────────────────────────────┤
+  │ docs/02-glossary.md          │ 지갑/자산/인증/전송/UI 표준 용어 + 사용   │
+  │                              │ 금지 동의어                               │
+  ├──────────────────────────────┼───────────────────────────────────────────┤
+  │ strings/*/texts.json         │ 각 화면별 샘플 텍스트 (한/영, os, type    │
+  │                              │ 포함)                                     │
+  ├──────────────────────────────┼───────────────────────────────────────────┤
+  │ scripts/split-csv-to-json.js │ CSV → 9개 폴더 JSON 자동 분리 스크립트    │
+  ├──────────────────────────────┼───────────────────────────────────────────┤
+  │ package.json                 │ npm run split <file.csv> / npm run        │
+  │                              │ split:dry                                 │
+  ├──────────────────────────────┼───────────────────────────────────────────┤
+  │ README.md                    │ 구조 설명 + CSV 사용법 가이드             │
+  └──────────────────────────────┴───────────────────────────────────────────┘
+
+  CSV 일괄 업데이트 방법:
+  # Figma/스프레드시트에서 CSV 내보낸 후
+  node scripts/split-csv-to-json.js strings.csv
+
+  # 미리보기 (파일 저장 없음)
+  node scripts/split-csv-to-json.js strings.csv --dry-run
+
+  CSV 컬럼: section, key, ko, en, context, os, type
+
+✻ Crunched for 4m 8s
+
+❯ 현재 디렉토리의 `docs/` 폴더 안에 아래 5개의 마크다운 파일을 생성해 줘.       
+주의사항: 파일 안에는 단 한 글자의 텍스트나 템플릿도 임의로 작성하지 마. 완전히 
+ 내용이 없는 0바이트의 '빈 파일(Empty file)' 상태로만 만들어야 해. (터미널의    
+`touch` 명령어를 사용해서 생성하는 것을 권장해.)                                
+                                                                                
+- 01-voice-and-tone.md                                                          
+- 02-writing-principle.md                                                       
+- 03-ux-pattern-guidelines.md                                                   
+- 04-content-writing.md                                                         
+- 05-klip-glossary.md                                                           
+
+⏺ Bash(touch
+      /Users/yuna/Desktop/workspace/native-ux-writing/docs/01-voice-and-tone.md
+      /Users/yuna/Desktop/workspace/native-ux-writing/docs/02-writing-principle.
+      md /Us…)
+  ⎿  Done
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ 5개 파일 모두 0바이트 빈 파일로 생성되었습니다.
+
+  docs/
+  ├── 01-os-guidelines.md         (기존)
+  ├── 01-voice-and-tone.md        0B ✓
+  ├── 02-glossary.md              (기존)
+  ├── 02-writing-principle.md     0B ✓
+  ├── 03-ux-pattern-guidelines.md 0B ✓
+  ├── 04-content-writing.md       0B ✓
+  └── 05-klip-glossary.md         0B ✓
+
+❯ 파일명의 숫자가 겹치지 않도록 변경해줘. 02-glossary.md는 삭제해줘.            
+
+⏺ 현재 상태를 보면 01-이 두 개, 02-가 두 개 겹쳐 있습니다. 01-os-guidelines.md를
+   기준으로 나머지를 순서대로 밀겠습니다.
+
+⏺ Bash(cd /Users/yuna/Desktop/workspace/native-ux-writing/docs && mv
+      01-voice-and-tone.md 02-voice-and-tone.md && mv 02-writing-principle.md
+      03-writing-principle.md &&…)
+  ⎿  Done
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ 완료되었습니다.
+
+  docs/
+  ├── 01-os-guidelines.md
+  ├── 02-voice-and-tone.md
+  ├── 03-writing-principle.md
+  ├── 04-ux-pattern-guidelines.md
+  ├── 05-content-writing.md
+  └── 06-klip-glossary.md
+
+  02-glossary.md 삭제, 나머지 5개 파일 번호 순서대로 정렬했습니다.
+
+❯ /Users/yuna/Downloads/claudeTest_String_Common.xlsx 파일을 읽어서, 공통       
+텍스트 데이터를 파싱해 줘.                                                      
+
+⏺ Bash(python3 -c "import openpyxl; print('openpyxl OK')" 2>/dev/null || python3
+       -c "import pandas; print('pandas OK')" 2>/dev/null || echo "neither
+      available")
+  ⎿  Interrupted · What should Claude do instead?
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ .xlsx는 바이너리 파일이라 직접 읽을 수 없습니다. 파싱하려면 실행 환경이
+  필요합니다.
+
+  몇 가지 방법 중 선호하시는 방식을 알려주세요:
+
+  1. Python 스크립트 실행 — openpyxl 또는 pandas로 파싱 (설치 필요할 수 있음)
+  2. Node.js 스크립트 실행 — xlsx 패키지로 파싱 (npm install xlsx)
+  3. 직접 변환 후 전달 — 파일을 CSV로 내보내서 /Users/yuna/Downloads/에 저장해
+  주시면 바로 읽을 수 있습니다
+
+  어떤 방법으로 진행할까요?
+
+❯ cancel                                                                        
+
+⏺ 알겠습니다. 파일을 CSV로 내보내거나 다른 방법이 준비되면 말씀해 주세요.
+
+❯ /Users/yuna/Downloads/claudeTest_String_Common.xlsx\ -\ Native\ v2.8.0.csv    
+파일을 읽어서, 공통 텍스트 데이터를 파싱해줘.                                   
+파싱한 데이터를 바탕으로 'native-ux-writing/strings/01-common/common.md' 파일을 
+ 생성하고, 아래의 규칙에 맞춰 마크다운 구조로 정리해줘.                         
+[작업규칙]                                                                      
+1. 데이터를 텍스트의 성격에 따라 카테고리화(예:버튼, 네트워크, 권한 안내        
+등)하여 '##' 헤딩으로 분류해.                                                   
+2. 각 카테고리 아래에는 마크다운 표를 생성해.  표의 칼럼은 '| Key | 한국어 문구 
+ | UI 분류 | 맥락 및 제약 조건 |' 4개로 구성해.                                 
+3. CSV 데이터에서 식별자(Key)와 실제 한국어 텍스트를 추출하여 표에 매핑해.      
+4. 'UI 분류'와 '맥락 및 제약조건' 칼럼은 네가 파일의 텍스트 컨텍스트를 분석해서 
+ 적절히 유추해서 채워 넣어줘. (예: 텍스트가 짧은 동사형이면 '버튼'으로 유추)    
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ 데이터를 분석해서 마크다운 파일을 생성합니다.
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/01-common/common.md)
+  ⎿  Wrote 248 lines to ../strings/01-common/common.md
+       1 # Common Strings
+       2 
+       3 > 출처: `claudeTest_String_Common.xlsx - Native v2.8.0.csv`
+       4 > 앱 전반에서 재사용되는 공통 UI 텍스트를 카테고리별로 정리한 문
+         서입니다.
+       5 
+       6 ---
+       7 
+       8 ## 공통 버튼
+       9 
+      10 | Key | 한국어 문구 | UI 분류 | 맥락 및 제약 조건 |
+     … +238 lines (ctrl+o to expand)
+
+⏺ strings/01-common/common.md 생성 완료입니다. 파싱한 147개 항목을 아래 11개 
+  카테고리로 분류했습니다.
+
+  ┌─────────────────────────────┬─────────┐
+  │         ## 카테고리         │ 항목 수 │
+  ├─────────────────────────────┼─────────┤
+  │ 공통 버튼                   │ 40개    │
+  ├─────────────────────────────┼─────────┤
+  │ 하단 네비게이션             │ 7개     │
+  ├─────────────────────────────┼─────────┤
+  │ 거래내역 — 내역 표시        │ 10개    │
+  ├─────────────────────────────┼─────────┤
+  │ 거래내역 — 시간 표시        │ 4개     │
+  ├─────────────────────────────┼─────────┤
+  │ 거래내역 — 상태             │ 6개     │
+  ├─────────────────────────────┼─────────┤
+  │ 거래내역 — 상세 컬럼 레이블 │ 12개    │
+  ├─────────────────────────────┼─────────┤
+  │ 거래내역 — 시스템 메시지    │ 3개     │
+  ├─────────────────────────────┼─────────┤
+  │ 스낵바 / 인앱 알림          │ 6개     │
+  ├─────────────────────────────┼─────────┤
+  │ 네트워크                    │ 11개    │
+  ├─────────────────────────────┼─────────┤
+  │ 토큰 표준                   │ 4개     │
+  ├─────────────────────────────┼─────────┤
+  │ 단위 및 수량                │ 12개    │
+  ├─────────────────────────────┼─────────┤
+  │ 기간 필터                   │ 5개     │
+  ├─────────────────────────────┼─────────┤
+  │ 상태 값                     │ 11개    │
+  ├─────────────────────────────┼─────────┤
+  │ 기타 / 공통 레이블          │ 16개    │
+  └─────────────────────────────┴─────────┘
+
+  UI 분류 유추 기준:
+  - 동사형 짧은 단어 → 버튼
+  - {{변수}} 포함 → 동적 치환이 필요함을 맥락 및 제약 조건에 명시
+  - (미지원) 접미 항목 → 비활성 UI 적용 안내 추가
+  - common_quitApp → Android 전용 패턴으로 명시
+
+✻ Cooked for 2m 25s
+
+❯ 방금 생성한 'common.md' 파일을 읽고, 마크다운 표에 있는 데이터를 기반으로     
+메타데이터가 포함된 단일 뎁스(Flat) 구조의 'strings/01-common/texts.json'       
+파일을 업데이트 해줘.                                                           
+[작업 규칙]                                                                     
+1. 기존에 작성된 'texts.json'의 내용은 모두 삭제해줘.                           
+2. 중첩 구조(Nested)를 만들지마. 최상위 객체(depth 1)의 key는 마크다운 표에서   
+추출한 'key'값(예: 'common_yes')을 그대로 사용해. (백틱 기호는 제거)            
+3. 해당 key의 vlaue는 단순 문자열이 아니라, 아래 6가지 속성을 가진              
+객체(object)로 구성해줘.                                                        
+- 'key' : 마크다운 표의 key값과 동일                                            
+- 'ko' : 마크다운 표의 '한국어 문구(KO)' 추출 값 (안에 들어 있는 '<br>' 태그는  
+텍스트 그대로 유지)                                                             
+- 'en' : 현재는 빈 문자열 '""' (추후 번역을 위해 비워둠)                        
+
+⏺ 작업 규칙 3번에서 6가지 속성 중 3개(key, ko, en)만 확인됩니다. 나머지 3개
+  속성이 메시지에서 잘린 것 같습니다.
+
+  나머지 속성을 알려주시면 바로 작업하겠습니다. 기존 texts.json의 구조(context,
+  os, type)를 그대로 사용할까요?
+
+❯ cancel                                                                        
+
+⏺ 알겠습니다. 나머지 속성이 준비되면 말씀해 주세요.
+
+❯ - 'context': 마크다운 표의 '맥락 및 제약 조건' 추출값                         
+- 'os' : '"all"'(공통 폴더이므로 기본값으로 all 할당)                           
+- 'type' : 마크다운 표의 'UI 분류' 추출 값                                      
+4. 완성된 json을 'strings/01-common/texts.json' 파일에 들여쓰기 2칸으로 덮어써  
+줘.                                                                             
+5. 실행이 끝나면 생성된 json의 첫 번째 항목('common_yes')이 어떻게 생겼는지     
+터미널에 로그로 보여줘.                                                         
+
+⏺ common.md를 기반으로 전체 JSON을 작성합니다.
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/01-common/texts.json)
+  ⎿  Added 1143 lines, removed 63 lines
+         1 -[                                                            
+         2 -  {                                                          
+         3 -    "key": "btn_confirm",                                    
+         1 +{                                                            
+         2 +  "common_yes": {                                            
+         3 +    "key": "common_yes",                                     
+         4 +    "ko": "예",                                              
+         5 +    "en": "",                                                
+         6 +    "context": "확인/동의 다이얼로그의 긍정 응답. common_no와
+           + 쌍으로 사용",                                               
+         7 +    "os": "all",                                             
+         8 +    "type": "버튼"                                           
+         9 +  },                                                         
+        10 +  "common_no": {                                             
+        11 +    "key": "common_no",                                      
+        12 +    "ko": "아니요",                                          
+        13 +    "en": "",                                                
+        14 +    "context": "확인/동의 다이얼로그의 부정 응답. common_yes 
+           +와 쌍으로 사용",                                             
+        15 +    "os": "all",                                             
+        16 +    "type": "버튼"                                           
+        17 +  },                                                         
+        18 +  "common_ok": {                                             
+        19 +    "key": "common_ok",                                      
+        20      "ko": "확인",
+         5 -    "en": "Confirm",                                         
+         6 -    "context": "긍정 액션 공통 버튼",                        
+        21 +    "en": "",                                                
+        22 +    "context": "단일 액션 얼럿의 닫기/승인 버튼. Primary 스타
+           +일 적용",                                                    
+        23      "os": "all",
+         8 -    "type": "button"                                         
+        24 +    "type": "버튼"                                           
+        25    },
+        10 -  {                                                          
+        11 -    "key": "btn_cancel",                                     
+        26 +  "common_cancel": {                                         
+        27 +    "key": "common_cancel",                                  
+        28      "ko": "취소",
+        13 -    "en": "Cancel",                                          
+        14 -    "context": "취소/중단 공통 버튼",                        
+        29 +    "en": "",                                                
+        30 +    "context": "작업 중단 및 이전 상태로 복귀. Secondary 스타
+           +일 적용",                                                    
+        31      "os": "all",
+        16 -    "type": "button"                                         
+        32 +    "type": "버튼"                                           
+        33    },
+        18 -  {                                                          
+        19 -    "key": "btn_next",                                       
+        34 +  "common_save": {                                           
+        35 +    "key": "common_save",                                    
+        36 +    "ko": "저장",                                            
+        37 +    "en": "",                                                
+        38 +    "context": "편집 완료 후 데이터 저장. 변경사항 없을 시 비
+           +활성화",                                                     
+        39 +    "os": "all",                                             
+        40 +    "type": "버튼"                                           
+        41 +  },                                                         
+        42 +  "common_next": {                                           
+        43 +    "key": "common_next",                                    
+        44      "ko": "다음",
+        21 -    "en": "Next",                                            
+        22 -    "context": "단계 진행 공통 버튼",                        
+        45 +    "en": "",                                                
+        46 +    "context": "멀티 스텝 플로우에서 다음 단계로 진행",      
+        47      "os": "all",
+        24 -    "type": "button"                                         
+        48 +    "type": "버튼"                                           
+        49    },
+        26 -  {                                                          
+        27 -    "key": "btn_done",                                       
+        28 -    "ko": "완료",                                            
+        29 -    "en": "Done",                                            
+        30 -    "context": "프로세스 종료 공통 버튼",                    
+        50 +  "common_later": {                                          
+        51 +    "key": "common_later",                                   
+        52 +    "ko": "다음에",                                          
+        53 +    "en": "",                                                
+        54 +    "context": "선택적 기능(알림 허용 등)을 나중에 처리하는  
+           +스킵 버튼",                                                  
+        55      "os": "all",
+        32 -    "type": "button"                                         
+        56 +    "type": "버튼"                                           
+        57    },
+        34 -  {                                                          
+        35 -    "key": "btn_close",                                      
+        36 -    "ko": "닫기",                                            
+        37 -    "en": "Close",                                           
+        38 -    "context": "모달/바텀시트 닫기 버튼",                    
+        58 +  "common_logout": {                                         
+        59 +    "key": "common_logout",                                  
+        60 +    "ko": "로그아웃",                                        
+        61 +    "en": "",                                                
+        62 +    "context": "계정 세션 종료. 확인 얼럿 선행 필요",        
+        63      "os": "all",
+        40 -    "type": "button"                                         
+        64 +    "type": "버튼"                                           
+        65    },
+        42 -  {                                                          
+        43 -    "key": "btn_copy",                                       
+        66 +  "common_update": {                                         
+        67 +    "key": "common_update",                                  
+        68 +    "ko": "업데이트",                                        
+        69 +    "en": "",                                                
+        70 +    "context": "앱 강제/선택 업데이트 유도 화면에서 사용",   
+        71 +    "os": "all",                                             
+        72 +    "type": "버튼"                                           
+        73 +  },                                                         
+        74 +  "common_cs": {                                             
+        75 +    "key": "common_cs",                                      
+        76 +    "ko": "고객센터",                                        
+        77 +    "en": "",                                                
+        78 +    "context": "고객센터 화면 이동 또는 외부 링크 연결",     
+        79 +    "os": "all",                                             
+        80 +    "type": "버튼"                                           
+        81 +  },                                                         
+        82 +  "common_verify": {                                         
+        83 +    "key": "common_verify",                                  
+        84 +    "ko": "본인인증",                                        
+        85 +    "en": "",                                                
+        86 +    "context": "본인인증 플로우 진입 CTA",                   
+        87 +    "os": "all",                                             
+        88 +    "type": "버튼"                                           
+        89 +  },                                                         
+        90 +  "common_more": {                                           
+        91 +    "key": "common_more",                                    
+        92 +    "ko": "더보기",                                          
+        93 +    "en": "",                                                
+        94 +    "context": "목록 또는 콘텐츠의 추가 항목 로드",          
+        95 +    "os": "all",                                             
+        96 +    "type": "버튼"                                           
+        97 +  },                                                         
+        98 +  "common_showAll": {                                        
+        99 +    "key": "common_showAll",                                 
+       100 +    "ko": "전체 보기",                                       
+       101 +    "en": "",                                                
+       102 +    "context": "축약된 목록을 전체 화면으로 전환",           
+       103 +    "os": "all",                                             
+       104 +    "type": "버튼"                                           
+       105 +  },                                                         
+       106 +  "common_showDetail": {                                     
+       107 +    "key": "common_showDetail",                              
+       108 +    "ko": "자세히 보기",                                     
+       109 +    "en": "",                                                
+       110 +    "context": "상세 정보 화면으로 이동",                    
+       111 +    "os": "all",                                             
+       112 +    "type": "버튼"                                           
+       113 +  },                                                         
+       114 +  "common_move": {                                           
+       115 +    "key": "common_move",                                    
+       116 +    "ko": "이동",                                            
+       117 +    "en": "",                                                
+       118 +    "context": "특정 화면 또는 섹션으로 이동",               
+       119 +    "os": "all",                                             
+       120 +    "type": "버튼"                                           
+       121 +  },                                                         
+       122 +  "common_use": {                                            
+       123 +    "key": "common_use",                                     
+       124 +    "ko": "사용",                                            
+       125 +    "en": "",                                                
+       126 +    "context": "기능 또는 아이템 사용 처리 (짧은 형태)",     
+       127 +    "os": "all",                                             
+       128 +    "type": "버튼"                                           
+       129 +  },                                                         
+       130 +  "common_useNft": {                                         
+       131 +    "key": "common_useNft",                                  
+       132 +    "ko": "사용하기",                                        
+       133 +    "en": "",                                                
+       134 +    "context": "NFT 티켓/쿠폰 등의 사용 처리 CTA",           
+       135 +    "os": "all",                                             
+       136 +    "type": "버튼"                                           
+       137 +  },                                                         
+       138 +  "common_add": {                                            
+       139 +    "key": "common_add",                                     
+       140 +    "ko": "추가",                                            
+       141 +    "en": "",                                                
+       142 +    "context": "항목(토큰, 주소 등) 추가. 아이콘과 병행 사용 
+           +가능",                                                       
+       143 +    "os": "all",                                             
+       144 +    "type": "버튼"                                           
+       145 +  },                                                         
+       146 +  "common_copy": {                                           
+       147 +    "key": "common_copy",                                    
+       148      "ko": "복사",
+        45 -    "en": "Copy",                                            
+        46 -    "context": "텍스트 클립보드 복사 버튼",                  
+       149 +    "en": "",                                                
+       150 +    "context": "주소·해시 등 텍스트를 클립보드에 복사",      
+       151      "os": "all",
+        48 -    "type": "button"                                         
+       152 +    "type": "버튼"                                           
+       153    },
+        50 -  {                                                          
+        51 -    "key": "btn_retry",                                      
+       154 +  "common_exchange": {                                       
+       155 +    "key": "common_exchange",                                
+       156 +    "ko": "교환하기",                                        
+       157 +    "en": "",                                                
+       158 +    "context": "토큰 스왑/교환 플로우 진입 CTA",             
+       159 +    "os": "all",                                             
+       160 +    "type": "버튼"                                           
+       161 +  },                                                         
+       162 +  "common_receive": {                                        
+       163 +    "key": "common_receive",                                 
+       164 +    "ko": "받기",                                            
+       165 +    "en": "",                                                
+       166 +    "context": "토큰/NFT 수신 플로우 진입. 홈·상세 화면 사용"
+           +,                                                            
+       167 +    "os": "all",                                             
+       168 +    "type": "버튼"                                           
+       169 +  },                                                         
+       170 +  "common_send": {                                           
+       171 +    "key": "common_send",                                    
+       172 +    "ko": "보내기",                                          
+       173 +    "en": "",                                                
+       174 +    "context": "토큰/NFT 전송 플로우 진입. 홈·상세 화면 사용"
+           +,                                                            
+       175 +    "os": "all",                                             
+       176 +    "type": "버튼"                                           
+       177 +  },                                                         
+       178 +  "common_tokenSend": {                                      
+       179 +    "key": "common_tokenSend",                               
+       180 +    "ko": "토큰 보내기",                                     
+       181 +    "en": "",                                                
+       182 +    "context": "NFT 상세 등에서 토큰 전송을 명시적으로 구분할
+           + 때 사용",                                                   
+       183 +    "os": "all",                                             
+       184 +    "type": "버튼"                                           
+       185 +  },                                                         
+       186 +  "common_cantSend": {                                       
+       187 +    "key": "common_cantSend",                                
+       188 +    "ko": "보내기 불가",                                     
+       189 +    "en": "",                                                
+       190 +    "context": "미지원 네트워크 등 전송 불가 상태의 비활성 버
+           +튼",                                                         
+       191 +    "os": "all",                                             
+       192 +    "type": "버튼"                                           
+       193 +  },                                                         
+       194 +  "common_sell": {                                           
+       195 +    "key": "common_sell",                                    
+       196 +    "ko": "판매하기",                                        
+       197 +    "en": "",                                                
+       198 +    "context": "NFT 마켓플레이스 연동 판매 플로우 진입 CTA", 
+       199 +    "os": "all",                                             
+       200 +    "type": "버튼"                                           
+       201 +  },                                                         
+       202 +  "common_close": {                                          
+       203 +    "key": "common_close",                                   
+       204 +    "ko": "닫기",                                            
+       205 +    "en": "",                                                
+       206 +    "context": "바텀시트·모달 닫기. 우측 상단 또는 하단 배치"
+           +,                                                            
+       207 +    "os": "all",                                             
+       208 +    "type": "버튼"                                           
+       209 +  },                                                         
+       210 +  "common_deleteNft": {                                      
+       211 +    "key": "common_deleteNft",                               
+       212 +    "ko": "삭제하기",                                        
+       213 +    "en": "",                                                
+       214 +    "context": "NFT 삭제 액션. 확인 얼럿 선행 필요. Destructi
+           +ve 스타일",                                                  
+       215 +    "os": "all",                                             
+       216 +    "type": "버튼"                                           
+       217 +  },                                                         
+       218 +  "common_share": {                                          
+       219 +    "key": "common_share",                                   
+       220 +    "ko": "공유하기",                                        
+       221 +    "en": "",                                                
+       222 +    "context": "OS 공유 시트(Share Sheet) 호출",             
+       223 +    "os": "all",                                             
+       224 +    "type": "버튼"                                           
+       225 +  },                                                         
+       226 +  "common_retry": {                                          
+       227 +    "key": "common_retry",                                   
+       228      "ko": "다시 시도",
+        53 -    "en": "Try Again",                                       
+        54 -    "context": "오류 발생 후 재시도 버튼",                   
+       229 +    "en": "",                                                
+       230 +    "context": "오류 발생 후 동일 요청 재시도",              
+       231      "os": "all",
+        56 -    "type": "button"                                         
+       232 +    "type": "버튼"                                           
+       233    },
+        58 -  {                                                          
+        59 -    "key": "alert_network_error_title",                      
+        60 -    "ko": "네트워크 연결을 확인해 주세요",                   
+        61 -    "en": "Check Your Network Connection",                   
+        62 -    "context": "네트워크 오류 공통 얼럿 제목",               
+       234 +  "common_delete": {                                         
+       235 +    "key": "common_delete",                                  
+       236 +    "ko": "삭제",                                            
+       237 +    "en": "",                                                
+       238 +    "context": "항목 삭제. 확인 얼럿 선행 필요. Destructive  
+           +스타일",                                                     
+       239      "os": "all",
+        64 -    "type": "title"                                          
+       240 +    "type": "버튼"                                           
+       241    },
+        66 -  {                                                          
+        67 -    "key": "alert_network_error_desc",                       
+        68 -    "ko": "인터넷 연결이 원활하지 않습니다. 연결 상태를 확인 
+           -한 후 다시 시도해 주세요.",                                  
+        69 -    "en": "Your internet connection seems unstable. Please ch
+           -eck and try again.",                                         
+        70 -    "context": "네트워크 오류 공통 얼럿 본문",               
+       242 +  "common_edit": {                                           
+       243 +    "key": "common_edit",                                    
+       244 +    "ko": "변경",                                            
+       245 +    "en": "",                                                
+       246 +    "context": "정보 수정 모드 진입 또는 값 변경",           
+       247      "os": "all",
+        72 -    "type": "description"                                    
+       248 +    "type": "버튼"                                           
+       249    },
+        74 -  {                                                          
+        75 -    "key": "toast_copied",                                   
+        76 -    "ko": "복사되었습니다",                                  
+        77 -    "en": "Copied",                                          
+        78 -    "context": "복사 성공 토스트 메시지",                    
+       250 +  "common_setting": {                                        
+       251 +    "key": "common_setting",                                 
+       252 +    "ko": "설정",                                            
+       253 +    "en": "",                                                
+       254 +    "context": "앱 내 설정 화면 이동",                       
+       255      "os": "all",
+        80 -    "type": "toast"                                          
+       256 +    "type": "버튼"                                           
+       257    },
+        82 -  {                                                          
+        83 -    "key": "label_loading",                                  
+        84 -    "ko": "처리 중",                                         
+        85 -    "en": "Processing",                                      
+        86 -    "context": "로딩 상태 공통 레이블",                      
+       258 +  "common_goToSetting": {                                    
+       259 +    "key": "common_goToSetting",                             
+       260 +    "ko": "설정으로 이동",                                   
+       261 +    "en": "",                                                
+       262 +    "context": "OS 시스템 설정 앱으로 이동 (권한 허용 유도 시
+           + 사용)",                                                     
+       263      "os": "all",
+        88 -    "type": "label"                                          
+       264 +    "type": "버튼"                                           
+       265 +  },                                                         
+       266 +  "common_addContacts": {                                    
+       267 +    "key": "common_addContacts",                             
+       268 +    "ko": "주소록에 추가",                                   
+       269 +    "en": "",                                                
+       270 +    "context": "트랜잭션 상대방 주소를 주소록에 저장",       
+       271 +    "os": "all",                                             
+       272 +    "type": "버튼"                                           
+       273 +  },                                                         
+       274 +  "common_refresh": {                                        
+       275 +    "key": "common_refresh",                                 
+       276 +    "ko": "새로고침",                                        
+       277 +    "en": "",                                                
+       278 +    "context": "현재 화면 데이터 수동 갱신",                 
+       279 +    "os": "all",                                             
+       280 +    "type": "버튼"                                           
+       281 +  },                                                         
+       282 +  "common_showHistory": {                                    
+       283 +    "key": "common_showHistory",                             
+       284 +    "ko": "내역 보기",                                       
+       285 +    "en": "",                                                
+       286 +    "context": "거래내역 화면으로 이동",                     
+       287 +    "os": "all",                                             
+       288 +    "type": "버튼"                                           
+       289 +  },                                                         
+       290 +  "common_connect": {                                        
+       291 +    "key": "common_connect",                                 
+       292 +    "ko": "연결",                                            
+       293 +    "en": "",                                                
+       294 +    "context": "A2A/WalletConnect 서비스 연결 요청 승인",    
+       295 +    "os": "all",                                             
+       296 +    "type": "버튼"                                           
+       297 +  },                                                         
+       298 +  "common_sign": {                                           
+       299 +    "key": "common_sign",                                    
+       300 +    "ko": "서명",                                            
+       301 +    "en": "",                                                
+       302 +    "context": "메시지 또는 트랜잭션 서명 승인. 보안 액션이므
+           +로 신중히 배치",                                             
+       303 +    "os": "all",                                             
+       304 +    "type": "버튼"                                           
+       305 +  },                                                         
+       306 +  "common_approve": {                                        
+       307 +    "key": "common_approve",                                 
+       308 +    "ko": "승인",                                            
+       309 +    "en": "",                                                
+       310 +    "context": "컨트랙트 권한 허용(Approve) 처리",           
+       311 +    "os": "all",                                             
+       312 +    "type": "버튼"                                           
+       313 +  },                                                         
+       314 +  "common_learnMore": {                                      
+       315 +    "key": "common_learnMore",                               
+       316 +    "ko": "더 알아보기",                                     
+       317 +    "en": "",                                                
+       318 +    "context": "외부 도움말·블로그 링크 연결. 텍스트 버튼 또 
+           +는 인라인 링크",                                             
+       319 +    "os": "all",                                             
+       320 +    "type": "버튼"                                           
+       321 +  },                                                         
+       322 +  "common_tabHome": {                                        
+       323 +    "key": "common_tabHome",                                 
+       324 +    "ko": "Home",                                            
+       325 +    "en": "",                                                
+       326 +    "context": "메인 지갑 홈 탭. 영문 고정 표기",            
+       327 +    "os": "all",                                             
+       328 +    "type": "탭 레이블"                                      
+       329 +  },                                                         
+       330 +  "common_tabToken": {                                       
+       331 +    "key": "common_tabToken",                                
+       332 +    "ko": "Token",                                           
+       333 +    "en": "",                                                
+       334 +    "context": "토큰 목록 탭. 영문 고정 표기",               
+       335 +    "os": "all",                                             
+       336 +    "type": "탭 레이블"                                      
+       337 +  },                                                         
+       338 +  "common_tabNFT": {                                         
+       339 +    "key": "common_tabNFT",                                  
+       340 +    "ko": "NFT",                                             
+       341 +    "en": "",                                                
+       342 +    "context": "NFT 목록 탭. 영문 고정 표기",                
+       343 +    "os": "all",                                             
+       344 +    "type": "탭 레이블"                                      
+       345 +  },                                                         
+       346 +  "common_tabMore": {                                        
+       347 +    "key": "common_tabMore",                                 
+       348 +    "ko": "More",                                            
+       349 +    "en": "",                                                
+       350 +    "context": "더보기(설정 등) 탭. 영문 고정 표기",         
+       351 +    "os": "all",                                             
+       352 +    "type": "탭 레이블"                                      
+       353 +  },                                                         
+       354 +  "common_tabAddress": {                                     
+       355 +    "key": "common_tabAddress",                              
+       356 +    "ko": "Address",                                         
+       357 +    "en": "",                                                
+       358 +    "context": "주소록 탭. 영문 고정 표기",                  
+       359 +    "os": "all",                                             
+       360 +    "type": "탭 레이블"                                      
+       361 +  },                                                         
+       362 +  "common_qr": {                                             
+       363 +    "key": "common_qr",                                      
+       364 +    "ko": "QR",                                              
+       365 +    "en": "",                                                
+       366 +    "context": "QR 스캔 진입. 하단 탭 또는 액션 버튼으로 사용
+           +",                                                           
+       367 +    "os": "all",                                             
+       368 +    "type": "탭/버튼 레이블"                                 
+       369 +  },                                                         
+       370 +  "common_nfc": {                                            
+       371 +    "key": "common_nfc",                                     
+       372 +    "ko": "NFC",                                             
+       373 +    "en": "",                                                
+       374 +    "context": "NFC 기능 진입. 하단 탭 또는 액션 버튼으로 사 
+           +용",                                                         
+       375 +    "os": "all",                                             
+       376 +    "type": "탭/버튼 레이블"                                 
+       377 +  },                                                         
+       378 +  "common_sendTo": {                                         
+       379 +    "key": "common_sendTo",                                  
+       380 +    "ko": "{{address}}에게",                                 
+       381 +    "en": "",                                                
+       382 +    "context": "전송 상대방 주소 표시. {{address}}는 축약 주 
+           +소(예: 0x1234…abcd) 치환",                                   
+       383 +    "os": "all",                                             
+       384 +    "type": "본문"                                           
+       385 +  },                                                         
+       386 +  "common_sendToken": {                                      
+       387 +    "key": "common_sendToken",                               
+       388 +    "ko": "{{ftName}}보냄",                                  
+       389 +    "en": "",                                                
+       390 +    "context": "토큰 전송 내역 행 설명. {{ftName}}은 토큰 심 
+           +볼(예: KLAY) 치환",                                          
+       391 +    "os": "all",                                             
+       392 +    "type": "본문"                                           
+       393 +  },                                                         
+       394 +  "common_receiveToken": {                                   
+       395 +    "key": "common_receiveToken",                            
+       396 +    "ko": "{{ftName}}받음",                                  
+       397 +    "en": "",                                                
+       398 +    "context": "토큰 수신 내역 행 설명. {{ftName}}은 토큰 심 
+           +볼 치환",                                                    
+       399 +    "os": "all",                                             
+       400 +    "type": "본문"                                           
+       401 +  },                                                         
+       402 +  "common_sendNFT": {                                        
+       403 +    "key": "common_sendNFT",                                 
+       404 +    "ko": "{{nftName}}보냄",                                 
+       405 +    "en": "",                                                
+       406 +    "context": "NFT(SFT 단수) 전송 내역. {{nftName}}은 NFT 이
+           +름 치환",                                                    
+       407 +    "os": "all",                                             
+       408 +    "type": "본문"                                           
+       409 +  },                                                         
+       410 +  "common_receiveNFT": {                                     
+       411 +    "key": "common_receiveNFT",                              
+       412 +    "ko": "{{nftName}}받음",                                 
+       413 +    "en": "",                                                
+       414 +    "context": "NFT(SFT 단수) 수신 내역. {{nftName}}은 NFT 이
+           +름 치환",                                                    
+       415 +    "os": "all",                                             
+       416 +    "type": "본문"                                           
+       417 +  },                                                         
+       418 +  "common_sendNftMT": {                                      
+       419 +    "key": "common_sendNftMT",                               
+       420 +    "ko": "{{nftName}} {{n}}개 보냄",                        
+       421 +    "en": "",                                                
+       422 +    "context": "SFT 다수 전송 내역. {{n}}은 수량 치환",      
+       423 +    "os": "all",                                             
+       424 +    "type": "본문"                                           
+       425 +  },                                                         
+       426 +  "common_receiveNftMT": {                                   
+       427 +    "key": "common_receiveNftMT",                            
+       428 +    "ko": "{{nftName}} {{n}}개 받음",                        
+       429 +    "en": "",                                                
+       430 +    "context": "SFT 다수 수신 내역. {{n}}은 수량 치환",      
+       431 +    "os": "all",                                             
+       432 +    "type": "본문"                                           
+       433 +  },                                                         
+       434 +  "common_feeDelegated": {                                   
+       435 +    "key": "common_feeDelegated",                            
+       436 +    "ko": "면제",                                            
+       437 +    "en": "",                                                
+       438 +    "context": "수수료 대납(Fee Delegation) 적용 시 수수료란 
+           +에 표시",                                                    
+       439 +    "os": "all",                                             
+       440 +    "type": "본문"                                           
+       441 +  },                                                         
+       442 +  "common_history": {                                        
+       443 +    "key": "common_history",                                 
+       444 +    "ko": "거래내역",                                        
+       445 +    "en": "",                                                
+       446 +    "context": "거래내역 화면 또는 섹션 제목",               
+       447 +    "os": "all",                                             
+       448 +    "type": "제목"                                           
+       449 +  },                                                         
+       450 +  "history_none": {                                          
+       451 +    "key": "history_none",                                   
+       452 +    "ko": "거래내역이 없어요.",                              
+       453 +    "en": "",                                                
+       454 +    "context": "거래내역 목록 빈 상태(Empty State) 안내 문구"
+           +,                                                            
+       455 +    "os": "all",                                             
+       456 +    "type": "본문"                                           
+       457 +  },                                                         
+       458 +  "common_justBefore": {                                     
+       459 +    "key": "common_justBefore",                              
+       460 +    "ko": "방금 전",                                         
+       461 +    "en": "",                                                
+       462 +    "context": "전송 후 1분 미만 경과 시 표시",              
+       463 +    "os": "all",                                             
+       464 +    "type": "캡션"                                           
+       465 +  },                                                         
+       466 +  "common_minuteBefore": {                                   
+       467 +    "key": "common_minuteBefore",                            
+       468 +    "ko": "{{minutes}}분 전",                                
+       469 +    "en": "",                                                
+       470 +    "context": "1분 이상 1시간 미만 경과. {{minutes}}는 정수 
+           +치환",                                                       
+       471 +    "os": "all",                                             
+       472 +    "type": "캡션"                                           
+       473 +  },                                                         
+       474 +  "common_hoursBefore": {                                    
+       475 +    "key": "common_hoursBefore",                             
+       476 +    "ko": "{{hour}}시간 전",                                 
+       477 +    "en": "",                                                
+       478 +    "context": "1시간 이상 24시간 미만 경과. {{hour}}는 정수 
+           +치환",                                                       
+       479 +    "os": "all",                                             
+       480 +    "type": "캡션"                                           
+       481 +  },                                                         
+       482 +  "common_daysBefore": {                                     
+       483 +    "key": "common_daysBefore",                              
+       484 +    "ko": "{{day}}일 전",                                    
+       485 +    "en": "",                                                
+       486 +    "context": "1일 이상 경과. {{day}}는 정수 치환",         
+       487 +    "os": "all",                                             
+       488 +    "type": "캡션"                                           
+       489 +  },                                                         
+       490 +  "history_sending": {                                       
+       491 +    "key": "history_sending",                                
+       492 +    "ko": "보내는 중",                                       
+       493 +    "en": "",                                                
+       494 +    "context": "트랜잭션 제출 후 블록 확인 대기 중 상태",    
+       495 +    "os": "all",                                             
+       496 +    "type": "캡션"                                           
+       497 +  },                                                         
+       498 +  "history_canceling": {                                     
+       499 +    "key": "history_canceling",                              
+       500 +    "ko": "취소 중",                                         
+       501 +    "en": "",                                                
+       502 +    "context": "전송 취소 트랜잭션 처리 중 상태",            
+       503 +    "os": "all",                                             
+       504 +    "type": "캡션"                                           
+       505 +  },                                                         
+       506 +  "history_cancelingSend": {                                 
+       507 +    "key": "history_cancelingSend",                          
+       508 +    "ko": "보내기 취소 중",                                  
+       509 +    "en": "",                                                
+       510 +    "context": "보내기 액션에 대한 취소 처리 진행 중",       
+       511 +    "os": "all",                                             
+       512 +    "type": "캡션"                                           
+       513 +  },                                                         
+       514 +  "history_sendDone": {                                      
+       515 +    "key": "history_sendDone",                               
+       516 +    "ko": "보내기 완료",                                     
+       517 +    "en": "",                                                
+       518 +    "context": "전송 트랜잭션 블록 확정 완료",               
+       519 +    "os": "all",                                             
+       520 +    "type": "캡션"                                           
+       521 +  },                                                         
+       522 +  "history_sendFail": {                                      
+       523 +    "key": "history_sendFail",                               
+       524 +    "ko": "보내기 실패",                                     
+       525 +    "en": "",                                                
+       526 +    "context": "전송 트랜잭션 실패 또는 리버트. 오류 색상 적 
+           +용 권장",                                                    
+       527 +    "os": "all",                                             
+       528 +    "type": "캡션"                                           
+       529 +  },                                                         
+       530 +  "history_receiveDone": {                                   
+       531 +    "key": "history_receiveDone",                            
+       532 +    "ko": "받기 완료",                                       
+       533 +    "en": "",                                                
+       534 +    "context": "수신 트랜잭션 블록 확정 완료",               
+       535 +    "os": "all",                                             
+       536 +    "type": "캡션"                                           
+       537 +  },                                                         
+       538 +  "history_owner": {                                         
+       539 +    "key": "history_owner",                                  
+       540 +    "ko": "지갑 소유자",                                     
+       541 +    "en": "",                                                
+       542 +    "context": "거래내역 상세 - 지갑 소유자 항목명",         
+       543 +    "os": "all",                                             
+       544 +    "type": "컬럼 레이블"                                    
+       545 +  },                                                         
+       546 +  "history_status": {                                        
+       547 +    "key": "history_status",                                 
+       548 +    "ko": "상태",                                            
+       549 +    "en": "",                                                
+       550 +    "context": "거래내역 상세 - 처리 상태 항목명",           
+       551 +    "os": "all",                                             
+       552 +    "type": "컬럼 레이블"                                    
+       553 +  },                                                         
+       554 +  "history_network": {                                       
+       555 +    "key": "history_network",                                
+       556 +    "ko": "네트워크",                                        
+       557 +    "en": "",                                                
+       558 +    "context": "거래내역 상세 - 사용 네트워크 항목명",       
+       559 +    "os": "all",                                             
+       560 +    "type": "컬럼 레이블"                                    
+       561 +  },                                                         
+       562 +  "history_sender": {                                        
+       563 +    "key": "history_sender",                                 
+       564 +    "ko": "보낸 사람",                                       
+       565 +    "en": "",                                                
+       566 +    "context": "거래내역 상세 - 발신 주소 항목명",           
+       567 +    "os": "all",                                             
+       568 +    "type": "컬럼 레이블"                                    
+       569 +  },                                                         
+       570 +  "history_receiver": {                                      
+       571 +    "key": "history_receiver",                               
+       572 +    "ko": "받는 사람",                                       
+       573 +    "en": "",                                                
+       574 +    "context": "거래내역 상세 - 수신 주소 항목명",           
+       575 +    "os": "all",                                             
+       576 +    "type": "컬럼 레이블"                                    
+       577 +  },                                                         
+       578 +  "history_tokenAmount": {                                   
+       579 +    "key": "history_tokenAmount",                            
+       580 +    "ko": "수량",                                            
+       581 +    "en": "",                                                
+       582 +    "context": "거래내역 상세 - 토큰 전송 수량 항목명",      
+       583 +    "os": "all",                                             
+       584 +    "type": "컬럼 레이블"                                    
+       585 +  },                                                         
+       586 +  "history_txTime": {                                        
+       587 +    "key": "history_txTime",                                 
+       588 +    "ko": "전송 시각",                                       
+       589 +    "en": "",                                                
+       590 +    "context": "거래내역 상세 - 트랜잭션 타임스탬프 항목명", 
+       591 +    "os": "all",                                             
+       592 +    "type": "컬럼 레이블"                                    
+       593 +  },                                                         
+       594 +  "history_fee": {                                           
+       595 +    "key": "history_fee",                                    
+       596 +    "ko": "수수료",                                          
+       597 +    "en": "",                                                
+       598 +    "context": "거래내역 상세 - 트랜잭션 수수료 항목명",     
+       599 +    "os": "all",                                             
+       600 +    "type": "컬럼 레이블"                                    
+       601 +  },                                                         
+       602 +  "history_tx": {                                            
+       603 +    "key": "history_tx",                                     
+       604 +    "ko": "트랜잭션 해시",                                   
+       605 +    "en": "",                                                
+       606 +    "context": "거래내역 상세 - Tx Hash 항목명. 복사 버튼 병 
+           +행 노출",                                                    
+       607 +    "os": "all",                                             
+       608 +    "type": "컬럼 레이블"                                    
+       609 +  },                                                         
+       610 +  "history_service": {                                       
+       611 +    "key": "history_service",                                
+       612 +    "ko": "요청 서비스",                                     
+       613 +    "en": "",                                                
+       614 +    "context": "A2A 거래내역 상세 - 연동 서비스명 항목명",   
+       615 +    "os": "all",                                             
+       616 +    "type": "컬럼 레이블"                                    
+       617 +  },                                                         
+       618 +  "history_sendAmount": {                                    
+       619 +    "key": "history_sendAmount",                             
+       620 +    "ko": "전송 수량",                                       
+       621 +    "en": "",                                                
+       622 +    "context": "거래내역 상세 - 실제 전송된 수량 항목명",    
+       623 +    "os": "all",                                             
+       624 +    "type": "컬럼 레이블"                                    
+       625 +  },                                                         
+       626 +  "history_contract": {                                      
+       627 +    "key": "history_contract",                               
+       628 +    "ko": "컨트랙트",                                        
+       629 +    "en": "",                                                
+       630 +    "context": "거래내역 상세 - 스마트 컨트랙트 주소 항목명",
+       631 +    "os": "all",                                             
+       632 +    "type": "컬럼 레이블"                                    
+       633 +  },                                                         
+       634 +  "history_txBtn": {                                         
+       635 +    "key": "history_txBtn",                                  
+       636 +    "ko": "트랜잭션 확인",                                   
+       637 +    "en": "",                                                
+       638 +    "context": "블록 익스플로러 외부 링크 이동 버튼",        
+       639 +    "os": "all",                                             
+       640 +    "type": "버튼"                                           
+       641 +  },                                                         
+       642 +  "history_pendingNoneTitle": {                              
+       643 +    "key": "history_pendingNoneTitle",                       
+       644 +    "ko": "이전 요청이 완료되어<br/>새로운 요청을 보낼 수 있 
+           +어요",                                                       
+       645 +    "en": "",                                                
+       646 +    "context": "대기 중 요청 해소 후 표시되는 안내 제목. <br/
+           +> 줄바꿈 포함",                                              
+       647 +    "os": "all",                                             
+       648 +    "type": "제목"                                           
+       649 +  },                                                         
+       650 +  "history_pendingNoneBody": {                               
+       651 +    "key": "history_pendingNoneBody",                        
+       652 +    "ko": "처음부터 다시 시도해 주세요.",                    
+       653 +    "en": "",                                                
+       654 +    "context": "대기 해소 후 재시도 유도 안내 본문",         
+       655 +    "os": "all",                                             
+       656 +    "type": "본문"                                           
+       657 +  },                                                         
+       658 +  "common_copyDone": {                                       
+       659 +    "key": "common_copyDone",                                
+       660 +    "ko": "클립보드에 복사했어요.",                          
+       661 +    "en": "",                                                
+       662 +    "context": "복사 성공 피드백. 자동 노출 후 사라짐(일반적 
+           +으로 2~3초)",                                                
+       663 +    "os": "all",                                             
+       664 +    "type": "스낵바"                                         
+       665 +  },                                                         
+       666 +  "common_deleteNftDone": {                                  
+       667 +    "key": "common_deleteNftDone",                           
+       668 +    "ko": "NFT를 삭제했어요.",                               
+       669 +    "en": "",                                                
+       670 +    "context": "NFT 삭제 완료 피드백. 실행 취소(Undo) 버튼 제
+           +공 검토",                                                    
+       671 +    "os": "all",                                             
+       672 +    "type": "스낵바"                                         
+       673 +  },                                                         
+       674 +  "common_deleteAddressDone": {                              
+       675 +    "key": "common_deleteAddressDone",                       
+       676 +    "ko": "주소를 삭제했어요.",                              
+       677 +    "en": "",                                                
+       678 +    "context": "주소록 항목 삭제 완료 피드백",               
+       679 +    "os": "all",                                             
+       680 +    "type": "스낵바"                                         
+       681 +  },                                                         
+       682 +  "common_quitApp": {                                        
+       683 +    "key": "common_quitApp",                                 
+       684 +    "ko": "한 번 더 누르면 클립이 종료돼요.",                
+       685 +    "en": "",                                                
+       686 +    "context": "Android 뒤로가기 두 번 종료 패턴 안내. Androi
+           +d 전용",                                                     
+       687 +    "os": "all",                                             
+       688 +    "type": "스낵바"                                         
+       689 +  },                                                         
+       690 +  "common_sendingNoti": {                                    
+       691 +    "key": "common_sendingNoti",                             
+       692 +    "ko": "NFT를 보내고 있어요.",                            
+       693 +    "en": "",                                                
+       694 +    "context": "NFT 전송 트랜잭션 제출 직후 인앱 알림",      
+       695 +    "os": "all",                                             
+       696 +    "type": "스낵바/알림"                                    
+       697 +  },                                                         
+       698 +  "common_cancelingNoti": {                                  
+       699 +    "key": "common_cancelingNoti",                           
+       700 +    "ko": "NFT 보내기를 취소하고 있어요.",                   
+       701 +    "en": "",                                                
+       702 +    "context": "NFT 전송 취소 트랜잭션 제출 직후 인앱 알림", 
+       703 +    "os": "all",                                             
+       704 +    "type": "스낵바/알림"                                    
+       705 +  },                                                         
+       706 +  "common_klaytn": {                                         
+       707 +    "key": "common_klaytn",                                  
+       708 +    "ko": "클레이튼",                                        
+       709 +    "en": "",                                                
+       710 +    "context": "Klaytn 네트워크 표시명",                     
+       711 +    "os": "all",                                             
+       712 +    "type": "캡션"                                           
+       713 +  },                                                         
+       714 +  "common_ethereum": {                                       
+       715 +    "key": "common_ethereum",                                
+       716 +    "ko": "이더리움",                                        
+       717 +    "en": "",                                                
+       718 +    "context": "Ethereum 네트워크 표시명",                   
+       719 +    "os": "all",                                             
+       720 +    "type": "캡션"                                           
+       721 +  },                                                         
+       722 +  "common_polygon": {                                        
+       723 +    "key": "common_polygon",                                 
+       724 +    "ko": "폴리곤",                                          
+       725 +    "en": "",                                                
+       726 +    "context": "Polygon 네트워크 표시명",                    
+       727 +    "os": "all",                                             
+       728 +    "type": "캡션"                                           
+       729 +  },                                                         
+       730 +  "common_allNetwork": {                                     
+       731 +    "key": "common_allNetwork",                              
+       732 +    "ko": "전체 네트워크",                                   
+       733 +    "en": "",                                                
+       734 +    "context": "네트워크 필터 '전체' 선택 옵션",             
+       735 +    "os": "all",                                             
+       736 +    "type": "캡션"                                           
+       737 +  },                                                         
+       738 +  "common_ethereumM": {                                      
+       739 +    "key": "common_ethereumM",                               
+       740 +    "ko": "이더리움 (미지원)",                               
+       741 +    "en": "",                                                
+       742 +    "context": "현재 기능에서 지원하지 않는 이더리움 네트워크
+           +. 비활성 UI 적용",                                           
+       743 +    "os": "all",                                             
+       744 +    "type": "캡션"                                           
+       745 +  },                                                         
+       746 +  "common_polygonM": {                                       
+       747 +    "key": "common_polygonM",                                
+       748 +    "ko": "폴리곤 (미지원)",                                 
+       749 +    "en": "",                                                
+       750 +    "context": "현재 기능에서 지원하지 않는 폴리곤 네트워크. 
+           +비활성 UI 적용",                                             
+       751 +    "os": "all",                                             
+       752 +    "type": "캡션"                                           
+       753 +  },                                                         
+       754 +  "common_unsupported": {                                    
+       755 +    "key": "common_unsupported",                             
+       756 +    "ko": "(미지원)",                                        
+       757 +    "en": "",                                                
+       758 +    "context": "미지원 네트워크 공통 접미 표기. 네트워크명 뒤
+           +에 병기",                                                    
+       759 +    "os": "all",                                             
+       760 +    "type": "캡션"                                           
+       761 +  },                                                         
+       762 +  "common_bora": {                                           
+       763 +    "key": "common_bora",                                    
+       764 +    "ko": "보라",                                            
+       765 +    "en": "",                                                
+       766 +    "context": "BORA 네트워크 표시명",                       
+       767 +    "os": "all",                                             
+       768 +    "type": "캡션"                                           
+       769 +  },                                                         
+       770 +  "common_supportNetwork": {                                 
+       771 +    "key": "common_supportNetwork",                          
+       772 +    "ko": "지원 네트워크",                                   
+       773 +    "en": "",                                                
+       774 +    "context": "지원 네트워크 섹션 또는 항목 레이블",        
+       775 +    "os": "all",                                             
+       776 +    "type": "캡션"                                           
+       777 +  },                                                         
+       778 +  "common_supportNetworks": {                                
+       779 +    "key": "common_supportNetworks",                         
+       780 +    "ko": "클레이튼, 이더리움, 폴리곤, 보라",                
+       781 +    "en": "",                                                
+       782 +    "context": "전체 지원 네트워크 열거 문자열. 쉼표+공백 구 
+           +분",                                                         
+       783 +    "os": "all",                                             
+       784 +    "type": "캡션"                                           
+       785 +  },                                                         
+       786 +  "common_supportNetworksM": {                               
+       787 +    "key": "common_supportNetworksM",                        
+       788 +    "ko": "클레이튼, 보라",                                  
+       789 +    "en": "",                                                
+       790 +    "context": "특정 기능(예: NFT 전송)의 제한 지원 네트워크 
+           +열거 문자열",                                                
+       791 +    "os": "all",                                             
+       792 +    "type": "캡션"                                           
+       793 +  },                                                         
+       794 +  "common_standardKip17": {                                  
+       795 +    "key": "common_standardKip17",                           
+       796 +    "ko": "KIP-17",                                          
+       797 +    "en": "",                                                
+       798 +    "context": "Klaytn NFT(ERC-721 호환) 표준명. 영문 고정 표
+           +기",                                                         
+       799 +    "os": "all",                                             
+       800 +    "type": "캡션"                                           
+       801 +  },                                                         
+       802 +  "common_standardKip37": {                                  
+       803 +    "key": "common_standardKip37",                           
+       804 +    "ko": "KIP-37",                                          
+       805 +    "en": "",                                                
+       806 +    "context": "Klaytn SFT(ERC-1155 호환) 표준명. 영문 고정  
+           +표기",                                                       
+       807 +    "os": "all",                                             
+       808 +    "type": "캡션"                                           
+       809 +  },                                                         
+       810 +  "common_standardErc721": {                                 
+       811 +    "key": "common_standardErc721",                          
+       812 +    "ko": "ERC-721",                                         
+       813 +    "en": "",                                                
+       814 +    "context": "Ethereum NFT 표준명. 영문 고정 표기",        
+       815 +    "os": "all",                                             
+       816 +    "type": "캡션"                                           
+       817 +  },                                                         
+       818 +  "common_standardErc1155": {                                
+       819 +    "key": "common_standardErc1155",                         
+       820 +    "ko": "ERC-1155",                                        
+       821 +    "en": "",                                                
+       822 +    "context": "Ethereum SFT 표준명. 영문 고정 표기",        
+       823 +    "os": "all",                                             
+       824 +    "type": "캡션"                                           
+       825 +  },                                                         
+       826 +  "common_daily": {                                          
+       827 +    "key": "common_daily",                                   
+       828 +    "ko": "일",                                              
+       829 +    "en": "",                                                
+       830 +    "context": "일 단위 기간 표기. 숫자 뒤에 접미 사용 (예: 7
+           +일)",                                                        
+       831 +    "os": "all",                                             
+       832 +    "type": "단위"                                           
+       833 +  },                                                         
+       834 +  "common_weekly": {                                         
+       835 +    "key": "common_weekly",                                  
+       836 +    "ko": "주",                                              
+       837 +    "en": "",                                                
+       838 +    "context": "주 단위 기간 표기",                          
+       839 +    "os": "all",                                             
+       840 +    "type": "단위"                                           
+       841 +  },                                                         
+       842 +  "common_monthly": {                                        
+       843 +    "key": "common_monthly",                                 
+       844 +    "ko": "월",                                              
+       845 +    "en": "",                                                
+       846 +    "context": "월 단위 기간 표기",                          
+       847 +    "os": "all",                                             
+       848 +    "type": "단위"                                           
+       849 +  },                                                         
+       850 +  "common_won": {                                            
+       851 +    "key": "common_won",                                     
+       852 +    "ko": "원",                                              
+       853 +    "en": "",                                                
+       854 +    "context": "원화(KRW) 단위. 숫자 뒤 접미 사용",          
+       855 +    "os": "all",                                             
+       856 +    "type": "단위"                                           
+       857 +  },                                                         
+       858 +  "common_amount": {                                         
+       859 +    "key": "common_amount",                                  
+       860 +    "ko": "{{n}}개",                                         
+       861 +    "en": "",                                                
+       862 +    "context": "수량 표기. {{n}}은 정수 치환. NFT/SFT 수량에 
+           +사용",                                                       
+       863 +    "os": "all",                                             
+       864 +    "type": "단위"                                           
+       865 +  },                                                         
+       866 +  "common_filterAmount": {                                   
+       867 +    "key": "common_filterAmount",                            
+       868 +    "ko": "총 {{n}}개",                                      
+       869 +    "en": "",                                                
+       870 +    "context": "필터 결과 총 수량 표기. {{n}}은 정수 치환",  
+       871 +    "os": "all",                                             
+       872 +    "type": "단위"                                           
+       873 +  },                                                         
+       874 +  "common_symbolNone": {                                     
+       875 +    "key": "common_symbolNone",                              
+       876 +    "ko": "---",                                             
+       877 +    "en": "",                                                
+       878 +    "context": "심볼 또는 값이 없을 때 표시하는 플레이스홀더"
+           +,                                                            
+       879 +    "os": "all",                                             
+       880 +    "type": "단위"                                           
+       881 +  },                                                         
+       882 +  "common_mtQuantity": {                                     
+       883 +    "key": "common_mtQuantity",                              
+       884 +    "ko": "x{{n}}",                                          
+       885 +    "en": "",                                                
+       886 +    "context": "SFT 다중 수량 표기. 썸네일 또는 목록에서 수량
+           + 뱃지로 사용",                                               
+       887 +    "os": "all",                                             
+       888 +    "type": "단위"                                           
+       889 +  },                                                         
+       890 +  "common_today": {                                          
+       891 +    "key": "common_today",                                   
+       892 +    "ko": "오늘",                                            
+       893 +    "en": "",                                                
+       894 +    "context": "D-Day가 당일인 경우 표시",                   
+       895 +    "os": "all",                                             
+       896 +    "type": "단위"                                           
+       897 +  },                                                         
+       898 +  "common_dDay": {                                           
+       899 +    "key": "common_dDay",                                    
+       900 +    "ko": "D-{{days}}",                                      
+       901 +    "en": "",                                                
+       902 +    "context": "만료·이벤트까지 남은 일수 표기. {{days}}는 정
+           +수 치환",                                                    
+       903 +    "os": "all",                                             
+       904 +    "type": "단위"                                           
+       905 +  },                                                         
+       906 +  "common_tenThousand": {                                    
+       907 +    "key": "common_tenThousand",                             
+       908 +    "ko": "만",                                              
+       909 +    "en": "",                                                
+       910 +    "context": "큰 숫자 한국어 단위 표기 (예: 1만)",         
+       911 +    "os": "all",                                             
+       912 +    "type": "단위"                                           
+       913 +  },                                                         
+       914 +  "common_hundredMillion": {                                 
+       915 +    "key": "common_hundredMillion",                          
+       916 +    "ko": "억",                                              
+       917 +    "en": "",                                                
+       918 +    "context": "큰 숫자 한국어 단위 표기 (예: 1억)",         
+       919 +    "os": "all",                                             
+       920 +    "type": "단위"                                           
+       921 +  },                                                         
+       922 +  "common_week": {                                           
+       923 +    "key": "common_week",                                    
+       924 +    "ko": "7일",                                             
+       925 +    "en": "",                                                
+       926 +    "context": "최근 7일 기간 필터 선택지",                  
+       927 +    "os": "all",                                             
+       928 +    "type": "필터 버튼"                                      
+       929 +  },                                                         
+       930 +  "common_month": {                                          
+       931 +    "key": "common_month",                                   
+       932 +    "ko": "1개월",                                           
+       933 +    "en": "",                                                
+       934 +    "context": "최근 1개월 기간 필터 선택지",                
+       935 +    "os": "all",                                             
+       936 +    "type": "필터 버튼"                                      
+       937 +  },                                                         
+       938 +  "common_3months": {                                        
+       939 +    "key": "common_3months",                                 
+       940 +    "ko": "3개월",                                           
+       941 +    "en": "",                                                
+       942 +    "context": "최근 3개월 기간 필터 선택지",                
+       943 +    "os": "all",                                             
+       944 +    "type": "필터 버튼"                                      
+       945 +  },                                                         
+       946 +  "common_year": {                                           
+       947 +    "key": "common_year",                                    
+       948 +    "ko": "1년",                                             
+       949 +    "en": "",                                                
+       950 +    "context": "최근 1년 기간 필터 선택지",                  
+       951 +    "os": "all",                                             
+       952 +    "type": "필터 버튼"                                      
+       953 +  },                                                         
+       954 +  "common_sortLatest": {                                     
+       955 +    "key": "common_sortLatest",                              
+       956 +    "ko": "최근 받은 순",                                    
+       957 +    "en": "",                                                
+       958 +    "context": "정렬 기준: 최신 수신 순서. 정렬 셀렉터에서 사
+           +용",                                                         
+       959 +    "os": "all",                                             
+       960 +    "type": "필터 버튼"                                      
+       961 +  },                                                         
+       962 +  "common_status": {                                         
+       963 +    "key": "common_status",                                  
+       964 +    "ko": "상태",                                            
+       965 +    "en": "",                                                
+       966 +    "context": "상태 필터 또는 목록 컬럼 레이블",            
+       967 +    "os": "all",                                             
+       968 +    "type": "컬럼 레이블"                                    
+       969 +  },                                                         
+       970 +  "common_valid": {                                          
+       971 +    "key": "common_valid",                                   
+       972 +    "ko": "유효함",                                          
+       973 +    "en": "",                                                
+       974 +    "context": "아이템(쿠폰·티켓 등)이 사용 가능한 유효 상태"
+           +,                                                            
+       975 +    "os": "all",                                             
+       976 +    "type": "본문"                                           
+       977 +  },                                                         
+       978 +  "common_expired": {                                        
+       979 +    "key": "common_expired",                                 
+       980 +    "ko": "만료됨",                                          
+       981 +    "en": "",                                                
+       982 +    "context": "유효기간이 지난 상태. 비활성 UI 또는 오류 색 
+           +상 적용",                                                    
+       983 +    "os": "all",                                             
+       984 +    "type": "본문"                                           
+       985 +  },                                                         
+       986 +  "common_errorStatus": {                                    
+       987 +    "key": "common_errorStatus",                             
+       988 +    "ko": "상태 알 수 없음",                                 
+       989 +    "en": "",                                                
+       990 +    "context": "상태 조회 실패 또는 정의되지 않은 상태",     
+       991 +    "os": "all",                                             
+       992 +    "type": "본문"                                           
+       993 +  },                                                         
+       994 +  "common_errorLoad": {                                      
+       995 +    "key": "common_errorLoad",                               
+       996 +    "ko": "불러오기 실패",                                   
+       997 +    "en": "",                                                
+       998 +    "context": "데이터 로드 실패 시 목록/값 영역에 표시",    
+       999 +    "os": "all",                                             
+      1000 +    "type": "본문"                                           
+      1001 +  },                                                         
+      1002 +  "common_allStatus": {                                      
+      1003 +    "key": "common_allStatus",                               
+      1004 +    "ko": "모든 상태",                                       
+      1005 +    "en": "",                                                
+      1006 +    "context": "상태 필터 '전체' 선택 옵션",                 
+      1007 +    "os": "all",                                             
+      1008 +    "type": "본문"                                           
+      1009 +  },                                                         
+      1010 +  "common_availableStatus": {                                
+      1011 +    "key": "common_availableStatus",                         
+      1012 +    "ko": "사용가능",                                        
+      1013 +    "en": "",                                                
+      1014 +    "context": "사용 가능한 아이템 상태 필터 옵션",          
+      1015 +    "os": "all",                                             
+      1016 +    "type": "본문"                                           
+      1017 +  },                                                         
+      1018 +  "common_notAvailableStatus": {                             
+      1019 +    "key": "common_notAvailableStatus",                      
+      1020 +    "ko": "사용불가",                                        
+      1021 +    "en": "",                                                
+      1022 +    "context": "사용 불가 아이템 상태 필터 옵션",            
+      1023 +    "os": "all",                                             
+      1024 +    "type": "본문"                                           
+      1025 +  },                                                         
+      1026 +  "common_usedStatus": {                                     
+      1027 +    "key": "common_usedStatus",                              
+      1028 +    "ko": "사용완료",                                        
+      1029 +    "en": "",                                                
+      1030 +    "context": "이미 사용된 아이템 상태 필터 옵션",          
+      1031 +    "os": "all",                                             
+      1032 +    "type": "본문"                                           
+      1033 +  },                                                         
+      1034 +  "common_expiredStatus": {                                  
+      1035 +    "key": "common_expiredStatus",                           
+      1036 +    "ko": "기간만료",                                        
+      1037 +    "en": "",                                                
+      1038 +    "context": "유효기간 만료 아이템 상태 필터 옵션",        
+      1039 +    "os": "all",                                             
+      1040 +    "type": "본문"                                           
+      1041 +  },                                                         
+      1042 +  "common_done": {                                           
+      1043 +    "key": "common_done",                                    
+      1044 +    "ko": "완료",                                            
+      1045 +    "en": "",                                                
+      1046 +    "context": "일반적인 처리 완료 상태 표시",               
+      1047 +    "os": "all",                                             
+      1048 +    "type": "본문"                                           
+      1049 +  },                                                         
+      1050 +  "common_addressTooltip": {                                 
+      1051 +    "key": "common_addressTooltip",                          
+      1052 +    "ko": "내 주소",                                         
+      1053 +    "en": "",                                                
+      1054 +    "context": "내 지갑 주소임을 나타내는 툴팁 또는 레이블", 
+      1055 +    "os": "all",                                             
+      1056 +    "type": "본문"                                           
+      1057 +  },                                                         
+      1058 +  "common_all": {                                            
+      1059 +    "key": "common_all",                                     
+      1060 +    "ko": "전체",                                            
+      1061 +    "en": "",                                                
+      1062 +    "context": "전체 선택/조회 옵션. 필터·탭 등 범용 사용",  
+      1063 +    "os": "all",                                             
+      1064 +    "type": "본문"                                           
+      1065 +  },                                                         
+      1066 +  "common_loading": {                                        
+      1067 +    "key": "common_loading",                                 
+      1068 +    "ko": "불러오는 중",                                     
+      1069 +    "en": "",                                                
+      1070 +    "context": "데이터 로딩 중 상태 표시. 스피너와 함께 사용"
+           +,                                                            
+      1071 +    "os": "all",                                             
+      1072 +    "type": "캡션"                                           
+      1073 +  },                                                         
+      1074 +  "common_loadingEng": {                                     
+      1075 +    "key": "common_loadingEng",                              
+      1076 +    "ko": "Loading",                                         
+      1077 +    "en": "",                                                
+      1078 +    "context": "영문 로딩 표시. 특정 화면에서 영문 고정 표기 
+           +사용 시",                                                    
+      1079 +    "os": "all",                                             
+      1080 +    "type": "캡션"                                           
+      1081 +  },                                                         
+      1082 +  "common_tokenId": {                                        
+      1083 +    "key": "common_tokenId",                                 
+      1084 +    "ko": "No.",                                             
+      1085 +    "en": "",                                                
+      1086 +    "context": "NFT 토큰 ID 앞에 붙는 접두 레이블 (예: No.123
+           +4)",                                                         
+      1087 +    "os": "all",                                             
+      1088 +    "type": "캡션"                                           
+      1089 +  },                                                         
+      1090 +  "common_bio": {                                            
+      1091 +    "key": "common_bio",                                     
+      1092 +    "ko": "생체 인증",                                       
+      1093 +    "en": "",                                                
+      1094 +    "context": "생체 인증 관련 화면 제목 또는 섹션 레이블",  
+      1095 +    "os": "all",                                             
+      1096 +    "type": "제목"                                           
+      1097 +  },                                                         
+      1098 +  "common_viewer": {                                         
+      1099 +    "key": "common_viewer",                                  
+      1100 +    "ko": "{{viewers}}명이 읽었어요.",                       
+      1101 +    "en": "",                                                
+      1102 +    "context": "콘텐츠(공지 등) 조회 수 표시. {{viewers}}는  
+           +정수 치환",                                                  
+      1103 +    "os": "all",                                             
+      1104 +    "type": "캡션"                                           
+      1105 +  },                                                         
+      1106 +  "common_img": {                                            
+      1107 +    "key": "common_img",                                     
+      1108 +    "ko": "이미지",                                          
+      1109 +    "en": "",                                                
+      1110 +    "context": "이미지 뷰어 화면 제목 또는 이미지 영역 대체  
+           +텍스트",                                                     
+      1111 +    "os": "all",                                             
+      1112 +    "type": "제목"                                           
+      1113 +  },                                                         
+      1114 +  "common_start": {                                          
+      1115 +    "key": "common_start",                                   
+      1116 +    "ko": "부터",                                            
+      1117 +    "en": "",                                                
+      1118 +    "context": "기간 표시 시작점 접미사 (예: 2024.01.01부터)"
+           +,                                                            
+      1119 +    "os": "all",                                             
+      1120 +    "type": "본문"                                           
+      1121 +  },                                                         
+      1122 +  "common_end": {                                            
+      1123 +    "key": "common_end",                                     
+      1124 +    "ko": "까지",                                            
+      1125 +    "en": "",                                                
+      1126 +    "context": "기간 표시 종료점 접미사 (예: 2024.12.31까지)"
+           +,                                                            
+      1127 +    "os": "all",                                             
+      1128 +    "type": "본문"                                           
+      1129 +  },                                                         
+      1130 +  "common_expirationDate": {                                 
+      1131 +    "key": "common_expirationDate",                          
+      1132 +    "ko": "유효기간",                                        
+      1133 +    "en": "",                                                
+      1134 +    "context": "쿠폰·티켓 등의 유효기간 항목 레이블",        
+      1135 +    "os": "all",                                             
+      1136 +    "type": "본문"                                           
+      1137 +  },                                                         
+      1138 +  "common_location": {                                       
+      1139 +    "key": "common_location",                                
+      1140 +    "ko": "장소",                                            
+      1141 +    "en": "",                                                
+      1142 +    "context": "이벤트·쿠폰 등의 사용 가능 장소 항목 레이블",
+      1143 +    "os": "all",                                             
+      1144 +    "type": "본문"                                           
+      1145 +  },                                                         
+      1146 +  "common_noPriceInfo": {                                    
+      1147 +    "key": "common_noPriceInfo",                             
+      1148 +    "ko": "가격 정보 없음",                                  
+      1149 +    "en": "",                                                
+      1150 +    "context": "시세 데이터 미제공 토큰에 가격란 대신 표시", 
+      1151 +    "os": "all",                                             
+      1152 +    "type": "본문"                                           
+      1153 +  },                                                         
+      1154 +  "common_currentPrice": {                                   
+      1155 +    "key": "common_currentPrice",                            
+      1156 +    "ko": "현재가",                                          
+      1157 +    "en": "",                                                
+      1158 +    "context": "토큰 또는 NFT의 현재 시세 항목 레이블",      
+      1159 +    "os": "all",                                             
+      1160 +    "type": "본문"                                           
+      1161 +  },                                                         
+      1162 +  "common_spam": {                                           
+      1163 +    "key": "common_spam",                                    
+      1164 +    "ko": "사기주의",                                        
+      1165 +    "en": "",                                                
+      1166 +    "context": "스팸·사기 의심 토큰/NFT에 표시하는 경고 레이 
+           +블. 경고 색상 적용 필수",                                    
+      1167 +    "os": "all",                                             
+      1168 +    "type": "본문"                                           
+      1169    }
+        90 -]                                                            
+      1170 +}                                                            
+
+⏺ Bash(node -e "const j = require('/Users/yuna/Desktop/workspace/native-ux-writi
+      ng/strings/01-common/texts.json'); console.log(JSON.stringify({
+      common_yes: j.common_ye…)
+  ⎿  Error: Exit code 127
+     (eval):1: command not found: node
+
+⏺ Bash(python3 -c "
+      import json…)
+  ⎿  {
+       "common_yes": {
+         "key": "common_yes",
+     … +8 lines (ctrl+o to expand)
+
+⏺ 완료입니다. 첫 번째 항목 확인:
+
+  {
+    "common_yes": {
+      "key": "common_yes",
+      "ko": "예",
+      "en": "",
+      "context": "확인/동의 다이얼로그의 긍정 응답. common_no와 쌍으로 사용",
+      "os": "all",
+      "type": "버튼"
+    }
+  }
+
+  - 총 147개 항목 flat 구조로 작성
+  - 기존 texts.json 내용 전면 교체
+  - ko 내 <br/> 태그 원문 그대로 유지 (history_pendingNoneTitle)
+  - os 전체 "all" 고정
+  - en 전체 빈 문자열 "" 처리
+
+✻ Worked for 4m 21s
+
+❯ 'workspace/native-ux-writing'폴더에 'CLAUDE.md' 파일을 생성하고, 아래 내용을  
+그대로 작성해줘.                                                                
+# Native App UX Writing System                                                  
+                                                                                
+너는 우리 프로덕트의 수석 UX 라이터(UX Writer)야.                               
+새로운 텍스트를 작성, 수정, 검수할 때 아래의 규칙을 반드시 최우선으로 준수해.   
+                                                                                
+## 📚 핵심 참조 문서 (필독)                                                     
+새로운 화면의 텍스트를 제안하거나 기존 텍스트를 리뷰하기 전에, **반드시 아래    
+`docs/` 폴더의 문서를 먼저 읽고 맥락을 파악**해.                                
+                                                                                
+1. `docs/02-voice-and-tone.md` : 브랜드 페르소나와 상황별 어조 (해요체 vs       
+합쇼체 기준)                                                                    
+2. `docs/03-writing-principle.md` : 글쓰기 4대 원칙 (능동태, 두괄식, 해결책     
+중심, 긍정적 프레이밍)                                                          
+3. `docs/04-ux-pattern-guidelines.md` : UI 컴포넌트별 텍스트 작성 공식 및 길이  
+제약                                                                            
+4. `docs/05-content-writing.md` : 긴 호흡의 글쓰기 구조화 (공지사항, 약관 등)   
+5. `docs/06-glossary.md` : ⭐️ 도메인 공통 용어집 (금지어 및 권장어 매핑)        
+                                                                                
+## ⚙️ 작업 지침                                                                 
+1. **검증 (Cross-check):** 텍스트를 생성한 후, `06-glossary.md`의 금지어가      
+쓰이지 않았는지, `03-writing-principle.md`에 위배되는 수동태(~되어지다)가       
+없는지 스스로 교차 검증해.                                                      
+2. **근거 제시:** 텍스트 시안을 제안할 때는 항상 "왜 이 단어와 문장 구조를      
+선택했는지" 가이드라인에 근거하여 이유를 1~2줄로 설명해.                        
+3. **포맷 유지:** JSON 파일(`texts.json`)을 다룰 때는 우리가 정의한 메타데이터  
+포함 Flat 구조(`key`, `ko`, `en`, `context`, `os`, `type`)를 절대 임의로        
+누락하거나 훼손하지 마.                                                         
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/CLAUDE.md)
+  ⎿  Wrote 18 lines to ../CLAUDE.md
+       1 # Native App UX Writing System
+       2 
+       3 너는 우리 프로덕트의 수석 UX 라이터(UX Writer)야.
+       4 새로운 텍스트를 작성, 수정, 검수할 때 아래의 규칙을 반드시 최우
+         선으로 준수해.
+       5 
+       6 ## 📚 핵심 참조 문서 (필독)
+       7 새로운 화면의 텍스트를 제안하거나 기존 텍스트를 리뷰하기 전에, *
+         *반드시 아래 `docs/` 폴더의 문서를 먼저 읽고 맥락을 파악**해.
+       8 
+       9 1. `docs/02-voice-and-tone.md` : 브랜드 페르소나와 상황별 어조 (
+         해요체 vs 합쇼체 기준)
+      10 2. `docs/03-writing-principle.md` : 글쓰기 4대 원칙 (능동태, 두
+         괄식, 해결책 중심, 긍정적 프레이밍)
+     … +8 lines (ctrl+o to expand)
+
+⏺ native-ux-writing/CLAUDE.md 생성 완료입니다.
+
+❯ 현재 우리 앱에서 토큰을 전송하거나 서비스를 이용할 때 잔액이 부족하면 "보유   
+수량이 부족하여 요청이 처리되지 않았습니다."라는 딱딱한 팝업이 뜨고 있어. 유저  
+경험을 개선하기 위해 이 팝업 텍스트를 수정하려고 해.                            
+                                                                                
+`docs/` 폴더에 있는 우리의 보이스앤톤 가이드와 글쓰기 원칙, 용어집을 꼼꼼히     
+읽어보고 아래 작업을 수행해 줘.                                                 
+                                                                                
+1. 이 상황은 치명적인 시스템 오류가 아니라 일반적인 사용성 문제야. 가이드라인에 
+ 맞춰 적절한 어조(해요체/합쇼체 중 택 1)를 선택해 줘.                           
+2. 수동태를 배제하고, 원인과 함께 '다음 행동(해결책)'을 제시하는 원칙에 맞춰    
+텍스트 시안(Title, Body, Button)을 3가지 버전으로 제안해 줘.                    
+3. 각 시안마다 어떤 가이드라인(문서명과 규칙)을 근거로 그렇게 작성했는지        
+1~2줄로 이유를 설명해 줘.                                                       
+4. 네가 가장 추천하는 1순위 시안을 우리가 세팅한 Flat JSON 구조(`key`, `ko`,    
+`en`, `context`, `os`, `type`)에 맞춰 코드로 출력해 줘. (key 값은               
+`error_insufficient_balance`로 임의 지정해)                                     
+
+⏺ docs/ 폴더 문서들을 먼저 읽겠습니다.
+
+⏺ Read 5 files (ctrl+o to expand)
+
+⏺ 가이드라인을 꼼꼼히 읽었습니다. 분석 및 시안을 제안합니다.
+
+  ---
+  사전 분석: 기존 텍스트의 문제점
+
+  "보유 수량이 부족하여 요청이 처리되지 않았습니다."
+
+
+  ┌──────────┬──────────────────────────────────────────────────────────────┐
+  │  위반    │                             내용                             │
+  │   항목   │                                                              │
+  ├──────────┼──────────────────────────────────────────────────────────────┤
+  │ 어조     │ 합쇼체(~습니다) 사용 → 02-voice-and-tone.md에 따르면 자산    │
+  │ 오류     │ 손실 경고·치명적 에러가 아닌 일반 사용성 문제이므로 해요체   │
+  │          │ 적용 필요                                                    │
+  ├──────────┼──────────────────────────────────────────────────────────────┤
+  │ 수동태   │ "처리되지 않았습니다" → 03-writing-principle.md 원칙 1 위반  │
+  ├──────────┼──────────────────────────────────────────────────────────────┤
+  │ 미괄식   │ "부족하여(이유) → 처리되지 않았습니다(결과)" 순서 → 결과가   │
+  │          │ 먼저 와야 하는 두괄식 위반                                   │
+  ├──────────┼──────────────────────────────────────────────────────────────┤
+  │ Dead-end │ 원인만 통보, 다음 행동 없음 → 03-writing-principle.md 원칙 3 │
+  │          │  위반                                                        │
+  └──────────┴──────────────────────────────────────────────────────────────┘
+
+  ---
+  어조 결정
+
+  → 해요체 선택
+
+  02-voice-and-tone.md 기준, 🟢 일반 상황(해요체) 적용. 잔액 부족은 치명적
+  시스템 에러·자산 손실 경고가 아닌 일반적인 사용 흐름의 중단 상황이므로
+  부드럽고 친절한 해요체가 적합합니다.
+
+  ---
+  시안 3가지
+
+  🅐 Version A — 원인 + 두 가지 해결 경로 제시
+
+  ┌────────┬─────────────────────────────────────────────────────────────────┐
+  │  구성  │                             텍스트                              │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Title  │ 잔액이 부족해요                                                 │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Body   │ 보내려는 수량보다 잔액이 적어요. 수량을 줄이거나 잔액을 채운 후 │
+  │        │  다시 시도해 주세요.                                            │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Button │ 다시 시도 / 닫기                                                │
+  └────────┴─────────────────────────────────────────────────────────────────┘
+
+  근거: 04-ux-pattern-guidelines.md 얼럿 공식(Title=결과 요약, Body=이유+해결책,
+   Button=행동 명확화) 충실히 적용. 03-writing-principle.md 원칙 3(해결책 
+  중심)에 따라 "수량 조정"과 "잔액 충전" 두 경로를 모두 제시해 사용자를 막다른 
+  길에 두지 않았습니다.
+
+  ---
+  🅑 Version B — 긍정 프레이밍 + 행동 촉구 중심
+
+  ┌────────┬─────────────────────────────────────────────────────────────────┐
+  │  구성  │                             텍스트                              │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Title  │ 전송 수량을 확인해 주세요                                       │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Body   │ 현재 잔액으로 전송 가능한 수량을 초과했어요. 수량을 조정하고    │
+  │        │ 다시 시도해 주세요.                                             │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Button │ 수량 조정 / 닫기                                                │
+  └────────┴─────────────────────────────────────────────────────────────────┘
+
+  근거: 03-writing-principle.md 원칙 4(긍정적 프레이밍) 적용. "전송할 수 
+  없어요"라는 부정문 대신 "확인해 주세요"라는 긍정 행동 지시어로 전환했습니다. 
+  버튼도 "다시 시도"보다 구체적인 행동인 "수량 조정"으로 
+  명확화(04-ux-pattern-guidelines.md 버튼 공식).
+
+  ---
+  🅒 Version C — 간결형 + 충전 CTA 직결
+
+  ┌────────┬─────────────────────────────────────────────────────────────────┐
+  │  구성  │                             텍스트                              │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Title  │ 잔액이 부족해요                                                 │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Body   │ 전송에 필요한 잔액이 부족해요. 잔액을 채운 후 다시 시도해       │
+  │        │ 주세요.                                                         │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Button │ 충전하기 / 닫기                                                 │
+  └────────┴─────────────────────────────────────────────────────────────────┘
+
+  근거: 03-writing-principle.md 원칙 2(두괄식·간결성) 최우선 적용. 불필요한 수식
+   없이 원인 1문장 + 해결책 1문장으로 구성했습니다. Primary 버튼을 "충전하기"로 
+  지정해 타이틀·버튼만 봐도 행동을 결정할 수 있게 
+  연결했습니다(04-ux-pattern-guidelines.md 얼럿 Action 공식).
+
+  ---
+  ⭐️ 1순위 추천: Version A
+
+  이유: 토큰 전송과 서비스 이용 양쪽 맥락 모두 커버하며, "수량 조정"과 "잔액
+  충전" 두 해결 경로를 함께 제시해 다양한 사용자 상황에 대응합니다. 특정
+  액션(충전하기)을 강제하지 않아 범용성이 가장 높습니다.
+
+  교차 검증 (Cross-check):
+  - 수동태: ❌ 없음
+  - 물결표: ❌ 없음
+  - 해요체: ✅
+  - 두괄식: ✅ (Title이 결과 요약)
+  - 마침표: ✅ Body에만, Title·Button엔 없음
+
+  {
+    "error_insufficient_balance_title": {
+      "key": "error_insufficient_balance_title",
+      "ko": "잔액이 부족해요",
+      "en": "",
+      "context": "잔액 부족으로 전송 또는 서비스 이용 요청이 중단됐을 때 
+  표시하는 얼럿 팝업 제목. 마침표 없음.",
+      "os": "all",
+      "type": "제목"
+    },
+    "error_insufficient_balance_body": {
+      "key": "error_insufficient_balance_body",
+      "ko": "보내려는 수량보다 잔액이 적어요. 수량을 줄이거나 잔액을 채운 후 
+  다시 시도해 주세요.",
+      "en": "",
+      "context": "잔액 부족 얼럿의 본문. 원인(잔액 부족) + 해결 경로 2가지(수량 
+  조정 or 잔액 충전) 제시. 2줄 이내 유지.",
+      "os": "all",
+      "type": "본문"
+    },
+    "error_insufficient_balance_btn_primary": {
+      "key": "error_insufficient_balance_btn_primary",
+      "ko": "다시 시도",
+      "en": "",
+      "context": "잔액 부족 얼럿의 Primary 버튼. 수량 조정 또는 충전 후 재시도 
+  유도. 10자 이내.",
+      "os": "all",
+      "type": "버튼"
+    },
+    "error_insufficient_balance_btn_secondary": {
+      "key": "error_insufficient_balance_btn_secondary",
+      "ko": "닫기",
+      "en": "",
+      "context": "잔액 부족 얼럿의 Secondary 버튼. 팝업 종료.",
+      "os": "all",
+      "type": "버튼"
+    }
+  }
+
+  ---
+  참고: 06-klip-glossary.md가 현재 비어 있어 금지어 교차 검증은 문서 작성 후 
+  재수행이 필요합니다. "보유 수량" 대신 **"잔액"**을 사용한 것은 기존 
+  strings/01-common/texts.json 내 컨텍스트 용어를 기준으로 판단했습니다.
+
+
+✻ Baked for 1m 35s
+
+❯ 'native-ux-writing/docs' 폴더에 '07-learning-log.md'파일을 생성해줘.          
+
+⏺ Bash(touch
+      /Users/yuna/Desktop/workspace/native-ux-writing/docs/07-learning-log.md)
+  ⎿  Done
+
+⏺ docs/07-learning-log.md 생성 완료입니다.
+
+❯ 아까 잔액부족 문구 제안했던 시안 중에서 version c로 최종확정할게.             
+
+⏺ Version C 최종 확정 내용:
+
+  ┌──────────────────┬──────────────────────────────────────────────────────┐
+  │       구성       │                        텍스트                        │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Title            │ 잔액이 부족해요                                      │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Body             │ 전송에 필요한 잔액이 부족해요. 잔액을 채운 후 다시   │
+  │                  │ 시도해 주세요.                                       │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Button (Primary) │ 충전하기                                             │
+  ├──────────────────┼──────────────────────────────────────────────────────┤
+  │ Button           │ 닫기                                                 │
+  │ (Secondary)      │                                                      │
+  └──────────────────┴──────────────────────────────────────────────────────┘
+
+  strings/01-common/texts.json에 추가하거나 다른 작업이 필요하면 말씀해 주세요.
+
+❯ 이건 공통은 아니니까 다른 폴더에 업데이트가 필요할 것 같아. 'strings'폴더에   
+있는 디렉토리 중에 적당하다고 생각되는 카테고리 폴더의 texts.json에 업데이트    
+해줘.                                                                           
+
+⏺ 잔액 부족 오류는 전송 플로우에서 발생하므로 08-send/가 적합합니다. 현재 파일을
+   확인하고 추가하겠습니다.
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ 파일이 비어 있네요. 08-send/texts.json에 Version C 내용을 flat 구조로
+  작성합니다.
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/08-send/texts.json)
+  ⎿  Wrote 34 lines to ../strings/08-send/texts.json
+       1 {
+       2   "error_insufficient_balance_title": {
+       3     "key": "error_insufficient_balance_title",
+       4     "ko": "잔액이 부족해요",
+       5     "en": "",
+       6     "context": "잔액 부족으로 전송 또는 서비스 이용 요청이 중단
+         됐을 때 표시하는 얼럿 팝업 제목. 마침표 없음.",
+       7     "os": "all",
+       8     "type": "제목"
+       9   },
+      10   "error_insufficient_balance_body": {
+     … +24 lines (ctrl+o to expand)
+
+⏺ strings/08-send/texts.json에 4개 항목 추가 완료입니다.
+
+  - error_insufficient_balance_title → 얼럿 제목
+  - error_insufficient_balance_body → 얼럿 본문
+  - error_insufficient_balance_btn_primary → 충전하기
+  - error_insufficient_balance_btn_secondary → 닫기
+
+✻ Sautéed for 44s
+
+❯ version C 내용을 docs/07-learning-log.md 에 오늘 날짜로 업데이트해줘. 상황,   
+최종안, 그리고 왜 이 문구가 선택되었는지 '학습포인트'를 정리해서 넣어줘.        
+
+⏺ Write(07-learning-log.md)
+  ⎿  Error writing file
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ Write(07-learning-log.md)
+  ⎿  Wrote 46 lines to 07-learning-log.md
+       1 # UX Writing Learning Log
+       2 
+       3 ---
+       4 
+       5 ## 2026-03-11
+       6 
+       7 ### 케이스: 잔액 부족 오류 팝업 개선
+       8 
+       9 #### 상황
+      10 토큰 전송 또는 서비스 이용 시 잔액이 부족할 때 표시되던 기존 팝
+         업 문구를 UX 라이팅 가이드라인에 맞게 개선.
+     … +36 lines (ctrl+o to expand)
+
+⏺ docs/07-learning-log.md 업데이트 완료입니다. 아래 내용으로 정리했습니다.
+
+  - 상황: 기존 문구의 4가지 문제점 명시
+  - 최종 확정안: Version C 전체 텍스트 + 저장 위치·key 기록
+  - 학습 포인트 5가지:
+    a. 어조(해요체/합쇼체)는 심각도로 결정
+    b. 수동태 → 능동태 전환 이유
+    c. 에러 문구에 반드시 해결책 포함
+    d. Primary 버튼은 가장 빠른 해결 경로
+    e. 공통 vs 화면별 폴더 분류 기준
+
+✻ Worked for 48s
+
+❯ [요청사항] 우리 앱의 '지문 인증 실패' 화면에 들어갈 문구를 새로 작성해서      
+3가지 시안으로 제안해줘.                                                        
+기존 문구 (AS-IS):                                                              
+* 타이틀: 인증 오류                                                             
+* 본문: 지문 인증에 실패하였습니다. 다시 시도하여 주시기 바랍니다. 5회 실패 시  
+서비스 이용이 제한될 수 있습니다.                                               
+* 버튼: 확인                                                                    
+작성 가이드:                                                                    
+1. 02-voice-and-tone.md를 참고해서 상황에 맞는 어조를 선택해줘.                 
+2. 03-writing-principle.md의 '능동태'와 '해결책 중심' 원칙을 적용해줘.          
+3. 06-glossary.md를 확인해서 금지어가 있다면 수정해줘.                          
+4. 각 시안마다 어떤 가이드라인(문서명과 규칙)을 근거로 그렇게 작성했는지        
+1~2줄로 이유를 설명해 줘.                                                       
+5. 결과는 타이틀, 본문, 버튼으로 구분해줘.                                      
+
+⏺ 가이드 문서들을 먼저 재확인하겠습니다.
+
+⏺ Read 2 files (ctrl+o to expand)
+
+⏺ ---
+  사전 분석: 기존 문구 문제점
+
+  ┌────────────────────┬────────────────┬───────────────────────────────────┐
+  │        항목        │      문제      │          위반 가이드라인          │
+  ├────────────────────┼────────────────┼───────────────────────────────────┤
+  │                    │ Android 표준   │ 01-os-guidelines.md 생체 인증     │
+  │ "지문 인증"        │ 용어는 "지문   │ 용어표                            │
+  │                    │ 인식"          │                                   │
+  ├────────────────────┼────────────────┼───────────────────────────────────┤
+  │ "실패하였습니다"   │ 합쇼체 +       │ 02-voice-and-tone.md 일반 상황 →  │
+  │                    │ 경직된 문어체  │ 해요체                            │
+  ├────────────────────┼────────────────┼───────────────────────────────────┤
+  │ "제한될 수         │ 수동태         │ 03-writing-principle.md 원칙      │
+  │ 있습니다"          │                │ 1(능동태)                         │
+  ├────────────────────┼────────────────┼───────────────────────────────────┤
+  │ "다시 시도하여     │ 합쇼체,        │ 02-voice-and-tone.md /            │
+  │ 주시기 바랍니다"   │ 불필요한 수식  │ 03-writing-principle.md 원칙      │
+  │                    │                │ 2(간결성)                         │
+  ├────────────────────┼────────────────┼───────────────────────────────────┤
+  │                    │ 누르면 어떤    │                                   │
+  │ 버튼 "확인"        │ 일이           │ 04-ux-pattern-guidelines.md 버튼  │
+  │                    │ 일어나는지     │ 공식                              │
+  │                    │ 불명확         │                                   │
+  └────────────────────┴────────────────┴───────────────────────────────────┘
+
+  ⚠️ 06-klip-glossary.md가 현재 비어 있어 금지어 교차 검증은 불가했습니다. 대신 
+  01-os-guidelines.md의 용어 기준을 적용했습니다.
+
+  ---
+  어조 결정: 해요체
+
+  02-voice-and-tone.md 기준, 지문 인식 실패는 사용자가 직접 교정 가능한 일반적 
+  사용성 문제입니다. 치명적 시스템 오류·자산 손실 경고가 아니므로 🟢 해요체
+  적용이 적합합니다. 단, "5회 실패 시 잠금"은 투명한 안내자 원칙에 따라 누락
+  없이 포함합니다.
+
+  ---
+  시안 3가지
+
+  🅐 Version A — 재시도 유도형
+
+  ┌────────┬─────────────────────────────────────────────────────────────────┐
+  │  구성  │                             텍스트                              │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Title  │ 지문 인식에 실패했어요                                          │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Body   │ 등록한 손가락을 센서에 다시 올려 주세요. 5회 이상 실패하면      │
+  │        │ 서비스가 잠겨요.                                                │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Button │ 다시 시도                                                       │
+  └────────┴─────────────────────────────────────────────────────────────────┘
+
+  근거: 02-voice-and-tone.md 해요체 적용 + 03-writing-principle.md 원칙 1(능동태
+   — "실패하였습니다" → "실패했어요", "제한될 수 있습니다" → "잠겨요")·원칙 
+  3(해결책 중심). 용어는 01-os-guidelines.md Android 표준인 "지문 인식"으로 
+  교정했습니다.
+
+  ---
+  🅑 Version B — PIN 대안 제시형
+
+  ┌─────────────────┬───────────────────────────────────────────────────────┐
+  │      구성       │                        텍스트                         │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Title           │ 지문을 인식하지 못했어요                              │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Body            │ 손가락을 센서에 천천히 올려 주세요. 계속 어렵다면     │
+  │                 │ PIN으로 인증할 수 있어요.                             │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ 다시 시도                                             │
+  │ (Primary)       │                                                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ PIN으로 인증                                          │
+  │ (Secondary)     │                                                       │
+  └─────────────────┴───────────────────────────────────────────────────────┘
+
+  근거: 03-writing-principle.md 원칙 4(긍정적 프레이밍 — "실패했어요" 대신 
+  "인식하지 못했어요"로 시스템 책임으로 전환) + 원칙 3(해결책 이중 제공). 
+  04-ux-pattern-guidelines.md 얼럿 Action 공식에 따라 버튼만 봐도 두 가지 
+  선택지를 즉시 파악할 수 있게 구성했습니다.
+
+  ---
+  🅒 Version C — 경고 두괄식형
+
+  ┌────────────────┬────────────────────────────────────────────────────────┐
+  │      구성      │                         텍스트                         │
+  ├────────────────┼────────────────────────────────────────────────────────┤
+  │ Title          │ 지문 인식에 실패했어요                                 │
+  ├────────────────┼────────────────────────────────────────────────────────┤
+  │ Body           │ 5회 이상 실패하면 서비스가 잠겨요. 등록한 손가락을     │
+  │                │ 센서에 올리거나 PIN으로 인증해 주세요.                 │
+  ├────────────────┼────────────────────────────────────────────────────────┤
+  │ Button         │ PIN으로 인증                                           │
+  │ (Primary)      │                                                        │
+  ├────────────────┼────────────────────────────────────────────────────────┤
+  │ Button         │ 다시 시도                                              │
+  │ (Secondary)    │                                                        │
+  └────────────────┴────────────────────────────────────────────────────────┘
+
+  근거: 03-writing-principle.md 원칙 2(두괄식 — 가장 중요한 경고 정보를 Body 맨 
+  앞에 배치) + 02-voice-and-tone.md 투명한 안내자 원칙(불리한 정보를 숨기지 않고
+   앞단에 노출). 잠금 위험이 높은 상황에 적합하며 PIN을 Primary로 배치해 더 
+  안전한 경로를 유도합니다.
+
+  ---
+  교차 검증 (Cross-check)
+
+  ┌───────────────────────┬─────┬─────┬─────┐
+  │         항목          │  A  │  B  │  C  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ 해요체 적용           │ ✅  │ ✅  │ ✅  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ 수동태 없음           │ ✅  │ ✅  │ ✅  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ 물결표(~) 없음        │ ✅  │ ✅  │ ✅  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ Title 마침표 없음     │ ✅  │ ✅  │ ✅  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ Body 마침표 있음      │ ✅  │ ✅  │ ✅  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ Button 마침표 없음    │ ✅  │ ✅  │ ✅  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ "지문 인식" 용어 사용 │ ✅  │ ✅  │ ✅  │
+  ├───────────────────────┼─────┼─────┼─────┤
+  │ 해결책 포함           │ ✅  │ ✅  │ ✅  │
+  └───────────────────────┴─────┴─────┴─────┘
+
+✻ Churned for 1m 55s
+
+❯ version A에서 '실패하면 서비스가 잠긴요.'는 긍정보다 부정의 의미에 가깝고,    
+Version B에서의 'PIN'은 사용자에게 익숙하지 않은 전문용어야. Version C는 이     
+두가지가 모두 사용되어서 셋다 우리 원칙에 맞지 않아. 이 사례를                  
+'docs/07-learning-log.md'의 [Correction Logs]에 추가해줘. 어떤 부분이           
+잘못되었고, 어떻게 고쳐야 하는지 기록해서 다음 작업엔 반복하지 않도록 학습해.   
+그리고 문장은 다시 제안해줘.                                                    
+
+⏺ 먼저 현재 학습 로그를 확인하겠습니다.
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ 학습 로그를 업데이트하겠습니다.
+
+⏺ Update(07-learning-log.md)
+  ⎿  Added 45 lines
+      44  
+      45  **5. 카테고리 분류 기준: 공통 vs 화면별**
+      46  오류 문구라도 발생 맥락이 특정 플로우(전송)에 한정된다면 `01-co
+          mmon`이 아닌 해당 화면 폴더(`08-send`)에 귀속시킨다. 공통 폴더
+          는 화면에 무관하게 앱 전반에서 재사용되는 텍스트만 관리한다.
+      47 +                                                               
+      48 +---                                                            
+      49 +                                                               
+      50 +## Correction Logs                                             
+      51 +                                                               
+      52 +### 2026-03-11 — 지문 인식 실패 오류 팝업 시안 검수            
+      53 +                                                               
+      54 +#### 오류 1: 부정적 프레이밍으로 경고 문구 작성                
+      55 +                                                               
+      56 +| 항목 | 내용 |                                                
+      57 +|------|------|                                                
+      58 +| **발생 시안** | Version A, Version C |                       
+      59 +| **잘못된 문구** | "5회 이상 실패하면 서비스가 잠겨요." |     
+      60 +| **위반 가이드라인** | `03-writing-principle.md` 원칙 4 (긍정 
+         +적 프레이밍) |                                                 
+      61 +                                                               
+      62 +**문제 원인**                                                  
+      63 +제한 횟수 경고를 작성할 때, "잠겨요(불가)" 라는 부정적 결과에  
+         +초점을 맞췄다. 원칙 4는 시스템의 한계를 탓하는 부정어 대신 사용
+         +자가 **할 수 있는 것**을 긍정문으로 전달하도록 명시한다.       
+      64 +                                                               
+      65 +**수정 방향**                                                  
+      66 +- (X) "5회 이상 실패하면 서비스가 잠겨요." → 불가능한 상황을 강
+         +조                                                             
+      67 +- (O) "최대 5회까지 시도할 수 있어요." → 가능한 범위를 긍정적으
+         +로 안내                                                        
+      68 +                                                               
+      69 +---                                                            
+      70 +                                                               
+      71 +#### 오류 2: 일반 사용자에게 생소한 전문 용어 사용             
+      72 +                                                               
+      73 +| 항목 | 내용 |                                                
+      74 +|------|------|                                                
+      75 +| **발생 시안** | Version B, Version C |                       
+      76 +| **잘못된 문구** | "PIN으로 인증할 수 있어요.", "PIN으로 인증 
+         +해 주세요." |                                                  
+      77 +| **위반 가이드라인** | `02-voice-and-tone.md` 핵심 페르소나 — 
+         +투명한 안내자 (사용자가 바로 행동할 수 있어야 함) |            
+      78 +                                                               
+      79 +**문제 원인**                                                  
+      80 +"PIN"은 서비스 내부 용어로, 일반 사용자에게 낯선 기술 용어다.  
+         +사용자가 "PIN이 뭔지" 해석하는 인지 비용이 발생해 즉각적인 행동
+         +을 방해한다.                                                   
+      81 +                                                               
+      82 +**수정 방향**                                                  
+      83 +- (X) "PIN으로 인증" → 사용자에게 낯선 약어                    
+      84 +- (O) "비밀번호로 인증" → 누구나 직관적으로 이해 가능한 일반 언
+         +어로 대체                                                      
+      85 +                                                               
+      86 +---                                                            
+      87 +                                                               
+      88 +#### 핵심 학습 요약                                            
+      89 +                                                               
+      90 +1. **경고도 긍정문으로 쓴다.** 제한·불가 상황을 안내할 때도 "할
+         + 수 없어요" 대신 "여기까지 할 수 있어요" 구조로 전환한다.      
+      91 +2. **전문 용어는 사용자 언어로 번역한다.** 서비스 내부에서 쓰는
+         + 용어(PIN, TX, Gas Fee 등)가 본문에 노출될 때는 일반 사용자가  
+         +즉시 이해할 수 있는 단어로 대체 여부를 반드시 검토한다.        
+
+⏺ 이제 수정된 시안 3가지를 제안합니다.
+
+  ---
+  수정된 시안 3가지
+
+  🅐 Version A — 재시도 유도형 (수정)
+
+  ┌────────┬─────────────────────────────────────────────────────────────────┐
+  │  구성  │                             텍스트                              │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Title  │ 지문 인식에 실패했어요                                          │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Body   │ 등록한 손가락을 센서에 다시 올려 주세요. 최대 5회까지 시도할 수 │
+  │        │  있어요.                                                        │
+  ├────────┼─────────────────────────────────────────────────────────────────┤
+  │ Button │ 다시 시도                                                       │
+  └────────┴─────────────────────────────────────────────────────────────────┘
+
+  수정 내용: "서비스가 잠겨요" → "최대 5회까지 시도할 수 있어요" 
+  (03-writing-principle.md 원칙 4 — 가능한 범위를 긍정문으로 전환)
+
+  ---
+  🅑 Version B — 대안 제시형 (수정)
+
+  ┌─────────────────┬───────────────────────────────────────────────────────┐
+  │      구성       │                        텍스트                         │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Title           │ 지문을 인식하지 못했어요                              │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Body            │ 손가락을 센서에 천천히 올려 주세요. 계속 어렵다면     │
+  │                 │ 비밀번호로 인증할 수 있어요.                          │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ 다시 시도                                             │
+  │ (Primary)       │                                                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ 비밀번호로 인증                                       │
+  │ (Secondary)     │                                                       │
+  └─────────────────┴───────────────────────────────────────────────────────┘
+
+  수정 내용: "PIN" → "비밀번호" (일반 사용자가 즉시 이해할 수 있는 언어로 대체 —
+   02-voice-and-tone.md 투명한 안내자 원칙)
+
+  ---
+  🅒 Version C — 경고 두괄식형 (수정)
+
+  ┌─────────────────┬───────────────────────────────────────────────────────┐
+  │      구성       │                        텍스트                         │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Title           │ 지문 인식에 실패했어요                                │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Body            │ 최대 5회까지 시도할 수 있어요. 등록한 손가락을        │
+  │                 │ 올리거나 비밀번호로 인증해 주세요.                    │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ 비밀번호로 인증                                       │
+  │ (Primary)       │                                                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ 다시 시도                                             │
+  │ (Secondary)     │                                                       │
+  └─────────────────┴───────────────────────────────────────────────────────┘
+
+  수정 내용: "서비스가 잠겨요" → "최대 5회까지 시도할 수 있어요" + "PIN" → 
+  "비밀번호" 두 가지 모두 교정
+
+
+✻ Brewed for 1m 8s
+
+❯ version A가 가장 좋긴한데, B나 C처럼 대안책인 secondary button이 빠진 게      
+아쉬워. 이 부분을 보완해줘.                                                     
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ ┌─────────────────┬───────────────────────────────────────────────────────┐
+  │      구성       │                        텍스트                         │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Title           │ 지문 인식에 실패했어요                                │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Body            │ 등록한 손가락을 센서에 다시 올려 주세요. 최대 5회까지 │
+  │                 │  시도할 수 있어요.                                    │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ 다시 시도                                             │
+  │ (Primary)       │                                                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Button          │ 비밀번호로 인증                                       │
+  │ (Secondary)     │                                                       │
+  └─────────────────┴───────────────────────────────────────────────────────┘
+
+  Version A의 구조·어조를 유지하면서 B·C의 대안 경로인 "비밀번호로 인증"을
+  Secondary 버튼으로 추가했습니다. 04-ux-pattern-guidelines.md 얼럿 Action
+  공식에 따라 제목과 버튼만 봐도 두 가지 선택지를 즉시 파악할 수 있습니다.
+
+  이대로 확정하면 strings/02-auth/texts.json에 업데이트할까요?
+
+❯ 업데이트하고 이번 건도 로그에 기록해줘.                                       
+
+⏺ 두 작업을 동시에 진행합니다.
+
+⏺ Read 2 files (ctrl+o to expand)
+
+⏺ Write(~/Desktop/workspace/native-ux-writing/strings/02-auth/texts.json)
+  ⎿  Wrote 34 lines to ../strings/02-auth/texts.json
+       1 {
+       2   "error_fingerprint_fail_title": {
+       3     "key": "error_fingerprint_fail_title",
+       4     "ko": "지문 인식에 실패했어요",
+       5     "en": "",
+       6     "context": "지문 인식 실패 시 표시하는 얼럿 팝업 제목. 마침
+         표 없음.",
+       7     "os": "android",
+       8     "type": "제목"
+       9   },
+      10   "error_fingerprint_fail_body": {
+     … +24 lines (ctrl+o to expand)
+
+⏺ Update(07-learning-log.md)
+  ⎿  Added 28 lines
+       89  
+       90  1. **경고도 긍정문으로 쓴다.** 제한·불가 상황을 안내할 때도 "
+           할 수 없어요" 대신 "여기까지 할 수 있어요" 구조로 전환한다.
+       91  2. **전문 용어는 사용자 언어로 번역한다.** 서비스 내부에서 쓰
+           는 용어(PIN, TX, Gas Fee 등)가 본문에 노출될 때는 일반 사용자
+           가 즉시 이해할 수 있는 단어로 대체 여부를 반드시 검토한다.
+       92 +                                                              
+       93 +---                                                           
+       94 +                                                              
+       95 +### 2026-03-11 — 지문 인식 실패 팝업 최종 확정                
+       96 +                                                              
+       97 +#### 상황                                                     
+       98 +1차 시안 3가지 검수 후 오류 교정 → Version A 구조를 베이스로 B
+          +·C의 Secondary 버튼을 보완하여 최종 확정.                     
+       99 +                                                              
+      100 +#### 최종 확정안                                              
+      101 +                                                              
+      102 +| 구성 | 텍스트 |                                             
+      103 +|------|--------|                                             
+      104 +| **Title** | 지문 인식에 실패했어요 |                        
+      105 +| **Body** | 등록한 손가락을 센서에 다시 올려 주세요. 최대 5회
+          +까지 시도할 수 있어요. |                                      
+      106 +| **Button (Primary)** | 다시 시도 |                          
+      107 +| **Button (Secondary)** | 비밀번호로 인증 |                  
+      108 +                                                              
+      109 +- **저장 위치:** `strings/02-auth/texts.json`                 
+      110 +- **Key:** `error_fingerprint_fail_title` / `_body` / `_btn_pr
+          +imary` / `_btn_secondary`                                     
+      111 +- **os:** `android` (지문 인식은 Android 한정 용어. iOS는 별도
+          + 분기 필요)                                                   
+      112 +                                                              
+      113 +#### 학습 포인트                                              
+      114 +                                                              
+      115 +**1. 단일 시안도 버튼 구성까지 완성도 있게 제안한다**         
+      116 +재시도 유도형 시안이라도 사용자가 반복 실패할 경우를 대비한 대
+          +안 경로(Secondary 버튼)를 함께 설계해야 Dead-end를 방지할 수  
+          +있다. 버튼 구성은 얼럿 설계의 핵심 요소이므로 초안 단계부터 Pr
+          +imary/Secondary를 함께 고려한다.                              
+      117 +                                                              
+      118 +**2. OS 분기를 컨텍스트에 명시한다**                          
+      119 +"지문 인식"은 Android 전용 표현이다(`01-os-guidelines.md`). `o
+          +s` 필드를 `"android"`로 지정하고, iOS용 Face ID / Touch ID 버 
+          +전은 별도 key로 분리해야 함을 context에 명시해 후속 작업자가  
+          +누락하지 않도록 한다.                                         
+
+⏺ 두 작업 완료입니다.
+
+  strings/02-auth/texts.json 업데이트
+  - os: "android" 로 지정 (지문 인식은 Android 전용 용어)
+  - Secondary 버튼 "비밀번호로 인증" 포함, 총 4개 key 추가
+
+  docs/07-learning-log.md 기록 추가
+  - 최종 확정안 전문 기록
+  - 학습 포인트 2가지 추가:
+    a. 초안 단계부터 Primary/Secondary 버튼을 함께 설계해야 Dead-end 방지
+    b. "지문 인식"은 Android 한정 — os 필드와 context에 iOS 분기 필요 명시
+
+✻ Churned for 1m 19s

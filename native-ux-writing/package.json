@@ -1,0 +1,11 @@
+{
+  "name": "native-ux-writing",
+  "version": "1.0.0",
+  "description": "Native 앱 UX 라이팅 자동화 텍스트 관리 시스템",
+  "scripts": {
+    "split": "node scripts/split-csv-to-json.js",
+    "split:dry": "node scripts/split-csv-to-json.js --dry-run"
+  },
+  "keywords": ["ux-writing", "i18n", "native-app"],
+  "license": "MIT"
+}

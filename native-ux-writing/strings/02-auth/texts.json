@@ -1,0 +1,34 @@
+{
+  "error_fingerprint_fail_title": {
+    "key": "error_fingerprint_fail_title",
+    "ko": "지문 인식에 실패했어요",
+    "en": "",
+    "context": "지문 인식 실패 시 표시하는 얼럿 팝업 제목. 마침표 없음.",
+    "os": "android",
+    "type": "제목"
+  },
+  "error_fingerprint_fail_body": {
+    "key": "error_fingerprint_fail_body",
+    "ko": "등록한 손가락을 센서에 다시 올려 주세요. 최대 5회까지 시도할 수 있어요.",
+    "en": "",
+    "context": "지문 인식 실패 얼럿 본문. 재시도 안내 + 긍정 프레이밍으로 최대 횟수 안내. 2줄 이내 유지.",
+    "os": "android",
+    "type": "본문"
+  },
+  "error_fingerprint_fail_btn_primary": {
+    "key": "error_fingerprint_fail_btn_primary",
+    "ko": "다시 시도",
+    "en": "",
+    "context": "지문 인식 실패 얼럿 Primary 버튼. 지문 재시도 유도. 10자 이내.",
+    "os": "android",
+    "type": "버튼"
+  },
+  "error_fingerprint_fail_btn_secondary": {
+    "key": "error_fingerprint_fail_btn_secondary",
+    "ko": "비밀번호로 인증",
+    "en": "",
+    "context": "지문 인식 실패 얼럿 Secondary 버튼. 비밀번호(PIN) 인증 화면으로 대안 이동. '핀', 'PIN' 표기 대신 일반 사용자 친화적 표현 사용.",
+    "os": "android",
+    "type": "버튼"
+  }
+}
