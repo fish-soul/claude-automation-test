@@ -103,7 +103,7 @@ function TokenSelectStep({ onSelect }: { onSelect: (token: Token) => void }) {
           <li key={token.symbol}>
             <button
               onClick={() => onSelect(token)}
-              className="w-full flex items-center justify-between px-4 h-[72px] rounded-[12px] border border-border bg-card hover:border-primary transition-colors duration-150"
+              className="w-full flex items-center justify-between px-4 h-[72px] rounded-[12px] bg-muted transition-colors duration-150"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
