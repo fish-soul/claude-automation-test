@@ -1,6 +1,8 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
 import { WithdrawalWarningDialog } from "@/components/withdrawal-warning-dialog"
 
 export default function Home() {
@@ -23,6 +25,10 @@ export default function Home() {
       >
         회원탈퇴 팝업 열기
       </button>
+
+      <Button asChild variant="secondary" size="lg" className="rounded-[var(--radius)]">
+        <Link href="/nonexistent">404 페이지 보기</Link>
+      </Button>
 
       <WithdrawalWarningDialog
         open={open}
