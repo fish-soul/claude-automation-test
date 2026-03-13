@@ -45,8 +45,8 @@ function formatKRW(n: number) {
   return n.toLocaleString("ko-KR") + "원"
 }
 function shortAddr(addr: string) {
-  if (addr.length <= 13) return addr
-  return addr.slice(0, 6) + "..." + addr.slice(-4)
+  if (addr.length <= 14) return addr
+  return addr.slice(0, 6) + "..." + addr.slice(-6)
 }
 
 // ─── Shared Header ────────────────────────────────────────
@@ -345,7 +345,7 @@ function ConfirmStep({
   const rows = [
     { label: "토큰",         value: `${token.name} (${token.symbol})`,    sub: undefined },
     { label: "전송 수량",    value: `${amount} ${token.symbol}`,           sub: `≈ ${formatKRW(estimatedKRW)}` },
-    { label: "받는 주소",    value: address,                               sub: undefined },
+    { label: "받는 주소",    value: shortAddr(address),                    sub: undefined },
     { label: "네트워크 수수료", value: `${NETWORK_FEE} ETH`,              sub: undefined },
   ]
 
@@ -437,30 +437,30 @@ function CompleteStep({
       </div>
 
       {/* 전송 요약 */}
-      <div className="rounded-[12px] border border-border divide-y divide-border">
-        <div className="px-4 py-3.5 flex items-center justify-between">
-          <span className="klip-14m text-muted-foreground">전송 수량</span>
+      <div className="flex flex-col gap-5">
+        <div className="flex items-start justify-between gap-4">
+          <span className="klip-14sb text-muted-foreground shrink-0">전송 수량</span>
           <div className="text-right">
             <p className="klip-14sb text-foreground">
               {amount} {token.symbol}
             </p>
-            <p className="klip-12m text-muted-foreground">≈ {formatKRW(estimatedKRW)}</p>
+            <p className="klip-12m text-muted-foreground mt-0.5">≈ {formatKRW(estimatedKRW)}</p>
           </div>
         </div>
-        <div className="px-4 py-3.5 flex items-start justify-between gap-4">
-          <span className="klip-14m text-muted-foreground shrink-0">받는 주소</span>
-          <span className="klip-14sb text-foreground text-right break-all">
+        <div className="flex items-start justify-between gap-4">
+          <span className="klip-14sb text-muted-foreground shrink-0">받는 주소</span>
+          <span className="klip-14sb text-foreground text-right">
             {shortAddr(address)}
           </span>
         </div>
-        <div className="px-4 py-3.5 flex items-center justify-between gap-4">
-          <span className="klip-14m text-muted-foreground shrink-0">트랜잭션 해시</span>
+        <div className="flex items-center justify-between gap-4">
+          <span className="klip-14sb text-muted-foreground shrink-0">트랜잭션 해시</span>
           <button
             onClick={onCopy}
             className="flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors"
           >
-            <span className="klip-12m">
-              {MOCK_TX_HASH.slice(0, 8)}...{MOCK_TX_HASH.slice(-4)}
+            <span className="klip-14sb">
+              {MOCK_TX_HASH.slice(0, 8)}...{MOCK_TX_HASH.slice(-6)}
             </span>
             {copied ? (
               <Check className="size-3.5 text-primary" />
