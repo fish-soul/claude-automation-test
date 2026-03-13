@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { ArrowLeft, QrCode, Copy, Check, CircleCheck } from "lucide-react"
 
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 // ─── Types ────────────────────────────────────────────────
@@ -12,6 +13,7 @@ type Token = {
   name: string
   balance: number
   valueKRW: number
+  iconPath: string
 }
 
 type Step = "select" | "amount" | "address" | "confirm" | "complete"
@@ -26,9 +28,9 @@ type RecentAddress = {
 const STEP_ORDER: Step[] = ["select", "amount", "address", "confirm", "complete"]
 
 const TOKENS: Token[] = [
-  { symbol: "ETH",  name: "이더리움", balance: 0.52,  valueKRW: 1_248_000 },
-  { symbol: "USDT", name: "테더",     balance: 250,   valueKRW:   332_500 },
-  { symbol: "BTC",  name: "비트코인", balance: 0.008, valueKRW:   602_400 },
+  { symbol: "ETH",  name: "이더리움", balance: 0.52,  valueKRW: 1_248_000, iconPath: "/tokens/eth.svg"  },
+  { symbol: "USDT", name: "테더",     balance: 250,   valueKRW:   332_500, iconPath: "/tokens/usdt.svg" },
+  { symbol: "BTC",  name: "비트코인", balance: 0.008, valueKRW:   602_400, iconPath: "/tokens/btc.svg"  },
 ]
 
 const RECENT_ADDRESSES: RecentAddress[] = [
@@ -106,9 +108,13 @@ function TokenSelectStep({ onSelect }: { onSelect: (token: Token) => void }) {
               className="w-full flex items-center justify-between px-4 h-[72px] rounded-[12px] bg-muted transition-colors duration-150"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
-                  <span className="klip-12b text-primary">{token.symbol.slice(0, 3)}</span>
-                </div>
+                <Image
+                  src={token.iconPath}
+                  alt={token.symbol}
+                  width={40}
+                  height={40}
+                  className="rounded-full shrink-0"
+                />
                 <div className="text-left">
                   <p className="klip-15sb text-foreground">{token.name}</p>
                   <p className="klip-12m text-muted-foreground">{token.symbol}</p>
