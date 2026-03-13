@@ -378,8 +378,11 @@ function ConfirmStep({
           ))}
         </div>
 
+        {/* 구분선 */}
+        <div className="h-px bg-border mt-6" />
+
         {/* 면책 고지 — 합쇼체 (자산 손실 위험) */}
-        <p className="klip-12m text-muted-foreground mt-6 leading-relaxed">
+        <p className="klip-12m text-muted-foreground mt-5 leading-relaxed">
           전송 후 취소할 수 없습니다. 잘못된 주소로 전송 시 자산을 복구할 수 없습니다.
           전송 전 정보를 반드시 확인하시기 바랍니다.
         </p>
@@ -437,7 +440,8 @@ function CompleteStep({
       </div>
 
       {/* 전송 요약 */}
-      <div className="flex flex-col gap-5">
+      <div className="h-px bg-border" />
+      <div className="flex flex-col gap-5 py-5">
         <div className="flex items-start justify-between gap-4">
           <span className="klip-14sb text-muted-foreground shrink-0">전송 수량</span>
           <div className="text-right">
@@ -470,6 +474,7 @@ function CompleteStep({
           </button>
         </div>
       </div>
+      <div className="h-px bg-border" />
 
       <div className="mt-auto pt-6">
         <Link
