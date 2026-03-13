@@ -14,6 +14,10 @@ export default function Home() {
         컴포넌트 플레이그라운드
       </h1>
 
+      <Button asChild size="lg" className="rounded-[var(--radius)]">
+        <Link href="/send">토큰 전송</Link>
+      </Button>
+
       <button
         onClick={() => setOpen(true)}
         className={[
