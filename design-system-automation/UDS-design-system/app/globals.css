@@ -1,0 +1,451 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════
+   UDS (Upbit Design System) — Global Theme
+   기반: 업비트 앱 스크린샷 60장 + Color Foundation + Typography Table
+   버전: 1.0.0 / 기준일: 2026.03.16
+   ⚠️ 한국 금융 관행 절대 준수: 상승=빨강(Red) / 하락=파랑(Blue)
+═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────
+     shadcn/ui Core Tokens — Upbit 브랜드 매핑
+  ───────────────────────────────────────────────────────────── */
+
+  /* Surface */
+  --background:                  hsl(0 0% 100%);       /* #FFFFFF — 기본 페이지 배경 */
+  --foreground:                  hsl(0 0% 13%);         /* #212121 — Primary 텍스트 */
+
+  --card:                        hsl(0 0% 100%);
+  --card-foreground:             hsl(0 0% 13%);
+
+  --popover:                     hsl(0 0% 100%);
+  --popover-foreground:          hsl(0 0% 13%);
+
+  /* Brand Primary — Upbit Blue #1340B0 */
+  --primary:                     hsl(221 80% 38%);      /* #1340B0 */
+  --primary-foreground:          hsl(0 0% 100%);
+
+  /* Secondary — Brand Subtle 틴트 #EBF0FF */
+  --secondary:                   hsl(221 100% 95%);     /* #EBF0FF */
+  --secondary-foreground:        hsl(221 80% 38%);      /* #1340B0 */
+
+  /* Muted */
+  --muted:                       hsl(0 0% 96%);         /* #F5F5F5 — Surface, 스켈레톤 */
+  --muted-foreground:            hsl(0 0% 62%);         /* #9E9E9E — Caption, Placeholder */
+
+  /* Accent — Brand Subtle 재사용 */
+  --accent:                      hsl(221 100% 95%);     /* #EBF0FF */
+  --accent-foreground:           hsl(221 80% 38%);
+
+  /* Destructive — 매수 CTA / 경고 (#C62828) */
+  --destructive:                 hsl(0 66% 46%);        /* #C62828 */
+  --destructive-foreground:      hsl(0 0% 100%);
+
+  /* Border / Input */
+  --border:                      hsl(0 0% 88%);         /* #E0E0E0 */
+  --input:                       hsl(0 0% 88%);         /* #E0E0E0 */
+  --ring:                        hsl(221 80% 38%);      /* #1340B0 */
+
+  /* Radius — Upbit Flat 디자인 기조 (기본 8px) */
+  --radius:                      0.5rem;                /* 8px — CTA 버튼, 정보 박스 */
+
+  /* Sidebar */
+  --sidebar:                     hsl(0 0% 98%);
+  --sidebar-foreground:          hsl(0 0% 13%);
+  --sidebar-primary:             hsl(221 80% 38%);
+  --sidebar-primary-foreground:  hsl(0 0% 100%);
+  --sidebar-accent:              hsl(0 0% 96%);
+  --sidebar-accent-foreground:   hsl(0 0% 13%);
+  --sidebar-border:              hsl(0 0% 88%);
+  --sidebar-ring:                hsl(221 80% 38%);
+
+  /* ─────────────────────────────────────────────────────────────
+     Upbit 전용 확장 토큰
+  ───────────────────────────────────────────────────────────── */
+
+  /* Brand */
+  --upbit-brand:                 hsl(221 80% 38%);      /* #1340B0 */
+  --upbit-brand-hover:           hsl(221 80% 30%);      /* #0F2F8A */
+  --upbit-brand-subtle:          hsl(221 100% 95%);     /* #EBF0FF */
+  --upbit-nav-bar:               hsl(221 80% 38%);      /* #1340B0 — 하단 탭바, 서브탭 배경 */
+
+  /* ⚠️ Positive / Negative — 한국 금융 관행 (상승=빨강, 하락=파랑) */
+  --upbit-positive:              hsl(0 63% 50%);        /* #D32F2F — 상승 수치, 매수 버튼 */
+  --upbit-positive-strong:       hsl(0 66% 46%);        /* #C62828 — 매수 CTA 버튼 강조 */
+  --upbit-positive-subtle:       hsl(351 100% 96%);     /* #FFEBEE — 상승 배경 틴트, 경고 배너 */
+  --upbit-negative:              hsl(211 78% 42%);      /* #1565C0 — 하락 수치, 매도 */
+  --upbit-negative-subtle:       hsl(206 100% 94%);     /* #E3F2FD — 하락 배경 틴트 */
+
+  /* Gray Scale */
+  --upbit-gray-900:              hsl(0 0% 13%);         /* #212121 — Primary 텍스트 */
+  --upbit-gray-700:              hsl(0 0% 26%);         /* #424242 — Secondary 텍스트, 보조 버튼 */
+  --upbit-gray-500:              hsl(0 0% 62%);         /* #9E9E9E — Caption, Placeholder */
+  --upbit-gray-400:              hsl(0 0% 74%);         /* #BDBDBD — 아이콘 비활성 */
+  --upbit-gray-300:              hsl(0 0% 88%);         /* #E0E0E0 — 구분선, 보더 */
+  --upbit-gray-100:              hsl(0 0% 96%);         /* #F5F5F5 — Surface 배경, 스켈레톤 */
+
+  /* Semantic / Feedback */
+  --upbit-warning-text:          hsl(0 63% 50%);        /* #D32F2F */
+  --upbit-warning-bg:            hsl(351 100% 96%);     /* #FFEBEE — 인라인 경고 배너 */
+  --upbit-success-text:          hsl(0 63% 50%);        /* #D32F2F — 입금완료=빨강 (한국 관행) */
+  --upbit-tooltip-bg:            hsl(221 80% 38%);      /* #1340B0 */
+  --upbit-tooltip-text:          hsl(0 0% 100%);
+  --upbit-overlay:               rgba(0, 0, 0, 0.5);    /* 모달 딤 오버레이 */
+
+  /* Radius Scale */
+  --upbit-radius-xs:             0.25rem;               /* 4px  — 뱃지, 태그, 세그먼트 indicator */
+  --upbit-radius-sm:             0.375rem;              /* 6px  — 소형 인라인 버튼 (신청/주문/모으기) */
+  --upbit-radius-md:             0.5rem;                /* 8px  — CTA 버튼, 정보 박스, 드롭다운 */
+  --upbit-radius-lg:             0.75rem;               /* 12px — 카드, Input 필드, 선택 박스 */
+  --upbit-radius-xl:             1rem;                  /* 16px — 모달/바텀시트 상단 코너 */
+  --upbit-radius-full:           9999px;                /* Pill — 필터 탭, 스테이킹 칩 */
+
+  /* Spacing (4px 그리드) */
+  --upbit-space-1:               0.25rem;               /* 4px  — 아이콘↔텍스트, 미세 여백 */
+  --upbit-space-2:               0.5rem;                /* 8px  — 인라인 요소 간격, 뱃지 패딩 */
+  --upbit-space-3:               0.75rem;               /* 12px — 버튼 내부 수직 패딩, 리스트 행 */
+  --upbit-space-4:               1rem;                  /* 16px — 화면 좌우 기본 패딩 */
+  --upbit-space-5:               1.25rem;               /* 20px — 카드 패딩, 모달 패딩 */
+  --upbit-space-6:               1.5rem;                /* 24px — 주요 섹션 상하 여백 */
+  --upbit-space-8:               2rem;                  /* 32px — 대형 섹션 분리 */
+
+  /* Typography Scale (Pretendard 전용) */
+  --upbit-text-display:          1.75rem;               /* 28px — 현재가 대형 숫자 */
+  --upbit-text-h1:               1.5rem;                /* 24px — 페이지 핵심 수치 */
+  --upbit-text-h2:               1.375rem;              /* 22px — 페이지 타이틀, 모달 헤더 */
+  --upbit-text-h3:               1.125rem;              /* 18px — 섹션 타이틀, 카드 수치 */
+  --upbit-text-h4:               1rem;                  /* 16px — 서브섹션 헤더, 강조 본문 */
+  --upbit-text-body1:            0.9375rem;             /* 15px — 코인명, 주요 항목명 */
+  --upbit-text-body2:            0.875rem;              /* 14px — 일반 본문, 데이터 수치 */
+  --upbit-text-body3:            0.8125rem;             /* 13px — 보조 설명, 서브 정보 */
+  --upbit-text-caption1:         0.75rem;               /* 12px — 캡션, 단위, 날짜 */
+  --upbit-text-caption2:         0.6875rem;             /* 11px — 탭바 라벨, 최소 텍스트 */
+
+  /* Font Weights — 실제 앱 규격: Bold(700) / Regular(400) 만 사용 */
+  --upbit-weight-bold:           700;
+  --upbit-weight-regular:        400;
+
+  /* Component Heights */
+  --upbit-height-cta:            3.25rem;               /* 52px — 풀와이드 CTA 버튼 */
+  --upbit-height-btn-sm:         2rem;                  /* 32px — 소형 인라인 버튼 */
+  --upbit-height-btn-percent:    2.25rem;               /* 36px — 퍼센트 프리셋 버튼 */
+  --upbit-height-input:          2.75rem;               /* 44px — 인풋 필드 */
+  --upbit-height-list:           3.5rem;                /* 56px — 리스트 아이템 최소 높이 */
+  --upbit-height-navbar:         2.75rem;               /* 44px — 네비게이션 바 */
+  --upbit-height-tabbar:         5rem;                  /* 80px — 하단 탭바 */
+
+  /* Shadow — Flat 디자인, 최소 사용 */
+  --upbit-shadow-dropdown:       0 2px 8px rgba(0, 0, 0, 0.12);  /* 드롭다운 전용 */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Dark Mode — 업비트 다크 테마
+═══════════════════════════════════════════════════════════════ */
+.dark {
+  --background:                  hsl(220 18% 10%);      /* 짙은 다크 네이비 */
+  --foreground:                  hsl(0 0% 95%);
+
+  --card:                        hsl(220 18% 14%);
+  --card-foreground:             hsl(0 0% 95%);
+
+  --popover:                     hsl(220 18% 14%);
+  --popover-foreground:          hsl(0 0% 95%);
+
+  --primary:                     hsl(221 80% 60%);      /* 다크 모드 밝은 브랜드 블루 */
+  --primary-foreground:          hsl(0 0% 100%);
+
+  --secondary:                   hsl(221 40% 20%);
+  --secondary-foreground:        hsl(221 80% 75%);
+
+  --muted:                       hsl(220 18% 18%);
+  --muted-foreground:            hsl(0 0% 50%);
+
+  --accent:                      hsl(221 40% 20%);
+  --accent-foreground:           hsl(221 80% 75%);
+
+  --destructive:                 hsl(0 63% 55%);
+  --destructive-foreground:      hsl(0 0% 100%);
+
+  --border:                      hsl(220 10% 22%);
+  --input:                       hsl(220 10% 22%);
+  --ring:                        hsl(221 80% 60%);
+
+  --upbit-gray-900:              hsl(0 0% 95%);
+  --upbit-gray-700:              hsl(0 0% 80%);
+  --upbit-gray-500:              hsl(0 0% 50%);
+  --upbit-gray-400:              hsl(0 0% 38%);
+  --upbit-gray-300:              hsl(0 0% 22%);
+  --upbit-gray-100:              hsl(0 0% 16%);
+
+  --upbit-brand:                 hsl(221 80% 60%);
+  --upbit-brand-hover:           hsl(221 80% 70%);
+  --upbit-nav-bar:               hsl(220 40% 14%);
+
+  --sidebar:                     hsl(220 18% 12%);
+  --sidebar-foreground:          hsl(0 0% 95%);
+  --sidebar-primary:             hsl(221 80% 60%);
+  --sidebar-primary-foreground:  hsl(0 0% 100%);
+  --sidebar-accent:              hsl(220 18% 18%);
+  --sidebar-accent-foreground:   hsl(0 0% 95%);
+  --sidebar-border:              hsl(220 10% 22%);
+  --sidebar-ring:                hsl(221 80% 60%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   @theme — Tailwind v4 유틸리티 클래스 노출
+═══════════════════════════════════════════════════════════════ */
+@theme inline {
+  /* shadcn 코어 */
+  --color-background:                    var(--background);
+  --color-foreground:                    var(--foreground);
+  --color-card:                          var(--card);
+  --color-card-foreground:               var(--card-foreground);
+  --color-popover:                       var(--popover);
+  --color-popover-foreground:            var(--popover-foreground);
+  --color-primary:                       var(--primary);
+  --color-primary-foreground:            var(--primary-foreground);
+  --color-secondary:                     var(--secondary);
+  --color-secondary-foreground:          var(--secondary-foreground);
+  --color-muted:                         var(--muted);
+  --color-muted-foreground:              var(--muted-foreground);
+  --color-accent:                        var(--accent);
+  --color-accent-foreground:             var(--accent-foreground);
+  --color-destructive:                   var(--destructive);
+  --color-border:                        var(--border);
+  --color-input:                         var(--input);
+  --color-ring:                          var(--ring);
+  --color-sidebar:                       var(--sidebar);
+  --color-sidebar-foreground:            var(--sidebar-foreground);
+  --color-sidebar-primary:               var(--sidebar-primary);
+  --color-sidebar-primary-foreground:    var(--sidebar-primary-foreground);
+  --color-sidebar-accent:                var(--sidebar-accent);
+  --color-sidebar-accent-foreground:     var(--sidebar-accent-foreground);
+  --color-sidebar-border:                var(--sidebar-border);
+  --color-sidebar-ring:                  var(--sidebar-ring);
+
+  /* Upbit 브랜드 */
+  --color-upbit-brand:                   var(--upbit-brand);
+  --color-upbit-brand-hover:             var(--upbit-brand-hover);
+  --color-upbit-brand-subtle:            var(--upbit-brand-subtle);
+  --color-upbit-nav-bar:                 var(--upbit-nav-bar);
+
+  /* Upbit Positive / Negative */
+  --color-upbit-positive:                var(--upbit-positive);
+  --color-upbit-positive-strong:         var(--upbit-positive-strong);
+  --color-upbit-positive-subtle:         var(--upbit-positive-subtle);
+  --color-upbit-negative:                var(--upbit-negative);
+  --color-upbit-negative-subtle:         var(--upbit-negative-subtle);
+
+  /* Upbit Gray Scale */
+  --color-upbit-gray-900:                var(--upbit-gray-900);
+  --color-upbit-gray-700:                var(--upbit-gray-700);
+  --color-upbit-gray-500:                var(--upbit-gray-500);
+  --color-upbit-gray-400:                var(--upbit-gray-400);
+  --color-upbit-gray-300:                var(--upbit-gray-300);
+  --color-upbit-gray-100:                var(--upbit-gray-100);
+
+  /* Upbit Semantic */
+  --color-upbit-warning-text:            var(--upbit-warning-text);
+  --color-upbit-warning-bg:              var(--upbit-warning-bg);
+  --color-upbit-success-text:            var(--upbit-success-text);
+  --color-upbit-tooltip-bg:              var(--upbit-tooltip-bg);
+  --color-upbit-tooltip-text:            var(--upbit-tooltip-text);
+
+  /* Radius */
+  --radius-sm:   var(--upbit-radius-sm);    /* 6px */
+  --radius-md:   var(--upbit-radius-md);    /* 8px */
+  --radius-lg:   var(--upbit-radius-lg);    /* 12px */
+  --radius-xl:   var(--upbit-radius-xl);    /* 16px */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Base Layer
+═══════════════════════════════════════════════════════════════ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* ⚠️ 절대 규칙: Pretendard 전용. 시스템 폰트 폴백 금지 */
+    font-family: 'Pretendard', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: var(--upbit-text-body2);    /* 14px */
+    font-weight: var(--upbit-weight-regular);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Upbit Typography Utilities
+═══════════════════════════════════════════════════════════════ */
+@layer utilities {
+
+  /* 현재가 대형 숫자 (28px Bold) */
+  .text-upbit-display {
+    font-size: var(--upbit-text-display);
+    font-weight: var(--upbit-weight-bold);
+    line-height: 1.4;
+    letter-spacing: -0.04em;
+  }
+
+  /* 페이지 핵심 수치 (24px Bold) */
+  .text-upbit-h1 {
+    font-size: var(--upbit-text-h1);
+    font-weight: var(--upbit-weight-bold);
+    line-height: 1.4;
+    letter-spacing: -0.03em;
+  }
+
+  /* 페이지 타이틀, 모달 헤더 (22px Bold) */
+  .text-upbit-h2 {
+    font-size: var(--upbit-text-h2);
+    font-weight: var(--upbit-weight-bold);
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+  }
+
+  /* 섹션 타이틀 (18px Bold) */
+  .text-upbit-h3 {
+    font-size: var(--upbit-text-h3);
+    font-weight: var(--upbit-weight-bold);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  /* 서브섹션 헤더 (16px Bold) */
+  .text-upbit-h4 {
+    font-size: var(--upbit-text-h4);
+    font-weight: var(--upbit-weight-bold);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  /* 코인명, 주요 항목 (15px Regular) */
+  .text-upbit-body1 {
+    font-size: var(--upbit-text-body1);
+    font-weight: var(--upbit-weight-regular);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  /* 일반 본문, 데이터 수치 (14px Regular) */
+  .text-upbit-body2 {
+    font-size: var(--upbit-text-body2);
+    font-weight: var(--upbit-weight-regular);
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  /* 보조 설명 (13px Regular) */
+  .text-upbit-body3 {
+    font-size: var(--upbit-text-body3);
+    font-weight: var(--upbit-weight-regular);
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  /* 캡션, 단위, 날짜 (12px Regular) */
+  .text-upbit-caption1 {
+    font-size: var(--upbit-text-caption1);
+    font-weight: var(--upbit-weight-regular);
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+
+  /* 탭바 라벨, 최소 텍스트 (11px Regular) */
+  .text-upbit-caption2 {
+    font-size: var(--upbit-text-caption2);
+    font-weight: var(--upbit-weight-regular);
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+
+  /* 가격 컬러 유틸리티 */
+  .text-positive  { color: var(--upbit-positive); }        /* 상승 — 빨강 */
+  .text-negative  { color: var(--upbit-negative); }        /* 하락 — 파랑 */
+  .text-neutral   { color: var(--upbit-gray-900); }        /* 보합 — 다크 그레이 */
+
+  /* CTA 버튼 공통 베이스 */
+  .btn-upbit-base {
+    height: var(--upbit-height-cta);
+    border-radius: var(--upbit-radius-md);
+    font-size: var(--upbit-text-h4);
+    font-weight: var(--upbit-weight-bold);
+    font-family: 'Pretendard', sans-serif;
+    transition: background-color 150ms ease;
+  }
+
+  /* 소형 인라인 버튼 (신청/주문/모으기) */
+  .btn-upbit-sm {
+    height: var(--upbit-height-btn-sm);
+    padding: 0 0.75rem;
+    border-radius: var(--upbit-radius-sm);
+    font-size: var(--upbit-text-body2);
+    font-weight: var(--upbit-weight-regular);
+    font-family: 'Pretendard', sans-serif;
+    border: 1px solid var(--upbit-gray-300);
+    color: var(--upbit-gray-700);
+    background: transparent;
+  }
+
+  /* 필터 탭 Pill (KRW / BTC / USDT / 관심) */
+  .chip-upbit {
+    height: 1.875rem;             /* 30px */
+    padding: 0 0.75rem;
+    border-radius: var(--upbit-radius-full);
+    font-size: var(--upbit-text-body3);
+    font-weight: var(--upbit-weight-regular);
+    font-family: 'Pretendard', sans-serif;
+    color: var(--upbit-gray-700);
+    background: transparent;
+    transition: background-color 100ms ease, color 100ms ease;
+  }
+
+  .chip-upbit[data-active="true"],
+  .chip-upbit.active {
+    background: var(--upbit-brand);
+    color: hsl(0 0% 100%);
+    font-weight: var(--upbit-weight-bold);
+  }
+
+  /* 인라인 경고 배너 */
+  .banner-upbit-warning {
+    background: var(--upbit-warning-bg);
+    color: var(--upbit-warning-text);
+    border-radius: var(--upbit-radius-md);
+    padding: var(--upbit-space-3) var(--upbit-space-4);
+    font-size: var(--upbit-text-body3);
+  }
+
+  /* 툴팁 */
+  .tooltip-upbit {
+    background: var(--upbit-tooltip-bg);
+    color: var(--upbit-tooltip-text);
+    border-radius: var(--upbit-radius-sm);
+    padding: var(--upbit-space-2) 0.75rem;
+    font-size: var(--upbit-text-body3);
+  }
+
+  /* 스켈레톤 베이스 */
+  .skeleton-upbit {
+    background: var(--upbit-gray-100);
+    border-radius: var(--upbit-radius-sm);
+    animation: upbit-shimmer 1.5s infinite;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Keyframes
+═══════════════════════════════════════════════════════════════ */
+@keyframes upbit-shimmer {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.5; }
+  100% { opacity: 1; }
+}
