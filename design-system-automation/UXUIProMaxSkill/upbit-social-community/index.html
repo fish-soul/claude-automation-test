@@ -17,22 +17,7 @@
     }
   </style>
   <style>
-    /* ── 숫자만 Helvetica Neue 적용 (두께는 컨텍스트의 Pretendard 두께에 자동 매핑) ── */
-    @font-face {
-      font-family: 'PretendardVariable';
-      src: local('Helvetica Neue'), local('HelveticaNeue'), local('Helvetica'), local('Arial');
-      font-weight: 100 900;
-      unicode-range:
-        U+0030-0039,  /* 0–9 */
-        U+002B,       /* + */
-        U+002D,       /* - */
-        U+002E,       /* . */
-        U+002C,       /* , */
-        U+0025,       /* % */
-        U+20A9;       /* ₩ */
-    }
-
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     body {
       font-family: 'PretendardVariable', Pretendard, 'Helvetica Neue', sans-serif;
       background: #D8D8D8;
@@ -187,15 +172,20 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 20px;
     }
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 999px;
-      object-fit: cover;
       flex-shrink: 0;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .avatar .tossface {
+      font-size: 20px;
+      line-height: 1;
     }
     .user-meta { flex: 1; min-width: 0; }
     .user-name-row {
@@ -205,13 +195,13 @@
     }
     .user-name {
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 600;
       color: #555555;
     }
     .user-badge {
       font-size: 12px;
-      font-weight: 600;
-      padding: 2px 7px;
+      font-weight: 500;
+      padding: 2px 5px;
       border-radius: 4px;
     }
     .user-badge.badge-top    { background: #FEF3C7; color: #92400E; } /* amber-100 / amber-800 */
@@ -224,18 +214,17 @@
     }
     .follow-btn {
       flex-shrink: 0;
-      padding: 4px 11px;
-      border-radius: 4px;
+      padding: 4px 0;
       font-size: 14px;
-      font-weight: 500;
-      border: 1px solid #DDDDDD;
-      color: #888888;
+      font-weight: 600;
+      border: none;
+      color: #1A3CB5;
       background: transparent;
       cursor: pointer;
     }
     .follow-btn.following {
-      background: #F5F5F5;
-      border-color: #EEEEEE;
+      background: transparent;
+      border: none;
       color: #AAAAAA;
     }
 
@@ -258,9 +247,10 @@
     }
     .post-body.clamped {
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      margin-bottom: 0;
     }
     .more-btn {
       font-size: 16px;
@@ -268,7 +258,7 @@
       color: #1A3CB5;
       background: none;
       border: none;
-      padding: 0 0 12px;
+      padding: 8px 0 20px;
       cursor: pointer;
       display: block;
     }
@@ -291,6 +281,44 @@
       cursor: pointer;
     }
     .trade-card:active { background: #EEEFF2; }
+    /* ── Trade Auth Card (거래인증) ── */
+    .trade-auth-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .trade-type-thumb {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: #DBEAFE;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1E40AF;
+    }
+    .trade-type-thumb.buy {
+      background: #FEE2E2;
+      color: #B91C1C;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .trade-auth-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .trade-auth-coin {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111111;
+    }
+    .trade-auth-avgprice {
+      font-size: 13px;
+      color: #777777;
+      white-space: nowrap;
+    }
     .trade-card-top {
       display: flex;
       align-items: center;
@@ -311,6 +339,15 @@
       font-size: 15px;
       font-weight: 600;
       color: #6B6B6B;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .coin-logo {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
     .trade-verified {
       margin-left: auto;
@@ -332,6 +369,44 @@
       color: #AAAAAA;
       font-variant-numeric: tabular-nums;
     }
+
+    /* ── Position Card ── */
+    .pos-row1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .pos-coin-info { display: flex; align-items: center; gap: 6px; }
+    .pos-name { font-size: 15px; font-weight: 700; color: #111111; }
+    .pos-ticker { font-size: 14px; color: #AAAAAA; font-weight: 400; }
+    .pos-trade-btn {
+      background: transparent;
+      color: #1A3CB5;
+      border: 1px solid #1A3CB5;
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .pos-trade-btn:active { background: #EEF1FB; }
+    .pos-pnl { margin-bottom: 20px; }
+    .pos-pnl-label { display: block; font-size: 13px; color: #AAAAAA; margin-bottom: 3px; }
+    .pos-pnl-value { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+    .pos-pnl-value.pos-up { color: #D42B2B; }
+    .pos-pnl-value.pos-down { color: #1A3CB5; }
+    .pos-pnl-pct { font-size: 14px; font-weight: 500; margin-left: 4px; }
+    .pos-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+    }
+    .pos-stat { display: flex; flex-direction: column; gap: 7px; }
+    .pos-stat-label { font-size: 13px; color: #AAAAAA; }
+    .pos-stat-val { font-size: 14px; font-weight: 400; color: #4A4A4A; }
 
     /* ── Chart Widget ── */
     .chart-widget {
@@ -403,7 +478,7 @@
     .fab {
       position: absolute;
       right: 18px;
-      bottom: 68px;
+      bottom: calc(max(env(safe-area-inset-bottom), 20px) + 54px + 16px);
       width: 46px;
       height: 46px;
       border-radius: 999px;
@@ -423,20 +498,23 @@
       position: absolute;
       inset: 0;
       z-index: 50;
-      display: none;
+      pointer-events: none;
     }
-    .bottom-sheet.open { display: block; }
+    .bottom-sheet.open { pointer-events: all; }
     .bs-backdrop {
       position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.4);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
+    .bottom-sheet.open .bs-backdrop { opacity: 1; }
     .bs-panel {
       position: absolute;
       bottom: 0; left: 0; right: 0;
       background: #FFFFFF;
       border-radius: 16px 16px 0 0;
-      padding-bottom: 28px;
+      padding-bottom: calc(max(env(safe-area-inset-bottom), 20px) + 16px);
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
     }
@@ -486,13 +564,28 @@
     }
     .pct-btn.active { background: #EEF1FB; border-color: #1A3CB5; color: #1A3CB5; }
 
+    .cta-row {
+      display: flex;
+      gap: 8px;
+    }
     .cta-btn {
-      width: 100%;
+      flex: 7;
       padding: 15px 0;
       border-radius: 8px;
       font-size: 16px;
       font-weight: 700;
       color: #FFFFFF;
+      border: none;
+      cursor: pointer;
+    }
+    .cta-cancel {
+      flex: 3;
+      padding: 15px 0;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #555555;
+      background: #F0F0F0;
       border: none;
       cursor: pointer;
     }
@@ -527,9 +620,9 @@
 
   <!-- FEED TABS -->
   <div class="feed-tabs" id="feedTabs">
-    <button class="feed-tab active" onclick="switchTab(0,this)">추천</button>
+    <button class="feed-tab active" onclick="switchTab(0,this)">발견</button>
     <button class="feed-tab" onclick="switchTab(1,this)">팔로잉</button>
-    <button class="feed-tab" onclick="switchTab(2,this)">뉴스</button>
+    <button class="feed-tab" onclick="switchTab(2,this)">인기</button>
     <button class="feed-tab" onclick="switchTab(3,this)">콘텐츠</button>
     <div class="tab-line" id="tabLine" style="left:0;"></div>
   </div>
@@ -541,7 +634,7 @@
     <!-- ── POST 1 ── -->
     <div class="post-card">
       <div class="user-row">
-        <img class="avatar" src="https://api.dicebear.com/9.x/shapes/svg?seed=kimbit&backgroundColor=1a3cb5" alt="달나라가즈아" />
+        <div class="avatar" style="background:#1A3CB5;"><span class="tossface">🌕</span></div>
         <div class="user-meta">
           <div class="user-name-row">
             <span class="user-name">달나라가즈아</span>
@@ -549,27 +642,27 @@
           </div>
           <div class="post-context">37분 전 · 팔로워 12.4만</div>
         </div>
-        <button class="follow-btn" onclick="toggleFollow(this)">팔로우</button>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
       </div>
 
-      <div class="post-title">오늘 드디어 BTC 포지션 전량 정리했어요</div>
-      <div class="post-body">
-        저점에서 분할 매수하고 목표가 도달 후 전량 매도 완료했습니다.
-        <span class="coin-tag" onclick="openSheet('ETH','이더리움',5240000,1.87,true)">#ETH</span>도 비슷한 흐름이니 관심 가져보세요.
+      <div class="post-title">9천만원대 물량 전부 쳐냈습니다</div>
+      <div class="post-body clamped" id="post1body">
+        나스닥 선물 약세에 1억 저항 못 뚫는 거 보고 오늘 새벽에 다 정리했어요.<br>
+        매크로 상 연준 발언 전까지는 관망이 맞다고 봐요.<br>
+        단기 눌림목은 8,400~8,600만원대로 보고 있고, 거기서 재진입 타이밍 볼 예정입니다.<br>
+        <span class="coin-tag" onclick="openSheet('ETH','이더리움',5240000,1.87,true)">#ETH</span>도 비트 따라 조정 올 것 같으니 섣불리 들어가지 마세요.
       </div>
+      <button class="more-btn" id="post1more" onclick="expandPost('post1body','post1more')">더 보기</button>
 
-      <!-- 거래 내역 인증 카드 -->
-      <div class="trade-card" onclick="openSheet('BTC','비트코인',97420000,2.34,true)">
-        <div class="trade-card-top">
-          <span class="trade-badge sell">매도</span>
-          <span class="trade-coin-name">비트코인 0.02931 BTC</span>
-          <div class="trade-verified">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#AAAAAA" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            업비트 인증
+      <!-- 거래 인증 카드 -->
+      <div class="trade-card">
+        <div class="trade-auth-card">
+          <div class="trade-type-thumb">매도</div>
+          <div class="trade-auth-info">
+            <span class="trade-auth-coin">비트코인 0.924 BTC</span>
+            <span class="trade-auth-avgprice">평균매도가 ₩99,200,000 · 03.17 03:47</span>
           </div>
         </div>
-        <div class="trade-amount" style="color:#D42B2B;">+₩2,847,000 <span style="font-size:15px;font-weight:600;">(+24.3%)</span></div>
-        <div class="trade-meta">1코인당 97,420,000원 · 14일 보유 · 3월 16일 09:23</div>
       </div>
 
       <div class="action-bar">
@@ -595,7 +688,7 @@
     <!-- ── POST 2 ── -->
     <div class="post-card">
       <div class="user-row">
-        <img class="avatar" src="https://api.dicebear.com/9.x/shapes/svg?seed=parksolana&backgroundColor=7c3aed" alt="SOL장인" />
+        <div class="avatar" style="background:#059669;"><span class="tossface">⚡</span></div>
         <div class="user-meta">
           <div class="user-name-row">
             <span class="user-name">SOL장인</span>
@@ -603,11 +696,15 @@
           </div>
           <div class="post-context">1시간 전 · 팔로워 3,821</div>
         </div>
-        <button class="follow-btn" onclick="toggleFollow(this)">팔로우</button>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
       </div>
 
       <div class="post-body clamped" id="post2body">
-        <span class="coin-tag" onclick="openSheet('SOL','솔라나',265000,4.12,true)">#SOL</span> 온체인 데이터에서 대형 지갑 유입이 눈에 띄어요. 260,000원 지지 확인 이후 추가 상승 시나리오가 유효합니다. 단기 트레이딩 관점에서 주목할 만한 구간이에요.
+        <span class="coin-tag" onclick="openSheet('SOL','솔라나',265000,4.12,true)">#SOL</span> 어젯밤부터 고래 지갑 유입 거래량이 심상치 않아요.<br>
+        26만원 지지선에서 두 번 튕겨나왔고 거래량도 평균 대비 180% 수준입니다.<br>
+        주피터 디파이 TVL도 꾸준히 올라오고 있어서 단기적으로 30만원 저항 테스트 가능성 높게 보고 있어요.<br>
+        다만 비트 눌리면 같이 빠지니까 비트 흐름 먼저 보고 분할로 접근하세요.<br>
+        이건 제 개인 의견이고 투자 판단은 각자 하시기 바랍니다.
       </div>
       <button class="more-btn" id="post2more" onclick="expandPost('post2body','post2more')">더 보기</button>
 
@@ -634,17 +731,27 @@
       </div>
 
       <!-- SOL 거래 카드 -->
-      <div class="trade-card" onclick="openSheet('SOL','솔라나',265000,4.12,true)">
-        <div class="trade-card-top">
-          <span class="trade-badge buy">매수</span>
-          <span class="trade-coin-name">솔라나 3.77 SOL</span>
-          <div class="trade-verified">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#AAAAAA" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            업비트 인증
+      <div class="trade-card" onclick="openSheet('SOL','솔라나',265000,9.8,true)">
+        <div class="pos-row1">
+          <div class="pos-coin-info">
+            <span class="pos-name">솔라나</span>
+            <span class="pos-ticker">SOL/KRW</span>
+          </div>
+          <button class="pos-trade-btn">거래하기</button>
+        </div>
+        <div class="pos-pnl">
+          <div class="pos-pnl-value pos-up">+₩23,700<span class="pos-pnl-pct">(+9.8%)</span></div>
+        </div>
+        <div class="pos-stats">
+          <div class="pos-stat">
+            <span class="pos-stat-label">평균매수가</span>
+            <span class="pos-stat-val">₩241,300</span>
+          </div>
+          <div class="pos-stat">
+            <span class="pos-stat-label">현재가</span>
+            <span class="pos-stat-val">₩265,000</span>
           </div>
         </div>
-        <div class="trade-amount" style="color:#D42B2B;">+₩41,200 <span style="font-size:15px;font-weight:600;">(+4.12%)</span></div>
-        <div class="trade-meta">1코인당 265,000원 · 3월 16일 08:47 기준</div>
       </div>
 
       <div class="action-bar">
@@ -670,7 +777,7 @@
     <!-- ── POST 3 ── -->
     <div class="post-card">
       <div class="user-row">
-        <img class="avatar" src="https://api.dicebear.com/9.x/shapes/svg?seed=leetherum&backgroundColor=374151" alt="ETH고래" />
+        <div class="avatar" style="background:#0EA5E9;"><span class="tossface">🐋</span></div>
         <div class="user-meta">
           <div class="user-name-row">
             <span class="user-name">ETH고래</span>
@@ -678,27 +785,28 @@
           </div>
           <div class="post-context">3시간 전 · 팔로워 947</div>
         </div>
-        <button class="follow-btn" onclick="toggleFollow(this)">팔로우</button>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
       </div>
 
-      <div class="post-title">매수 타이밍 놓쳤던 경험 공유해요</div>
+      <div class="post-title">뇌동매매 반성문 씁니다</div>
       <div class="post-body clamped" id="post3body">
-        <span class="coin-tag" onclick="openSheet('XRP','리플',860,3.21,false)">#XRP</span> 성급하게 따라 매수했다가 손실이 났어요. 피드에서 미리 신호를 확인했다면 달랐을 것 같아요. 앞으로는 커뮤니티 의견을 참고하면서 분할 매수 원칙을 지켜야겠어요.
+        <span class="coin-tag" onclick="openSheet('XRP','리플',860,3.21,false)">#XRP</span> 커뮤니티 분위기에 휩쓸려서 고점에 풀매수했다가 7% 손절했어요.<br>
+        SEC 이슈 해소됐다고 떡상 외치는 글 보고 그냥 들어갔는데...<br>
+        차트도 안 보고 들어간 제 잘못이죠.<br>
+        분할매수 원칙 지키라고 항상 말하면서 정작 저는 못 지켰네요.<br>
+        손실 인증이지만 반면교사 삼아 공유합니다. 다들 뇌동매매 조심하세요.
       </div>
       <button class="more-btn" id="post3more" onclick="expandPost('post3body','post3more')">더 보기</button>
 
-      <!-- XRP 손실 거래 카드 -->
-      <div class="trade-card" onclick="openSheet('XRP','리플',860,3.21,false)">
-        <div class="trade-card-top">
-          <span class="trade-badge loss">매수</span>
-          <span class="trade-coin-name">리플 166.3 XRP</span>
-          <div class="trade-verified">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#AAAAAA" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            업비트 인증
+      <!-- XRP 손절 거래 인증 카드 -->
+      <div class="trade-card">
+        <div class="trade-auth-card">
+          <div class="trade-type-thumb">매도</div>
+          <div class="trade-auth-info">
+            <span class="trade-auth-coin">리플 780 XRP</span>
+            <span class="trade-auth-avgprice">평균매도가 ₩860 · 03.17 11:23</span>
           </div>
         </div>
-        <div class="trade-amount" style="color:#1A3CB5;">-₩143,000 <span style="font-size:15px;font-weight:600;">(-7.2%)</span></div>
-        <div class="trade-meta">1코인당 860원 · 3일 보유 · 3월 13일 14:20</div>
       </div>
 
       <div class="action-bar">
@@ -721,12 +829,265 @@
       </div>
     </div>
 
+    <!-- ── POST 4 (잡담) ── -->
+    <div class="post-card">
+      <div class="user-row">
+        <div class="avatar" style="background:#F59E0B;"><span class="tossface">👑</span></div>
+        <div class="user-meta">
+          <div class="user-name-row">
+            <span class="user-name">코인왕대디</span>
+          </div>
+          <div class="post-context">2시간 전 · 팔로워 614</div>
+        </div>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
+      </div>
+      <div class="post-body">
+        도지는 왜 자꾸 떨어지냐 진짜ㅠㅠ<br>
+        일론이 트위터에 올리면 펌핑하던 시절은 어디갔냐...<br>
+        이제 반응도 없네 ㅋㅋㅋ 완전 옛날 얘기됨
+      </div>
+      <div class="action-bar">
+        <button class="act-btn" onclick="toggleLike(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>203</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>77</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>19</span></button>
+        <div class="act-spacer"></div>
+        <button class="act-dots"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ── POST 5 ── -->
+    <div class="post-card">
+      <div class="user-row">
+        <div class="avatar" style="background:#7C3AED;"><span class="tossface">📊</span></div>
+        <div class="user-meta">
+          <div class="user-name-row">
+            <span class="user-name">차트박사K</span>
+            <span class="user-badge badge-analyst">분석가</span>
+          </div>
+          <div class="post-context">3시간 전 · 팔로워 8,430</div>
+        </div>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
+      </div>
+      <div class="post-title">ETH 4시간봉 역헤숄 패턴 주목</div>
+      <div class="post-body clamped" id="post5body">
+        <span class="coin-tag" onclick="openSheet('ETH','이더리움',5240000,1.87,true)">#ETH</span> 4시간봉에서 역헤드앤숄더 패턴이 완성되고 있어요.<br>
+        넥라인 530만원 돌파 시 단기 목표가 580만원까지 열려있습니다.<br>
+        거래량도 서서히 붙기 시작했고 파생 미결제약정도 증가 중이에요.<br>
+        다만 비트가 먼저 안정화돼야 하는 조건이 있으니 비트 먼저 확인하세요.
+      </div>
+      <button class="more-btn" id="post5more" onclick="expandPost('post5body','post5more')">더 보기</button>
+      <!-- ETH 수익률 인증 카드 -->
+      <div class="trade-card" onclick="openSheet('ETH','이더리움',5240000,6.8,true)">
+        <div class="pos-row1">
+          <div class="pos-coin-info">
+            <span class="pos-name">이더리움</span>
+            <span class="pos-ticker">ETH/KRW</span>
+          </div>
+          <button class="pos-trade-btn">거래하기</button>
+        </div>
+        <div class="pos-pnl">
+          <div class="pos-pnl-value pos-up">+₩334,000<span class="pos-pnl-pct">(+6.8%)</span></div>
+        </div>
+        <div class="pos-stats">
+          <div class="pos-stat">
+            <span class="pos-stat-label">평균매수가</span>
+            <span class="pos-stat-val">₩4,906,000</span>
+          </div>
+          <div class="pos-stat">
+            <span class="pos-stat-label">현재가</span>
+            <span class="pos-stat-val">₩5,240,000</span>
+          </div>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="act-btn" onclick="toggleLike(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>521</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>94</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>47</span></button>
+        <div class="act-spacer"></div>
+        <button class="act-dots"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ── POST 6 (잡담) ── -->
+    <div class="post-card">
+      <div class="user-row">
+        <div class="avatar" style="background:#0F172A;"><span class="tossface">💎</span></div>
+        <div class="user-meta">
+          <div class="user-name-row">
+            <span class="user-name">존버는승리</span>
+            <span class="user-badge badge-holder">장기홀더</span>
+          </div>
+          <div class="post-context">4시간 전 · 팔로워 2,109</div>
+        </div>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
+      </div>
+      <div class="post-body">
+        비트 8천 간다고 했던 유튜버 지금 뭐함 ㅋㅋㅋ<br>
+        그 영상 보고 풀매수 각 잡았는데 진짜 다행이다<br>
+        역시 남 말 믿으면 안됨... 차트 공부가 답이에요
+      </div>
+      <div class="action-bar">
+        <button class="act-btn" onclick="toggleLike(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>1,204</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>231</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>88</span></button>
+        <div class="act-spacer"></div>
+        <button class="act-dots"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ── POST 7 ── -->
+    <div class="post-card">
+      <div class="user-row">
+        <div class="avatar" style="background:#DC2626;"><span class="tossface">⚙️</span></div>
+        <div class="user-meta">
+          <div class="user-name-row">
+            <span class="user-name">아비트리저</span>
+            <span class="user-badge badge-top">TOP 5%</span>
+          </div>
+          <div class="post-context">5시간 전 · 팔로워 5,677</div>
+        </div>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
+      </div>
+      <div class="post-title">에이벡스 서밋 앞두고 매집 완료</div>
+      <div class="post-body clamped" id="post7body">
+        <span class="coin-tag">#AVAX</span> 서밋 행사가 이틀 뒤라 미리 포지션 잡았어요.<br>
+        이벤트 드리븐 전략은 발표 직전 매집, 당일 고점 청산이 기본 공식입니다.<br>
+        다음 타깃은 <span class="coin-tag">#DOT</span> 업그레이드 일정 앞두고 있어서 같이 준비 중이에요.
+      </div>
+      <button class="more-btn" id="post7more" onclick="expandPost('post7body','post7more')">더 보기</button>
+      <!-- AVAX 매수 거래 인증 카드 -->
+      <div class="trade-card">
+        <div class="trade-auth-card">
+          <div class="trade-type-thumb buy">매수</div>
+          <div class="trade-auth-info">
+            <span class="trade-auth-coin">에이바스 12.5 AVAX</span>
+            <span class="trade-auth-avgprice">평균매수가 ₩38,400 · 03.15 09:22</span>
+          </div>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="act-btn" onclick="toggleLike(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>388</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>63</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>25</span></button>
+        <div class="act-spacer"></div>
+        <button class="act-dots"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ── POST 8 ── -->
+    <div class="post-card">
+      <div class="user-row">
+        <div class="avatar" style="background:#065F46;"><span class="tossface">🔍</span></div>
+        <div class="user-meta">
+          <div class="user-name-row">
+            <span class="user-name">온체인탐정</span>
+            <span class="user-badge badge-analyst">분석가</span>
+          </div>
+          <div class="post-context">6시간 전 · 팔로워 11,200</div>
+        </div>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
+      </div>
+      <div class="post-title">거래소 BTC 출금량 이상 감지</div>
+      <div class="post-body clamped" id="post8body">
+        <span class="coin-tag" onclick="openSheet('BTC','비트코인',97420000,2.34,true)">#BTC</span> 지난 12시간 동안 바이낸스·업비트 합산 출금량이 평소 대비 340% 급증했습니다.<br>
+        거래소 밖으로 나간다는 건 장기 보유 목적의 콜드월렛 이동 가능성이 높아요.<br>
+        공급 감소 → 수급 우호적 시그널로 해석할 수 있습니다.<br>
+        단기 조정 구간에서 매집하는 스마트머니 움직임으로 봐도 될 것 같아요.
+      </div>
+      <button class="more-btn" id="post8more" onclick="expandPost('post8body','post8more')">더 보기</button>
+      <div class="action-bar">
+        <button class="act-btn" onclick="toggleLike(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>742</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>118</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>56</span></button>
+        <div class="act-spacer"></div>
+        <button class="act-dots"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ── POST 9 (잡담) ── -->
+    <div class="post-card">
+      <div class="user-row">
+        <div class="avatar" style="background:#9333EA;"><span class="tossface">😤</span></div>
+        <div class="user-meta">
+          <div class="user-name-row">
+            <span class="user-name">물린사람123</span>
+          </div>
+          <div class="post-context">7시간 전 · 팔로워 88</div>
+        </div>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
+      </div>
+      <div class="post-body">
+        진짜 쉽지 않다 ㅋㅋㅋ<br>
+        공부 6개월 했는데 결국 시장이 내 의도대로 안 가네요<br>
+        오늘도 손절하고 치킨 먹으러 갑니다... 다들 수고하세요 😭
+      </div>
+      <div class="action-bar">
+        <button class="act-btn" onclick="toggleLike(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>2,847</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>403</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>312</span></button>
+        <div class="act-spacer"></div>
+        <button class="act-dots"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ── POST 10 ── -->
+    <div class="post-card">
+      <div class="user-row">
+        <div class="avatar" style="background:#1D4ED8;"><span class="tossface">🤖</span></div>
+        <div class="user-meta">
+          <div class="user-name-row">
+            <span class="user-name">퀀트형</span>
+            <span class="user-badge badge-top">TOP 1%</span>
+          </div>
+          <div class="post-context">8시간 전 · 팔로워 23.1만</div>
+        </div>
+        <button class="follow-btn" onclick="toggleFollow(this)">+ 팔로우</button>
+      </div>
+      <div class="post-title">BNB 자동매매 월간 결산 — 손실 마감</div>
+      <div class="post-body clamped" id="post10body">
+        <span class="coin-tag">#BNB</span> 3월 그리드봇 결과 공유해요. 솔직하게 씁니다.<br>
+        설정 범위 680,000~820,000원이었는데 월말 급락으로 하단 이탈하면서 손실 마감됐어요.<br>
+        그리드봇은 횡보장에서 강하지만 방향성 급락에는 속수무책이더라고요.<br>
+        다음 달은 범위 더 넓게 잡고 물량 줄여서 재운용할 예정입니다.
+      </div>
+      <button class="more-btn" id="post10more" onclick="expandPost('post10body','post10more')">더 보기</button>
+      <div class="trade-card" onclick="openSheet('BNB','바이낸스코인',621000,9.2,false)">
+        <div class="pos-row1">
+          <div class="pos-coin-info">
+            <span class="pos-name">바이낸스코인</span>
+            <span class="pos-ticker">BNB/KRW</span>
+          </div>
+          <button class="pos-trade-btn">거래하기</button>
+        </div>
+        <div class="pos-pnl">
+          <div class="pos-pnl-value pos-down">-₩63,200<span class="pos-pnl-pct">(-9.2%)</span></div>
+        </div>
+        <div class="pos-stats">
+          <div class="pos-stat">
+            <span class="pos-stat-label">평균매수가</span>
+            <span class="pos-stat-val">₩684,200</span>
+          </div>
+          <div class="pos-stat">
+            <span class="pos-stat-label">현재가</span>
+            <span class="pos-stat-val">₩621,000</span>
+          </div>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="act-btn" onclick="toggleLike(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>634</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>87</span></button>
+        <button class="act-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>41</span></button>
+        <div class="act-spacer"></div>
+        <button class="act-dots"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+      </div>
+    </div>
+
     <div style="height:20px;"></div>
   </div><!-- /feed-scroll -->
 
   <!-- FAB -->
   <button class="fab" onclick="">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
   </button>
 
   <!-- BOTTOM TAB BAR -->
@@ -771,7 +1132,7 @@
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px 12px;">
         <div style="display:flex;align-items:center;gap:10px;">
-          <div id="bsIcon" style="width:36px;height:36px;border-radius:999px;background:#F7931A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;">₿</div>
+          <img id="bsIcon" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/32/color/btc.png" alt="BTC" style="width:36px;height:36px;border-radius:999px;" />
           <div>
             <div style="font-size:15px;font-weight:700;color:#111111;" id="bsName">비트코인</div>
             <div style="display:flex;align-items:center;gap:8px;margin-top:2px;">
@@ -780,9 +1141,6 @@
             </div>
           </div>
         </div>
-        <button onclick="closeSheet()" style="width:28px;height:28px;border-radius:999px;background:#F5F5F5;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
       </div>
       <div class="order-tab-row">
         <button class="order-tab buy active" id="buyTab" onclick="switchOrder('buy')">매수</button>
@@ -816,7 +1174,10 @@
         <p style="font-size:11px;color:#AAAAAA;line-height:1.6;margin-bottom:14px;">
           가상자산 투자는 원금 손실이 발생할 수 있습니다. 본 투자에 대한 모든 책임은 투자자 본인에게 있습니다.
         </p>
-        <button class="cta-btn cta-buy" id="ctaBtn" onclick="placeOrder()">매수하기</button>
+        <div class="cta-row">
+          <button class="cta-cancel" onclick="closeSheet()">취소</button>
+          <button class="cta-btn cta-buy" id="ctaBtn" onclick="placeOrder()">매수하기</button>
+        </div>
       </div>
     </div>
   </div>
@@ -835,10 +1196,10 @@
     ch.textContent = (isUp ? '▲ ' : '▼ ') + changeAbs + '%';
     ch.style.color = isUp ? '#D42B2B' : '#1A3CB5';
     const icon = document.getElementById('bsIcon');
-    const colors = { BTC:'#F7931A', ETH:'#627EEA', SOL:'#9945FF', XRP:'#00AAE4' };
-    const labels = { BTC:'₿', ETH:'Ξ', SOL:'◎', XRP:'✕' };
-    icon.style.background = colors[ticker] || '#1A3CB5';
-    icon.textContent = labels[ticker] || ticker[0];
+    const iconMap = { BTC:'btc', ETH:'eth', SOL:'sol', XRP:'xrp', AVAX:'avax', BNB:'bnb' };
+    const sym = iconMap[ticker] || ticker.toLowerCase();
+    icon.src = `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/32/color/${sym}.png`;
+    icon.alt = ticker;
     calcQty();
     document.getElementById('bottomSheet').classList.add('open');
   }
@@ -915,7 +1276,7 @@
   function toggleFollow(btn) {
     const f = btn.dataset.following === 'true';
     btn.dataset.following = !f;
-    btn.textContent = f ? '팔로우' : '팔로잉';
+    btn.innerHTML = f ? '+ 팔로우' : '✓ 팔로잉';
     btn.classList.toggle('following', !f);
   }
 
