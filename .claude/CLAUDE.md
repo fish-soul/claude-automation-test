@@ -10,6 +10,7 @@
 2. **`/design-system-automation/`**
    - **`/baseUI-test/`**: Base UI 기반 컴포넌트 생성 시 해당 폴더의 지침 참조.
    - **`/shadcn-test/`**: shadcn/ui 기반 컴포넌트 생성 시 해당 폴더의 지침 참조.
+   - **`/UXUIProMaxSkill/`**: **[현재 기본 작업 폴더]** ui-ux-pro-max 스킬을 활용한 UI/UX 작업의 기본 저장 위치. 스킬 실행 경로: `design-system-automation/UXUIProMaxSkill/.claude/skills/ui-ux-pro-max/scripts/search.py`
 
 ## 🤖 통합 자동화 워크플로우 (Cross-Referencing)
 

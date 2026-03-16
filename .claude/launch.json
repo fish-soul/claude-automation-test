@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "shadcn-test",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "/Users/yuna/Desktop/claude-automation-test/design-system-automation/shadcn-test/node_modules/next/dist/bin/next",
+        "dev",
+        "--turbopack",
+        "--port", "3000",
+        "/Users/yuna/Desktop/claude-automation-test/design-system-automation/shadcn-test"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "uds-design-system",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "/Users/yuna/Desktop/claude-automation-test/design-system-automation/UDS-design-system/node_modules/next/dist/bin/next",
+        "dev",
+        "--turbopack",
+        "--port", "3001",
+        "/Users/yuna/Desktop/claude-automation-test/design-system-automation/UDS-design-system"
+      ],
+      "port": 3001
+    },
+    {
+      "name": "upbit-social",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3030", "design-system-automation/UXUIProMaxSkill/upbit-social-community"],
+      "port": 3030
+    }
+  ]
+}

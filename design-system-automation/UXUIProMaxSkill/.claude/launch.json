@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "upbit-social",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3030", "upbit-social-community"],
+      "port": 3030
+    }
+  ]
+}
