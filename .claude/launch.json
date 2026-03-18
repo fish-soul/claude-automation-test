@@ -1,0 +1,32 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "shadcn-test (Next.js)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "--turbopack"],
+      "cwd": "design-system-automation/shadcn-test",
+      "port": 3000
+    },
+    {
+      "name": "UDS Design System (Next.js)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "design-system-automation/UDS-design-system",
+      "port": 3001
+    },
+    {
+      "name": "upbit-social-community (Static)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "design-system-automation/UXUIProMaxSkill/upbit-social-community"],
+      "port": 3030
+    },
+    {
+      "name": "ux-writing-assistant (Next.js)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "--turbopack"],
+      "cwd": "ux-writing-assistant",
+      "port": 3002
+    }
+  ]
+}
