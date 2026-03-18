@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "shadcn-test",
+      "cwd": "design-system-automation/shadcn-test",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "uds-design-system",
+      "cwd": "design-system-automation/UDS-design-system",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "upbit-social",
+      "cwd": "design-system-automation/UXUIProMaxSkill/upbit-social-community",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3030", "."],
+      "port": 3030
+    }
+  ]
+}
