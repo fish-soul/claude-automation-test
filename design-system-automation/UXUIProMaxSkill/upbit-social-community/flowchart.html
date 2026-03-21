@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>업비트 피드 플로우차트</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #F5F6FA;
+      font-family: -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 60px 40px 80px;
+    }
+
+    .chart {
+      position: relative;
+      width: 600px;
+      height: 860px;
+    }
+
+    /* SVG 연결선 레이어 */
+    .connector-svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    /* ── 다이아몬드 공통 ── */
+    .diamond-wrap {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .diamond-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      line-height: 1.45;
+    }
+
+    /* 첫 번째 다이아몬드: 초보인가? */
+    .diamond1 { top: 0; width: 180px; height: 84px; }
+
+    /* 두 번째 다이아몬드: 쓰던 글이 있는가? */
+    .diamond2 { top: 605px; width: 180px; height: 80px; }
+
+    /* ── A: upbit_feed 이미지 ── */
+    .node-a {
+      position: absolute;
+      top: 180px;
+      left: 30px;
+      width: 180px;
+    }
+    .node-a img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+
+    /* ── 노드 공통 ── */
+    .node-box {
+      position: absolute;
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      background: white;
+      border-radius: 12px;
+      padding: 14px 10px;
+    }
+    .node-lbl {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .node-sub {
+      font-size: 10px;
+      color: #888;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* No → B (초보 아님) */
+    .node-b-no {
+      top: 180px;
+      right: 30px;
+      border: 2px solid #1A3CB5;
+    }
+    .node-b-no .node-lbl { color: #1A3CB5; }
+
+    /* 있음 → B (임시저장) */
+    .node-b-draft {
+      top: 760px;
+      left: 30px;
+      border: 2px solid #1A3CB5;
+    }
+    .node-b-draft .node-lbl { color: #1A3CB5; }
+
+    /* 없음 → C (새 글쓰기) */
+    .node-c {
+      top: 760px;
+      right: 30px;
+      border: 2px solid #D42B2B;
+    }
+    .node-c .node-lbl { color: #D42B2B; }
+  </style>
+</head>
+<body>
+<div class="chart">
+
+  <!--
+  ┌─ 좌표 메모 ──────────────────────────────────────────┐
+  │ Diamond1  center=(300,42)  left=(210,42) right=(390,42) bottom=(300,84)
+  │ A image   left=30 top=180 width=180 height≈327 → bottom≈507 center-x=120
+  │ B_no      right=30 top=180 width=120 center-x=510
+  │ FAB       center=(120,549) bottom≈590
+  │ Diamond2  center=(300,645) top=605 bottom=685 left=(210,645) right=(390,645)
+  │ B_draft   center-x=90  top=760
+  │ C_new     center-x=510 top=760
+  └──────────────────────────────────────────────────────┘
+  -->
+
+  <svg class="connector-svg">
+    <!-- ── 1단계: 초보인가? ──────────────────────────────── -->
+
+    <!-- Yes: 다이아몬드 하단(300,84) → 꺾어서 A 상단(120,180) -->
+    <line x1="300" y1="84"  x2="300" y2="120" stroke="#888" stroke-width="2"/>
+    <line x1="300" y1="120" x2="120" y2="120" stroke="#888" stroke-width="2"/>
+    <line x1="120" y1="120" x2="120" y2="178" stroke="#888" stroke-width="2"/>
+    <polygon points="120,180 114,166 126,166" fill="#888"/>
+    <text x="138" y="113" font-size="12" font-weight="700" fill="#1A3CB5">Yes</text>
+
+    <!-- No: 다이아몬드 우측(390,42) → B_no 상단(510,180) -->
+    <line x1="390" y1="42"  x2="510" y2="42"  stroke="#888" stroke-width="2"/>
+    <line x1="510" y1="42"  x2="510" y2="178" stroke="#888" stroke-width="2"/>
+    <polygon points="510,180 504,166 516,166" fill="#888"/>
+    <text x="418" y="35"  font-size="12" font-weight="700" fill="#D42B2B">No</text>
+
+    <!-- ── 2단계: upbit_feed 이미지 내 WriteButton → Diamond2 ── -->
+    <!--
+      upbit_feed.png: 1070×1944 (2x export, 실제 프레임 535×972)
+      WriteButton in frame: x=311 y=676 w=46 h=46 → center=(334,699)
+      display scale: 180/535 = 0.3364
+      x_display = 334 * 0.3364 = 112px → chart x = 30+112 = 142
+      y_display = 699 * 0.3364 = 235px → chart y = 180+235 = 415
+    -->
+    <!--
+      y 재계산: FAB는 탭바 바로 위 → 약 84% from top
+      0.84 * 327 = 275px → chart y = 180+275 = 455
+      레이블은 이미지 오른쪽 바깥(x > 210)에 위치
+    -->
+    <!-- 원점 마커 (WriteButton 위치) -->
+    <circle cx="142" cy="435" r="5" fill="#1A3CB5" opacity="0.7"/>
+    <!-- "글쓰기 버튼 탭" 레이블 → 이미지 오른쪽 바깥 -->
+    <text x="216" y="432" font-size="11" font-weight="600" fill="#1A3CB5">글쓰기 버튼 탭</text>
+    <!-- WriteButton → 오른쪽 꺾어서 Diamond2 상단으로 -->
+    <line x1="147" y1="435" x2="300" y2="435" stroke="#1A3CB5" stroke-width="2" stroke-dasharray="5,3"/>
+    <line x1="300" y1="435" x2="300" y2="603" stroke="#1A3CB5" stroke-width="2" stroke-dasharray="5,3"/>
+    <polygon points="300,605 294,591 306,591" fill="#1A3CB5"/>
+
+    <!-- ── 4단계: 쓰던 글이 있는가? ──────────────────────── -->
+
+    <!-- 있음: 다이아몬드2 좌측(210,645) → B_draft 상단(90,760) -->
+    <line x1="210" y1="645" x2="90"  y2="645" stroke="#888" stroke-width="2"/>
+    <line x1="90"  y1="645" x2="90"  y2="758" stroke="#888" stroke-width="2"/>
+    <polygon points="90,760 84,746 96,746" fill="#888"/>
+    <text x="110" y="638" font-size="12" font-weight="700" fill="#1A3CB5">있음</text>
+
+    <!-- 없음: 다이아몬드2 우측(390,645) → C 상단(510,760) -->
+    <line x1="390" y1="645" x2="510" y2="645" stroke="#888" stroke-width="2"/>
+    <line x1="510" y1="645" x2="510" y2="758" stroke="#888" stroke-width="2"/>
+    <polygon points="510,760 504,746 516,746" fill="#888"/>
+    <text x="408" y="638" font-size="12" font-weight="700" fill="#D42B2B">없음</text>
+  </svg>
+
+  <!-- 다이아몬드 1: 초보인가? -->
+  <div class="diamond-wrap diamond1">
+    <svg width="180" height="84" viewBox="0 0 180 84">
+      <polygon points="90,0 180,42 90,84 0,42" fill="#1A3CB5"/>
+    </svg>
+    <div class="diamond-text">초보인가?</div>
+  </div>
+
+  <!-- A: upbit_feed 이미지 -->
+  <div class="node-a">
+    <img src="upbit_feed.png" alt="업비트 피드 UI" />
+  </div>
+
+  <!-- 다이아몬드 2: 쓰던 글이 있는가? -->
+  <div class="diamond-wrap diamond2">
+    <svg width="180" height="80" viewBox="0 0 180 80">
+      <polygon points="90,0 180,40 90,80 0,40" fill="#1A3CB5"/>
+    </svg>
+    <div class="diamond-text">쓰던 글이<br>있는가?</div>
+  </div>
+
+  <!-- No → B (초보 아님) -->
+  <div class="node-box node-b-no">
+    <span class="node-lbl">B</span>
+    <span class="node-sub">일반 피드<br>진입</span>
+  </div>
+
+  <!-- 있음 → B (임시저장) -->
+  <div class="node-box node-b-draft">
+    <span class="node-lbl">B</span>
+    <span class="node-sub">임시저장 글<br>불러오기</span>
+  </div>
+
+  <!-- 없음 → C (새 글쓰기) -->
+  <div class="node-box node-c">
+    <span class="node-lbl">C</span>
+    <span class="node-sub">새 글쓰기<br>에디터 진입</span>
+  </div>
+
+</div>
+</body>
+</html>
