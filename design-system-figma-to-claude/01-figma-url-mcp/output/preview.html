@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KRDS Calendar Preview</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f0f2f5;
+      font-family: -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e2124;
+      margin-bottom: 8px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: #6d7882;
+      margin-bottom: 40px;
+    }
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #6d7882;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .preview-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .preview-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .preview-item-label {
+      font-size: 13px;
+      color: #464c53;
+      font-weight: 600;
+    }
+    .result-box {
+      margin-top: 8px;
+      padding: 12px 16px;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #e6e8ea;
+      font-size: 14px;
+      color: #1e2124;
+      min-width: 384px;
+    }
+    .result-box span { color: #256ef4; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="page-title">KRDS Calendar — 방법 1 테스트 결과</div>
+  <div class="page-sub">Figma URL + get_design_context → React 컴포넌트 구현</div>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const tokens = {
+      primary: '#256ef4',
+      primaryDark: '#063a74',
+      surfaceBg: '#eef2f7',
+      borderOuter: '#d6e0eb',
+      borderInner: '#cdd1d5',
+      textBasic: '#1e2124',
+      textSubtle: '#464c53',
+      textDisabled: '#8a949e',
+      textInverse: '#ffffff',
+      eventDot: '#d63d4a',
+      tertiaryBorder: '#58616a',
+      white: '#ffffff',
+    };
+
+    const DAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
+
+    function isSameDay(a, b) {
+      return a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate();
+    }
+
+    function isBetween(date, start, end) {
+      return date > start && date < end;
+    }
+
+    function getDaysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
+    function getFirstDay(y, m) { return new Date(y, m, 1).getDay(); }
+
+    function ArrowBtn({ dir, onClick }) {
+      return (
+        <button onClick={onClick} style={{
+          width:32, height:32, borderRadius:800,
+          border:`0.8px solid ${tokens.borderInner}`,
+          background:'transparent', cursor:'pointer',
+          display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0,
+        }}>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            {dir==='left'
+              ? <path d="M7 1L3 5L7 9" stroke={tokens.textBasic} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              : <path d="M3 1L7 5L3 9" stroke={tokens.textBasic} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            }
+          </svg>
+        </button>
+      );
+    }
+
+    function DayCell({ date, state, hasEvent, onClick, onHover }) {
+      const isDisabled = state === 'disabled';
+      const isSelected = state === 'selected' || state === 'rangeStart' || state === 'rangeEnd';
+      const isInRange = state === 'inRange';
+      const isToday = state === 'today';
+
+      const borderRadius = state === 'rangeStart' ? '1000px 0 0 1000px'
+        : state === 'rangeEnd' ? '0 1000px 1000px 0'
+        : isInRange ? 0 : 1000;
+
+      return (
+        <div
+          onClick={isDisabled ? undefined : onClick}
+          onMouseEnter={onHover}
+          style={{
+            width:44, height:44, flexShrink:0, position:'relative', zIndex:1,
+            borderRadius,
+            display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+            cursor: isDisabled ? 'default' : 'pointer',
+            background: isSelected ? tokens.primaryDark : isToday || isInRange ? tokens.white : 'transparent',
+            userSelect: 'none',
+          }}
+        >
+          <span style={{
+            fontFamily:"'Pretendard GOV', -apple-system, sans-serif",
+            fontSize:17, fontWeight:400, lineHeight:1.5, textAlign:'center',
+            color: isSelected ? tokens.textInverse : isDisabled ? tokens.textDisabled : tokens.textBasic,
+            opacity: isDisabled || isSelected ? 1 : 0.85,
+          }}>{date}</span>
+          {hasEvent && !isSelected && (
+            <div style={{width:4,height:4,borderRadius:100,background:tokens.eventDot,marginTop:1}}/>
+          )}
+        </div>
+      );
+    }
+
+    const MONTHS_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+    // KRDS Select_text 드롭다운 패턴: 트리거 버튼 아래 플로팅 패널
+    function SelectDropdown({ items, selectedValue, onSelect, onClose, offsetLeft }) {
+      return (
+        <div style={{
+          position:'absolute', top:57, left:offsetLeft,
+          background:'white', border:`1px solid ${tokens.borderInner}`,
+          borderRadius:8, padding:8, zIndex:20,
+          boxShadow:'0px 0px 2px rgba(0,0,0,0.05), 0px 4px 8px rgba(0,0,0,0.08)',
+          minWidth:120, maxHeight:260, overflowY:'auto',
+        }}>
+          {items.map(({label, value}) => {
+            const isSelected = value === selectedValue;
+            return (
+              <div
+                key={value}
+                onClick={() => { onSelect(value); onClose(); }}
+                style={{
+                  padding:'8px 8px', borderRadius:6, cursor:'pointer',
+                  background: isSelected ? '#eef2f7' : 'transparent',
+                  fontFamily:"'Pretendard GOV',-apple-system,sans-serif",
+                  fontSize:17, lineHeight:1.5,
+                  color: isSelected ? '#003675' : tokens.textBasic,
+                  fontWeight: isSelected ? 700 : 400,
+                  whiteSpace:'nowrap',
+                }}
+                onMouseEnter={e => { if(!isSelected) e.currentTarget.style.background='#eef2f7'; }}
+                onMouseLeave={e => { if(!isSelected) e.currentTarget.style.background='transparent'; }}
+              >{label}</div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    function Calendar({ type = 'day', eventDays = [], onResult }) {
+      const today = new Date();
+      const [vy, setVy] = useState(today.getFullYear());
+      const [vm, setVm] = useState(today.getMonth());
+      const [selected, setSelected] = useState(null);
+      const [rangeStart, setRangeStart] = useState(null);
+      const [rangeEnd, setRangeEnd] = useState(null);
+      const [hover, setHover] = useState(null);
+      const [picker, setPicker] = useState(null); // null | 'year' | 'month'
+      const isPeriod = type === 'period';
+
+      const prevMonth = () => { if(vm===0){setVy(y=>y-1);setVm(11);}else setVm(m=>m-1); };
+      const nextMonth = () => { if(vm===11){setVy(y=>y+1);setVm(0);}else setVm(m=>m+1); };
+      const goToday = () => { setVy(today.getFullYear()); setVm(today.getMonth()); setPicker(null); if(!isPeriod)setSelected(today); };
+      const togglePicker = (type) => setPicker(p => p === type ? null : type);
+
+      const handleClick = (date) => {
+        if (!isPeriod) {
+          setSelected(date);
+          onResult?.(`선택: ${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`);
+        } else {
+          if (!rangeStart || (rangeStart && rangeEnd)) {
+            setRangeStart(date); setRangeEnd(null); setHover(null);
+          } else {
+            const s = date < rangeStart ? date : rangeStart;
+            const e = date < rangeStart ? rangeStart : date;
+            setRangeStart(s); setRangeEnd(e);
+            onResult?.(`기간: ${s.getFullYear()}.${s.getMonth()+1}.${s.getDate()} ~ ${e.getFullYear()}.${e.getMonth()+1}.${e.getDate()}`);
+          }
+        }
+      };
+
+      const getState = (date, outOfMonth) => {
+        if (outOfMonth) return 'disabled';
+        const eff = rangeEnd ?? hover;
+        if (!isPeriod) {
+          if (selected && isSameDay(date, selected)) return 'selected';
+          if (isSameDay(date, today)) return 'today';
+          return 'default';
+        }
+        if (rangeStart && isSameDay(date, rangeStart)) return 'rangeStart';
+        if (eff && rangeStart && isSameDay(date, eff) && !isSameDay(date, rangeStart)) return 'rangeEnd';
+        if (rangeStart && eff && isBetween(date, rangeStart, eff)) return 'inRange';
+        if (isSameDay(date, today)) return 'today';
+        return 'default';
+      };
+
+      // 주 배열
+      const firstDay = getFirstDay(vy, vm);
+      const daysInMonth = getDaysInMonth(vy, vm);
+      const prevDays = getDaysInMonth(vy, vm===0?11:vm-1);
+      const cells = [];
+      for(let i=firstDay-1;i>=0;i--){
+        const m=vm===0?11:vm-1, y=vm===0?vy-1:vy;
+        cells.push({date:new Date(y,m,prevDays-i),out:true});
+      }
+      for(let d=1;d<=daysInMonth;d++) cells.push({date:new Date(vy,vm,d),out:false});
+      while(cells.length<42){
+        const d=cells.length-firstDay-daysInMonth+1;
+        const m=vm===11?0:vm+1, y=vm===11?vy+1:vy;
+        cells.push({date:new Date(y,m,d),out:true});
+      }
+      const weeks=[];
+      for(let i=0;i<42;i+=7) weeks.push(cells.slice(i,i+7));
+
+      const effEnd = rangeEnd ?? (isPeriod && rangeStart ? hover : null);
+
+      const fmt = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+
+      return (
+        <div style={{
+          width:384, background:tokens.surfaceBg,
+          border:`1px solid ${tokens.borderOuter}`,
+          borderRadius:12, display:'flex', flexDirection:'column',
+          alignItems:'center', overflow:'hidden', position:'relative',
+        }}>
+          {/* Header */}
+          <div style={{width:'100%',display:'flex',alignItems:'center',gap:16,padding:'8px 24px',borderBottom:`1px solid ${tokens.borderInner}`,flexShrink:0}}>
+            <ArrowBtn dir="left" onClick={prevMonth}/>
+            <div style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:0}}>
+              {[{lbl:`${vy}년`, key:'year'}, {lbl:`${vm+1}월`, key:'month'}].map(({lbl, key})=>(
+                <button key={key} onClick={()=>togglePicker(key)} style={{
+                  display:'flex', alignItems:'center', gap:4, height:40, padding:'0 8px', borderRadius:6,
+                  border:'none', cursor:'pointer',
+                  background: picker===key ? '#d6e0eb' : 'transparent',
+                  transition:'background 0.1s',
+                }}>
+                  <span style={{fontFamily:"'Pretendard GOV',-apple-system,sans-serif",fontSize:19,fontWeight:700,color:tokens.textBasic}}>{lbl}</span>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{transform: picker===key ? 'rotate(180deg)' : 'none', transition:'transform 0.15s'}}>
+                    <path d="M3 5L7 9L11 5" stroke={tokens.textBasic} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              ))}
+            </div>
+            <ArrowBtn dir="right" onClick={nextMonth}/>
+          </div>
+
+          {/* KRDS Select_text 패턴: 버튼 아래 플로팅 드롭다운 */}
+          {picker === 'year' && (
+            <SelectDropdown
+              items={Array.from({length:11},(_,i)=>({label:`${vy-5+i}년`,value:vy-5+i}))}
+              selectedValue={vy}
+              onSelect={setVy}
+              onClose={()=>setPicker(null)}
+              offsetLeft={56}
+            />
+          )}
+          {picker === 'month' && (
+            <SelectDropdown
+              items={MONTHS_KO.map((name,i)=>({label:name,value:i}))}
+              selectedValue={vm}
+              onSelect={setVm}
+              onClose={()=>setPicker(null)}
+              offsetLeft={176}
+            />
+          )}
+
+          {/* Days of week */}
+          <div style={{width:'100%',display:'flex',justifyContent:'space-between',padding:'12px 16px 0',fontFamily:"'Pretendard GOV',-apple-system,sans-serif",fontSize:15,color:tokens.textBasic}}>
+            {DAYS_KO.map(d=>(
+              <div key={d} style={{width:44,textAlign:'center',lineHeight:'24px'}}>{d}</div>
+            ))}
+          </div>
+
+          {/* Month label */}
+          <div style={{width:'100%',padding:'8px 16px 0'}}>
+            <span style={{fontSize:15,fontWeight:700,color:tokens.textSubtle,fontFamily:"'Pretendard GOV',-apple-system,sans-serif"}}>
+              {vy}년 {vm+1}월
+            </span>
+          </div>
+
+          {/* Weeks */}
+          <div style={{width:'100%',padding:'8px 16px 16px',display:'flex',flexDirection:'column',gap:2}} onMouseLeave={()=>setHover(null)}>
+            {weeks.map((week,wi)=>{
+              // range 연결 배경
+              let rangeOverlay = null;
+              if(isPeriod && rangeStart && effEnd){
+                const sT=rangeStart.getTime(), eT=effEnd.getTime();
+                const first=week.findIndex(c=>c.date.getTime()>sT);
+                const last=6-[...week].reverse().findIndex(c=>c.date.getTime()<eT);
+                if(first>=0 && last<=6 && first<=last){
+                  rangeOverlay=(
+                    <div style={{
+                      position:'absolute',top:0,
+                      left:`${(first/7)*100}%`,
+                      right:`${((6-last+1)/7)*100}%`,
+                      height:44,background:tokens.white,pointerEvents:'none',zIndex:0,
+                    }}/>
+                  );
+                }
+              }
+              return (
+                <div key={wi} style={{position:'relative',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                  {rangeOverlay}
+                  {week.map((cell,di)=>(
+                    <DayCell
+                      key={di}
+                      date={cell.date.getDate()}
+                      state={getState(cell.date, cell.out)}
+                      hasEvent={!cell.out && eventDays.some(d=>isSameDay(d,cell.date))}
+                      onClick={()=>!cell.out&&handleClick(cell.date)}
+                      onHover={()=>isPeriod&&rangeStart&&!rangeEnd&&!cell.out?setHover(cell.date):undefined}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Period input */}
+          {isPeriod && (
+            <div style={{width:'100%',padding:16,borderTop:`1px solid ${tokens.borderInner}`,background:tokens.white,display:'flex',gap:4,alignItems:'flex-end'}}>
+              {[{label:'시작일',date:rangeStart},{label:'종료일',date:rangeEnd}].map((f,i)=>(
+                <React.Fragment key={f.label}>
+                  {i===1&&<div style={{width:8,display:'flex',flexDirection:'column',alignItems:'center',paddingBottom:20}}><div style={{height:1,width:'100%',background:tokens.textSubtle}}/></div>}
+                  <div style={{flex:1,display:'flex',flexDirection:'column',gap:8}}>
+                    <span style={{fontSize:15,color:tokens.textSubtle,fontFamily:"'Pretendard GOV',-apple-system,sans-serif"}}>{f.label}</span>
+                    <div style={{height:40,border:`1px solid ${tokens.tertiaryBorder}`,borderRadius:6,background:tokens.white,display:'flex',alignItems:'center',padding:'0 16px',fontSize:15,color:f.date?tokens.textBasic:tokens.textDisabled,fontFamily:"'Pretendard GOV',-apple-system,sans-serif"}}>
+                      {f.date ? fmt(f.date) : 'YYYY.MM.DD'}
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+
+          {/* Footer */}
+          <div style={{width:'100%',padding:'16px 24px',borderTop:`1px solid ${tokens.borderInner}`,background:tokens.white,display:'flex',alignItems:'center',gap:16}}>
+            <button onClick={goToday} style={{background:'transparent',border:'none',fontSize:15,color:tokens.textBasic,cursor:'pointer',fontFamily:"'Pretendard GOV',-apple-system,sans-serif"}}>오늘</button>
+            <div style={{flex:1,display:'flex',justifyContent:'flex-end',gap:8}}>
+              <button style={{width:64,height:40,borderRadius:6,border:`1px solid ${tokens.tertiaryBorder}`,background:'transparent',fontSize:15,color:tokens.textBasic,cursor:'pointer',fontFamily:"'Pretendard GOV',-apple-system,sans-serif"}}>취소</button>
+              <button style={{width:64,height:40,borderRadius:6,border:'none',background:tokens.primary,fontSize:15,color:tokens.textInverse,cursor:'pointer',fontFamily:"'Pretendard GOV',-apple-system,sans-serif"}}>선택</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const today = new Date();
+      const [dayResult, setDayResult] = useState('날짜를 선택하세요');
+      const [periodResult, setPeriodResult] = useState('기간을 선택하세요');
+
+      const eventDays = [
+        new Date(today.getFullYear(), today.getMonth(), 4),
+        new Date(today.getFullYear(), today.getMonth(), 15),
+      ];
+
+      return (
+        <div>
+          <div className="section-label">Day 모드 — 단일 날짜 선택</div>
+          <div className="preview-row">
+            <div className="preview-item">
+              <div className="preview-item-label">type="day"</div>
+              <Calendar type="day" eventDays={eventDays} onResult={setDayResult}/>
+              <div className="result-box">결과: <span>{dayResult}</span></div>
+            </div>
+          </div>
+
+          <div className="section-label">Period 모드 — 기간 선택</div>
+          <div className="preview-row">
+            <div className="preview-item">
+              <div className="preview-item-label">type="period"</div>
+              <Calendar type="period" onResult={setPeriodResult}/>
+              <div className="result-box">결과: <span>{periodResult}</span></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

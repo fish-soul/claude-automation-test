@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KRDS Calendar — 방법 4 퓨어 (스크린샷만, 오염 없음)</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f0f2f5; font-family: -apple-system, sans-serif; padding: 40px; }
+    .page-title { font-size: 20px; font-weight: 700; color: #1e2124; margin-bottom: 6px; }
+    .page-sub   { font-size: 14px; color: #6d7882; margin-bottom: 8px; }
+    .notice-pure {
+      font-size: 13px; color: #1a4731; background: #e6f4ed;
+      border: 1px solid #6fcf97; border-radius: 6px;
+      padding: 10px 14px; margin-bottom: 16px; line-height: 1.7;
+    }
+    .notice-warn {
+      font-size: 13px; color: #7a3c00; background: #fff4e5;
+      border: 1px solid #ffb347; border-radius: 6px;
+      padding: 10px 14px; margin-bottom: 32px; line-height: 1.7;
+    }
+    .section-label { font-size: 13px; font-weight: 700; color: #6d7882; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .preview-row   { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 48px; }
+    .preview-item  { display: flex; flex-direction: column; gap: 12px; }
+    .preview-item-label { font-size: 13px; color: #464c53; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="page-title">KRDS Calendar — 방법 4 스크린샷 퓨어 버전</div>
+  <div class="page-sub">component.png / guide.png / atomic.png 3장만 보고 구현 — 방법 1·2 지식 완전 배제</div>
+
+  <div class="notice-pure">
+    ✅ <strong>이 파일의 원칙:</strong><br>
+    방법 1 (Figma MCP)과 방법 2 (Dev Mode HTML)에서 얻은 모든 지식을 배제했다.<br>
+    색상·치수·구현 방식 전부 스크린샷 3장의 시각적 분석만으로 결정했다.
+  </div>
+
+  <div class="notice-warn">
+    ⚠️ <strong>스크린샷만으로 확인 불가한 항목 (모두 추정값):</strong><br>
+    • 색상 HEX — 픽셀 측정 불가, 시각적으로 추정<br>
+    • 치수 (px) — 이미지 스케일 불확실, 시각적으로 추정<br>
+    • Range 배경 연결 방식 — component.png에서 연속 배경이 보여 "행 뒤에 배경 띠를 깔자"고 판단. 구체적 구현은 독자적으로 결정<br>
+    • 드롭다운 세부 스타일 — guide.png에서 세로 목록 확인. 높이·패딩·테두리색 추정<br>
+    • 월 드롭다운 — guide.png에 연도 드롭다운만 보임. 동일 패턴으로 추정 구현
+  </div>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 색상: component.png / guide.png / atomic.png 시각적 추정
+    // 방법 1·2 코드·파일 참조 없음
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    const C = {
+      // component.png — 달력 컨테이너
+      calBg:        '#ECF1F7', // 달력 전체 배경: 연한 회청색 (추정)
+      calBorder:    '#CAD5E2', // 외곽선: 그보다 조금 진한 회청색 (추정)
+
+      // component.png — 날짜 셀
+      selectedBg:   '#0B3D72', // 선택 셀: 짙은 남색 (추정)
+      selectedText: '#FFFFFF',
+      todayRingBg:  '#FFFFFF', // 오늘: 흰 원
+      todayDot:     '#D93D3D', // 오늘 아래 빨간 점 (추정)
+      dayoffText:   '#D93D3D', // 일요일/공휴일: 빨간 텍스트 (atomic.png)
+      eventText:    '#2463EA', // 이벤트: 파란 텍스트 (atomic.png)
+      normalText:   '#1C2229',
+      disabledText: '#AABAC8',
+
+      // component.png — 기간 선택 range 배경
+      // component.png에서 rangeStart~rangeEnd 사이 셀들이 연속 흰/연한 배경으로 채워짐
+      rangeBg:      '#FFFFFF', // range 내 셀 배경: 흰색으로 보임 (추정)
+
+      // guide.png — 드롭다운
+      dropBg:       '#FFFFFF',
+      dropBorder:   '#C8D4E0', // 드롭다운 테두리: 연한 회색 (추정)
+      dropShadow:   '0px 3px 10px rgba(0,0,0,0.12)', // 가벼운 그림자 (추정)
+      dropSelBg:    '#E8EFF6', // 선택된 연도 배경 (추정)
+
+      // guide.png / atomic.png — 헤더 버튼 상태
+      // atomic.png: 버튼 1·2 = 투명, 3 = 연회색, 4 = 조금 더 어두운 연회색
+      btnHoverBg:   '#EBF0F6',  // hover: 연한 회청색 (atomic.png 3번째)
+      btnPressedBg: '#D8E3EE', // pressed: 조금 더 진한 회청색 (atomic.png 4번째)
+
+      // component.png — 화살표 버튼
+      arrowBorder:  '#CAD5E2',
+
+      // component.png — 푸터 버튼
+      btnPrimaryBg: '#2463EA', // "선택" 버튼: 파란색 (추정)
+      btnPrimaryText: '#FFFFFF',
+      btnSecBorder: '#7A8998',
+      btnSecText:   '#1C2229',
+
+      divider:      '#D8E2EC',
+      headerText:   '#1C2229',
+      subText:      '#6A7785',
+    };
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 치수: component.png에서 시각적으로 추정. 픽셀 정확도 없음.
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    const CELL_W  = 40;   // 날짜 셀 크기 (추정)
+    const CAL_W   = 380;  // 달력 너비 (추정)
+    const H_PAD   = 20;   // 좌우 패딩 (추정)
+    const GRID_W  = CAL_W - H_PAD * 2;    // 340px
+    const CELL_STEP = GRID_W / 7;          // ≈ 48.6px (셀 + 간격 포함 1칸 너비)
+
+    // range 배경 띠 계산
+    // component.png에서 연속 배경이 보임 → "행 뒤에 배경 띠를 깔자"는 판단 (독자적 결론)
+    // 띠의 x 범위: 해당 행 내 range 첫 셀 왼쪽 ~ 마지막 셀 오른쪽
+    function calcRangeBand(week, sTime, eTime) {
+      if (!sTime || !eTime || sTime > eTime) return null;
+      let li = -1, ri = -1;
+      for (let i = 0; i < 7; i++) {
+        const d = week[i];
+        if (!d.out && d.date.getTime() >= sTime && d.date.getTime() <= eTime) {
+          if (li === -1) li = i;
+          ri = i;
+        }
+      }
+      if (li === -1 || li >= ri) return null;
+      // 왼쪽: li번 셀의 왼쪽 가장자리 근처 (셀 중앙 - CELL_W/2)
+      const left  = li * CELL_STEP + (CELL_STEP - CELL_W) / 2 + CELL_W / 2;
+      // 오른쪽: ri번 셀의 오른쪽 가장자리 근처
+      const right = ri * CELL_STEP + (CELL_STEP - CELL_W) / 2 + CELL_W / 2;
+      return { left, width: right - left };
+    }
+
+    function isSame(a, b) {
+      return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    }
+    function daysInMonth(y, m) { return new Date(y, m+1, 0).getDate(); }
+    function firstDay(y, m)    { return new Date(y, m, 1).getDay(); }
+
+    const DAYS_KO   = ['일','월','화','수','목','금','토'];
+    const MONTHS_KO = Array.from({length:12}, (_,i) => `${i+1}월`);
+
+    // ── 연도/월 드롭다운 ─────────────────────────────────────
+    // guide.png에서 확인: 버튼 바로 아래에 흰 배경 세로 목록이 뜸
+    // 목록 항목 스타일: 시각적 추정
+    function Dropdown({ items, selected, onSelect, onClose }) {
+      const ref = useRef(null);
+      useEffect(() => {
+        const fn = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
+        document.addEventListener('mousedown', fn);
+        return () => document.removeEventListener('mousedown', fn);
+      }, []);
+      return (
+        <div ref={ref} style={{
+          position: 'absolute', top: '100%', left: 0, zIndex: 30,
+          background: C.dropBg,
+          border: `1px solid ${C.dropBorder}`,
+          borderRadius: 6,
+          boxShadow: C.dropShadow,
+          minWidth: 90,
+          maxHeight: 200, overflowY: 'auto',
+          paddingTop: 4, paddingBottom: 4,
+        }}>
+          {items.map(it => {
+            const isSel = it.value === selected;
+            return (
+              <div key={it.value}
+                onClick={() => { onSelect(it.value); onClose(); }}
+                style={{
+                  padding: '7px 14px',
+                  cursor: 'pointer',
+                  fontSize: 15,
+                  fontFamily: "'Pretendard', -apple-system, sans-serif",
+                  fontWeight: isSel ? 700 : 400,
+                  color: C.normalText,
+                  background: isSel ? C.dropSelBg : 'transparent',
+                }}
+                onMouseEnter={e => { if (!isSel) e.currentTarget.style.background = C.dropSelBg; }}
+                onMouseLeave={e => { if (!isSel) e.currentTarget.style.background = 'transparent'; }}
+              >{it.label}</div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    // ── 헤더 버튼 ──────────────────────────────────────────
+    // atomic.png에서 상태 파악: 투명(default) / hover(연회색) / pressed(진한 연회색)
+    function HeaderBtn({ label, isOpen, onClick, dropdown }) {
+      const [hov, setHov] = useState(false);
+      return (
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={onClick}
+            onMouseEnter={() => setHov(true)}
+            onMouseLeave={() => setHov(false)}
+            style={{
+              padding: '0 8px',
+              height: 36,
+              border: 'none',
+              borderRadius: 5,
+              cursor: 'pointer',
+              background: isOpen ? C.btnPressedBg : hov ? C.btnHoverBg : 'transparent',
+              display: 'flex', alignItems: 'center', gap: 4,
+              transition: 'background 0.12s',
+            }}
+          >
+            <span style={{
+              fontFamily: "'Pretendard', -apple-system, sans-serif",
+              fontSize: 17, fontWeight: 700, color: C.headerText,
+            }}>{label}</span>
+            {/* 아래 화살표 — atomic.png에서 확인 */}
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"
+              style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+              <path d="M2 3.5L5.5 7.5L9 3.5" stroke={C.headerText} strokeWidth="1.5"
+                strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          {isOpen && dropdown}
+        </div>
+      );
+    }
+
+    // ── 화살표 버튼 ─────────────────────────────────────────
+    // component.png에서: 원형, 테두리 있음
+    function ArrowBtn({ dir, onClick }) {
+      const [hov, setHov] = useState(false);
+      return (
+        <button onClick={onClick}
+          onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+          style={{
+            width: 30, height: 30, borderRadius: '50%',
+            border: `1px solid ${C.arrowBorder}`,
+            background: hov ? C.btnHoverBg : 'transparent',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+            {dir === 'left'
+              ? <path d="M6.5 1.5L2.5 4.5L6.5 7.5" stroke={C.headerText} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              : <path d="M2.5 1.5L6.5 4.5L2.5 7.5" stroke={C.headerText} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>}
+          </svg>
+        </button>
+      );
+    }
+
+    // ── 날짜 셀 ─────────────────────────────────────────────
+    // atomic.png에서 상태별 모양 파악
+    function Cell({ date, state, isEvent, isSun, onClick, onHover }) {
+      const off  = state === 'disabled';
+      const sel  = state === 'on';
+      const tod  = state === 'today';
+      const rs   = state === 'rangeStart';
+      const re   = state === 'rangeEnd';
+      const ir   = state === 'inRange';
+
+      // component.png 기간 선택 모양: start=왼쪽 원, end=오른쪽 원, 중간=사각형
+      let br;
+      if      (rs)  br = '999px 0 0 999px';
+      else if (re)  br = '0 999px 999px 0';
+      else if (ir)  br = 0;
+      else          br = 999;
+
+      const bg = (sel || rs || re) ? C.selectedBg
+        : tod ? C.todayRingBg
+        : ir  ? C.rangeBg
+        : 'transparent';
+
+      // 텍스트 색상
+      // atomic.png: 일요일=빨간색, 이벤트=파란색(밑줄), disabled=회색, 선택=흰색
+      const color = (sel || rs || re) ? C.selectedText
+        : off ? C.disabledText
+        : isSun ? C.dayoffText
+        : isEvent ? C.eventText
+        : C.normalText;
+
+      return (
+        <div
+          onClick={off ? undefined : onClick}
+          onMouseEnter={onHover}
+          style={{
+            width: CELL_W, height: CELL_W, flexShrink: 0,
+            position: 'relative', zIndex: 1,
+            borderRadius: br, background: bg,
+            cursor: off ? 'default' : 'pointer',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            userSelect: 'none',
+          }}
+        >
+          {/* 날짜 숫자 */}
+          <span style={{
+            fontFamily: "'Pretendard', -apple-system, sans-serif",
+            fontSize: 15, lineHeight: '22px', fontWeight: 400,
+            color,
+            textDecoration: isEvent && !sel && !rs && !re ? 'underline' : 'none',
+            opacity: off ? 0.45 : 1,
+          }}>{date}</span>
+
+          {/* 오늘 빨간 점 — component.png·guide.png에서 확인 */}
+          {tod && (
+            <div style={{ width: 4, height: 4, borderRadius: '50%', background: C.todayDot, marginTop: 1 }} />
+          )}
+
+          {/* 이벤트 레이블 — guide.png·atomic.png에서 확인 */}
+          {isEvent && !sel && !rs && !re && (
+            <div style={{
+              fontSize: 9, color: C.eventText, lineHeight: '11px',
+              fontFamily: "'Pretendard', -apple-system, sans-serif",
+            }}>이벤트</div>
+          )}
+        </div>
+      );
+    }
+
+    // ── 캘린더 본체 ─────────────────────────────────────────
+    function Calendar({ mode }) {
+      const today = new Date();
+      const [year,  setYear]  = useState(today.getFullYear());
+      const [month, setMonth] = useState(today.getMonth());
+      const [sel,   setSel]   = useState(null);       // day mode 선택
+      const [range, setRange] = useState([null,null]); // period mode [start, end]
+      const [hoverDate, setHoverDate] = useState(null);
+      const [yearOpen,  setYearOpen]  = useState(false);
+      const [monthOpen, setMonthOpen] = useState(false);
+
+      const isPeriod = mode === 'period';
+
+      // 달력 빌드
+      const totalDays = daysInMonth(year, month);
+      const fd = firstDay(year, month);
+      const prevDays = daysInMonth(year, month - 1);
+
+      const cells = [];
+      for (let i = 0; i < fd; i++) {
+        cells.push({ date: new Date(year, month-1, prevDays - fd + i + 1), out: true });
+      }
+      for (let d = 1; d <= totalDays; d++) {
+        cells.push({ date: new Date(year, month, d), out: false });
+      }
+      const rem = 42 - cells.length;
+      for (let d = 1; d <= rem; d++) {
+        cells.push({ date: new Date(year, month+1, d), out: true });
+      }
+
+      const weeks = [];
+      for (let i = 0; i < 42; i += 7) weeks.push(cells.slice(i, i+7));
+
+      // 날짜 상태 결정
+      function cellState(cell) {
+        if (cell.out) return 'disabled';
+        if (!isPeriod) {
+          if (sel && isSame(cell.date, sel)) return 'on';
+          if (isSame(cell.date, today))      return 'today';
+          return 'normal';
+        }
+        // period mode
+        const [s, e] = range;
+        const t = cell.date.getTime();
+        const sT = s ? s.getTime() : null;
+        let eT = e ? e.getTime() : (hoverDate && sT ? hoverDate.getTime() : null);
+        if (sT && eT && sT > eT) { const tmp = sT; eT = sT; }
+
+        if (s && isSame(cell.date, s))     return 'rangeStart';
+        if (e && isSame(cell.date, e))     return 'rangeEnd';
+        if (!e && hoverDate && sT && eT && t > Math.min(sT,eT) && t < Math.max(sT,eT)) return 'inRange';
+        if (s && e && t > sT && t < eT)   return 'inRange';
+        if (isSame(cell.date, today))       return 'today';
+        return 'normal';
+      }
+
+      function handleDayClick(cell) {
+        if (cell.out) return;
+        if (!isPeriod) { setSel(cell.date); return; }
+        const [s, e] = range;
+        if (!s || (s && e)) { setRange([cell.date, null]); setHoverDate(null); }
+        else {
+          const sorted = cell.date < s ? [cell.date, s] : [s, cell.date];
+          setRange(sorted);
+        }
+      }
+
+      function handleDayHover(cell) {
+        if (!isPeriod || cell.out) return;
+        setHoverDate(cell.date);
+      }
+
+      // 연도 목록 — guide.png에서 세로 목록 확인. 범위 추정
+      const yearItems = Array.from({ length: 10 }, (_, i) => {
+        const y = today.getFullYear() - i;
+        return { label: `${y}년`, value: y };
+      });
+      const monthItems = Array.from({ length: 12 }, (_, i) => ({
+        label: `${i+1}월`, value: i,
+      }));
+
+      // range 배경 띠를 위한 범위 계산
+      const [s, e] = range;
+      const sT = s ? s.getTime() : null;
+      let eT = e ? e.getTime() : (hoverDate && sT ? hoverDate.getTime() : null);
+      if (sT && eT && sT > eT) eT = sT;
+
+      return (
+        <div style={{
+          width: CAL_W,
+          background: C.calBg,
+          border: `1px solid ${C.calBorder}`,
+          borderRadius: 12,
+          overflow: 'hidden',
+          fontFamily: "'Pretendard', -apple-system, sans-serif",
+        }}>
+          {/* 헤더 */}
+          <div style={{
+            padding: `16px ${H_PAD}px 12px`,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            <ArrowBtn dir="left" onClick={() => {
+              if (month === 0) { setYear(y => y-1); setMonth(11); }
+              else setMonth(m => m-1);
+            }}/>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <HeaderBtn
+                label={`${year}년`}
+                isOpen={yearOpen}
+                onClick={() => { setYearOpen(v => !v); setMonthOpen(false); }}
+                dropdown={
+                  <Dropdown
+                    items={yearItems}
+                    selected={year}
+                    onSelect={v => { setYear(v); setYearOpen(false); }}
+                    onClose={() => setYearOpen(false)}
+                  />
+                }
+              />
+              <HeaderBtn
+                label={`${month+1}월`}
+                isOpen={monthOpen}
+                onClick={() => { setMonthOpen(v => !v); setYearOpen(false); }}
+                dropdown={
+                  <Dropdown
+                    items={monthItems}
+                    selected={month}
+                    onSelect={v => { setMonth(v); setMonthOpen(false); }}
+                    onClose={() => setMonthOpen(false)}
+                  />
+                }
+              />
+            </div>
+            <ArrowBtn dir="right" onClick={() => {
+              if (month === 11) { setYear(y => y+1); setMonth(0); }
+              else setMonth(m => m+1);
+            }}/>
+          </div>
+
+          {/* 요일 헤더 */}
+          <div style={{
+            padding: `0 ${H_PAD}px`,
+            display: 'flex', justifyContent: 'space-between',
+          }}>
+            {DAYS_KO.map((d, i) => (
+              <div key={d} style={{
+                width: CELL_STEP, textAlign: 'center',
+                fontSize: 13, fontWeight: 600,
+                // component.png에서 일(0)=일요일 헤더도 빨간색처럼 보임
+                color: i === 0 ? C.dayoffText : C.subText,
+                paddingBottom: 6,
+              }}>{d}</div>
+            ))}
+          </div>
+
+          {/* 달력 그리드 */}
+          <div style={{ padding: `0 ${H_PAD}px 8px` }}>
+            {/* 월 레이블 — component.png에서 회색 소문자 */}
+            <div style={{ fontSize: 12, color: C.subText, marginBottom: 4 }}>
+              {year}년 {month+1}월
+            </div>
+
+            {weeks.map((week, wi) => {
+              const band = isPeriod ? calcRangeBand(week, sT, eT) : null;
+              return (
+                <div key={wi} style={{
+                  position: 'relative',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: 2,
+                }}>
+                  {/* Range 배경 띠
+                    component.png에서 확인: rangeStart~rangeEnd 사이에 연속 배경이 이어짐
+                    → 행 뒤에 배경 띠를 깐다는 판단을 독자적으로 내림 (방법 2 참조 아님)
+                    위치: 해당 행 내 첫 range 셀 왼쪽 ~ 마지막 range 셀 오른쪽 */}
+                  {band && (
+                    <div style={{
+                      position: 'absolute',
+                      top: 0, bottom: 0,
+                      left: band.left,
+                      width: band.width,
+                      background: C.rangeBg,
+                      zIndex: 0,
+                    }}/>
+                  )}
+                  {week.map((cell, ci) => {
+                    const st = cellState(cell);
+                    const isSun = !cell.out && cell.date.getDay() === 0;
+                    // 이벤트 날짜: 매달 4일로 시뮬레이션 (guide.png/atomic.png 예시 기준)
+                    const isEv = !cell.out && cell.date.getDate() === 4;
+                    return (
+                      <div key={ci} style={{ width: CELL_STEP, display: 'flex', justifyContent: 'center' }}>
+                        <Cell
+                          date={cell.date.getDate()}
+                          state={st}
+                          isEvent={isEv}
+                          isSun={isSun}
+                          onClick={() => handleDayClick(cell)}
+                          onHover={() => handleDayHover(cell)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 구분선 */}
+          <div style={{ height: 1, background: C.divider, margin: `0 ${H_PAD}px` }}/>
+
+          {/* 푸터 — component.png에서 확인: 왼쪽 "오늘", 오른쪽 "취소"/"선택" */}
+          <div style={{
+            padding: `12px ${H_PAD}px`,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: '#ffffff',
+          }}>
+            <button
+              onClick={() => { setYear(today.getFullYear()); setMonth(today.getMonth()); }}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                fontSize: 14, color: C.normalText,
+                fontFamily: "'Pretendard', -apple-system, sans-serif",
+              }}
+            >오늘</button>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={() => { setSel(null); setRange([null,null]); }}
+                style={{
+                  padding: '7px 18px', borderRadius: 6,
+                  border: `1px solid ${C.btnSecBorder}`,
+                  background: 'transparent', cursor: 'pointer',
+                  fontSize: 14, color: C.btnSecText,
+                  fontFamily: "'Pretendard', -apple-system, sans-serif",
+                }}
+              >취소</button>
+              <button style={{
+                padding: '7px 18px', borderRadius: 6, border: 'none',
+                background: C.btnPrimaryBg, cursor: 'pointer',
+                fontSize: 14, color: C.btnPrimaryText, fontWeight: 600,
+                fontFamily: "'Pretendard', -apple-system, sans-serif",
+              }}>선택</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── 앱 ──────────────────────────────────────────────────
+    function App() {
+      return (
+        <div>
+          <div class="section-label">Day Mode</div>
+          <div class="preview-row">
+            <div class="preview-item">
+              <div class="preview-item-label">날짜 선택</div>
+              <Calendar mode="day" />
+            </div>
+          </div>
+          <div class="section-label">Period Mode</div>
+          <div class="preview-row">
+            <div class="preview-item">
+              <div class="preview-item-label">기간 선택 (시작 클릭 → 종료 클릭)</div>
+              <Calendar mode="period" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

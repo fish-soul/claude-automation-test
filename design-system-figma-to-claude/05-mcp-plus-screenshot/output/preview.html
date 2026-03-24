@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KRDS Calendar — 방법 5 (MCP + 스크린샷 크로스체크)</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f0f2f5; font-family: -apple-system, sans-serif; padding: 40px; }
+    .page-title { font-size: 20px; font-weight: 700; color: #1e2124; margin-bottom: 6px; }
+    .page-sub   { font-size: 14px; color: #6d7882; margin-bottom: 8px; }
+    .notice {
+      font-size: 13px; color: #1a3a5c; background: #e8f0fb;
+      border: 1px solid #7aaee8; border-radius: 6px;
+      padding: 10px 14px; margin-bottom: 16px; line-height: 1.8;
+    }
+    .notice-warn {
+      font-size: 13px; color: #7a3c00; background: #fff4e5;
+      border: 1px solid #ffb347; border-radius: 6px;
+      padding: 10px 14px; margin-bottom: 32px; line-height: 1.8;
+    }
+    .section-label { font-size: 13px; font-weight: 700; color: #6d7882; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .preview-row   { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 48px; }
+    .preview-item  { display: flex; flex-direction: column; gap: 12px; }
+    .preview-item-label { font-size: 13px; color: #464c53; font-weight: 600; }
+    table { border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+    th, td { border: 1px solid #d6e0eb; padding: 4px 10px; text-align: left; }
+    th { background: #eef2f7; font-weight: 600; }
+    .ok { color: #1a7a3c; }
+    .diff { color: #c04a00; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="page-title">KRDS Calendar — 방법 5 (MCP + 스크린샷 크로스체크)</div>
+  <div class="page-sub">Figma 링크 3개 MCP 조회 + PNG 3장 시각 검증 → 불일치 항목 보정</div>
+
+  <div class="notice">
+    📋 <strong>사용한 입력 소스:</strong><br>
+    • <strong>MCP (node 343:51753)</strong> — 캘린더 컴포넌트 전체 구조, 토큰, range 연결 수치<br>
+    • <strong>MCP (node 5131:24401)</strong> — 가이드 (데이터 초과로 잘림 → 드롭다운 스타일은 guide.png 보완)<br>
+    • <strong>MCP (node 5131:25992)</strong> — 아토믹: 셀 전체 상태 (dayoff/event 포함), 헤더 버튼 상태<br>
+    • <strong>component.png</strong> — 전체 레이아웃 및 range 배경 시각 검증<br>
+    • <strong>guide.png</strong> — 드롭다운 구조 확인 (플로팅 목록)<br>
+    • <strong>atomic.png</strong> — 셀 상태별 색상 시각 검증
+  </div>
+
+  <div class="notice-warn">
+    🔍 <strong>크로스체크 결과 — MCP ↔ 스크린샷 비교:</strong><br>
+    <table>
+      <tr><th>항목</th><th>MCP 값</th><th>스크린샷 추정</th><th>판정</th></tr>
+      <tr><td>달력 배경색</td><td>#eef2f7</td><td>#EEF2F7</td><td class="ok">✅ 일치</td></tr>
+      <tr><td>선택 셀 색상</td><td>#063a74</td><td>#063A74</td><td class="ok">✅ 일치</td></tr>
+      <tr><td>오늘 점 색상</td><td>#d63d4a</td><td>#D63D4A</td><td class="ok">✅ 일치</td></tr>
+      <tr><td>dayoff 텍스트</td><td>#bd2c0f (danger)</td><td>밝은 빨강 추정</td><td class="diff">⚠️ 다름 → MCP 적용</td></tr>
+      <tr><td>이벤트 텍스트</td><td>#096ab3 (information)</td><td>파란색 추정</td><td class="diff">⚠️ 톤 차이 → MCP 적용</td></tr>
+      <tr><td>셀 크기</td><td>44px</td><td>42px 추정</td><td class="diff">⚠️ 다름 → MCP 적용</td></tr>
+      <tr><td>드롭다운 구조</td><td>MCP 데이터 잘림</td><td>guide.png: 플로팅 목록 확인</td><td class="ok">✅ 보완</td></tr>
+      <tr><td>Range 연결 방식</td><td>center-to-center 절대위치 rect (MCP 명시)</td><td>연속 배경 확인</td><td class="ok">✅ MCP로 정확 구현</td></tr>
+    </table>
+  </div>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 토큰: MCP get_design_context 에서 추출 (정확한 값)
+    // 출처 노드별로 주석 표시
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    const T = {
+      // node 343:51753 (Component)
+      calBg:        '#eef2f7',  // --color/surface/secondary-subtler
+      calBorder:    '#d6e0eb',  // --color/border/secondary-light
+      divider:      '#cdd1d5',  // --color/border/gray-light
+      selectedBg:   '#063a74',  // --color/action/secondary-active
+      todayBg:      '#ffffff',  // --color/element/inverse
+      todayDot:     '#d63d4a',  // --color/element/point
+      rangeBg:      '#ffffff',  // --color/action/white (range connector bg)
+      textBasic:    '#1e2124',  // --color/text/basic
+      textSubtle:   '#464c53',  // --color/text/subtle
+      textDisabled: '#8a949e',  // --color/text/disabled
+      textInverse:  '#ffffff',  // --color/text/inverse-static
+      btnPrimary:   '#256ef4',  // --color/button/primary-fill
+      btnSecBorder: '#58616a',  // --color/button/tertiary-border
+      arrowBorder:  '#cdd1d5',  // --color/border/gray-light
+
+      // node 5131:25992 (Atomic) — 크로스체크에서 스크린샷 추정과 달랐던 항목
+      dayoffText:   '#bd2c0f',  // --color/text/danger (atomic MCP 확인, 스크린샷 추정 다름)
+      eventText:    '#096ab3',  // --color/text/information (atomic MCP 확인)
+      textDisabledOn: '#6d7882', // --color/text/disabled-on (헤더 버튼 disabled)
+
+      // node 5131:25992 (Atomic) — 헤더 버튼 상태
+      btnHoverBg:   '#eef2f7',  // --color/action/secondary-hover
+      btnPressedBg: '#d6e0eb',  // --color/action/secondary-pressed
+      btnSelectedBg:'#eef2f7',  // --color/action/secondary-selected
+
+      // 드롭다운: MCP guide 데이터 초과 → guide.png 시각 보완
+      dropBg:       '#ffffff',
+      dropBorder:   '#cdd1d5',  // guide.png 기준 (MCP border token과 동일 추정)
+      dropShadow:   '0px 0px 2px rgba(0,0,0,0.05), 0px 4px 8px rgba(0,0,0,0.08)',
+      dropSelBg:    '#eef2f7',  // --color/action/secondary-selected
+    };
+
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 치수: MCP 코드에서 추출한 정확한 값
+    // node 343:51753: w-[384px], size-[44px], px-[16px]
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    const CELL_W    = 44;          // size-[44px] (MCP)
+    const CAL_W     = 384;         // w-[384px] (MCP)
+    const H_PAD     = 16;          // px-[var(--padding/6,16px)] (MCP)
+    const GRID_W    = CAL_W - H_PAD * 2;  // 352px
+
+    // justify-between: 셀 i의 시작 x = i * (GRID_W - CELL_W) / (7-1)
+    // center x = 시작x + CELL_W/2
+    // MCP 코드 검증: row3 rangeStart(i=2) → left≈126px, row3 rangeEnd row(i=6) → left+width≈328
+    // cellCX(2) = 2*(352-44)/6 + 22 = 2*51.33+22 = 124.7 ≈ 126 ✓
+    const CELL_STEP  = (GRID_W - CELL_W) / 6;   // ≈ 51.33px
+    const cellCX     = (i) => i * CELL_STEP + CELL_W / 2;
+
+    // Range 연결 배경: center-to-center (MCP 코드에서 명시적으로 확인)
+    function calcRangeConnector(week, sTime, eTime) {
+      if (!sTime || !eTime) return null;
+      let li = -1, ri = -1;
+      for (let i = 0; i < 7; i++) {
+        const t = week[i].date.getTime();
+        if (!week[i].out && t >= Math.min(sTime, eTime) && t <= Math.max(sTime, eTime)) {
+          if (li === -1) li = i;
+          ri = i;
+        }
+      }
+      if (li === -1 || li >= ri) return null;
+      return { left: cellCX(li), width: cellCX(ri) - cellCX(li) };
+    }
+
+    function isSame(a, b) {
+      return a.getFullYear()===b.getFullYear() &&
+        a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    }
+    function daysInMonth(y,m) { return new Date(y,m+1,0).getDate(); }
+    function firstDay(y,m)    { return new Date(y,m,1).getDay(); }
+
+    const DAYS_KO = ['일','월','화','수','목','금','토'];
+
+    // ── 드롭다운 패널 ─────────────────────────────────────
+    // guide.png: 버튼 아래에 플로팅 목록으로 뜸 (MCP guide 데이터 초과로 잘림 → 시각 보완)
+    // 선택 상태 배경: --color/action/secondary-selected = #eef2f7 (atomic MCP)
+    function Dropdown({ items, selected, onSelect, onClose }) {
+      const ref = useRef(null);
+      useEffect(() => {
+        const fn = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
+        document.addEventListener('mousedown', fn);
+        return () => document.removeEventListener('mousedown', fn);
+      }, []);
+      return (
+        <div ref={ref} style={{
+          position: 'absolute', top: 'calc(100% + 4px)', left: 0, zIndex: 30,
+          background: T.dropBg,
+          border: `1px solid ${T.dropBorder}`,
+          borderRadius: 6,  // --radius/medium1 (MCP)
+          boxShadow: T.dropShadow,
+          minWidth: 88, maxHeight: 216, overflowY: 'auto',
+          padding: '4px 0',
+        }}>
+          {items.map(it => {
+            const isSel = it.value === selected;
+            return (
+              <div key={it.value}
+                onClick={() => { onSelect(it.value); onClose(); }}
+                style={{
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+                  fontSize: 17,  // --font-size/label/medium (MCP)
+                  lineHeight: 1.5,
+                  fontWeight: isSel ? 700 : 400,
+                  color: isSel ? T.selectedBg : T.textBasic,
+                  background: isSel ? T.dropSelBg : 'transparent',
+                }}
+                onMouseEnter={e => { if (!isSel) e.currentTarget.style.background = T.dropSelBg; }}
+                onMouseLeave={e => { if (!isSel) e.currentTarget.style.background = 'transparent'; }}
+              >{it.label}</div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    // ── 헤더 버튼 ─────────────────────────────────────────
+    // 상태: default / hover / pressed / selected — node 5131:25992 CalendarHeaderAtoimc
+    function HeaderBtn({ label, isOpen, onClick, dropdown }) {
+      const [hov, setHov] = useState(false);
+      const bg = isOpen ? T.btnPressedBg  // pressed: #d6e0eb
+        : hov ? T.btnHoverBg              // hover:   #eef2f7
+        : 'transparent';                  // default: transparent
+      return (
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={onClick}
+            onMouseEnter={() => setHov(true)}
+            onMouseLeave={() => setHov(false)}
+            style={{
+              height: 40,  // --size-height/6 = 40px (MCP)
+              padding: '0 8px',  // --padding/3 (MCP)
+              borderRadius: 6,   // --radius/medium1 (MCP)
+              border: 'none', cursor: 'pointer',
+              background: bg,
+              display: 'flex', alignItems: 'center', gap: 4,
+              transition: 'background 0.12s',
+            }}>
+            <span style={{
+              fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+              fontSize: 19, fontWeight: 700,  // --font-size/heading/small (MCP)
+              color: T.textBasic,
+              lineHeight: 1.5,
+            }}>{label}</span>
+            {/* 드롭다운 화살표 아이콘: atomic MCP에서 16px drop-down 아이콘 확인 */}
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
+              style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+              <path d="M1.5 3L5 7L8.5 3" stroke={T.textBasic} strokeWidth="1.5"
+                strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          {isOpen && dropdown}
+        </div>
+      );
+    }
+
+    // ── 화살표 버튼 ───────────────────────────────────────
+    // node 343:51753: size-[32px], border-[0.8px] #cdd1d5, rounded-full
+    function ArrowBtn({ dir, onClick }) {
+      const [hov, setHov] = useState(false);
+      return (
+        <button onClick={onClick}
+          onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+          style={{
+            width: 32, height: 32,  // size-[32px] (MCP)
+            borderRadius: 800,       // --radius/max = 800px (MCP)
+            border: `0.8px solid ${T.arrowBorder}`,  // border-[0.8px] (MCP)
+            background: hov ? T.btnHoverBg : 'transparent',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0, transition: 'background 0.12s',
+          }}>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            {dir==='left'
+              ? <path d="M7 1.5L3 5L7 8.5" stroke={T.textBasic} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              : <path d="M3 1.5L7 5L3 8.5" stroke={T.textBasic} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>}
+          </svg>
+        </button>
+      );
+    }
+
+    // ── 날짜 셀 ──────────────────────────────────────────
+    // 상태: day / today / on / disabled / keep(inRange) / rangeStart / rangeEnd / dayoff / event
+    // 근거: node 5131:25992 CalendarDAtoimc (atomic MCP)
+    function DayCell({ date, state, isSun, isEvent, onClick, onHover }) {
+      const [hov, setHov] = useState(false);
+
+      const isDisabled   = state === 'disabled';
+      const isOn         = state === 'on';
+      const isToday      = state === 'today';
+      const isRangeStart = state === 'rangeStart';
+      const isRangeEnd   = state === 'rangeEnd';
+      const isInRange    = state === 'keep';
+      const isDayoff     = isSun && !isOn && !isRangeStart && !isRangeEnd && !isDisabled;
+
+      // border-radius: MCP — rangeStart: rounded-tl/bl, rangeEnd: rounded-tr/br
+      let br;
+      if      (isRangeStart) br = '1000px 0 0 1000px';
+      else if (isRangeEnd)   br = '0 1000px 1000px 0';
+      else if (isInRange)    br = 0;
+      else                   br = 1000;
+
+      // 배경: atomic MCP 상태별
+      const bg = isOn || isRangeStart || isRangeEnd ? T.selectedBg  // #063a74
+        : isToday ? T.todayBg                                         // white
+        : isInRange ? T.rangeBg                                       // white
+        : hov && !isDisabled ? T.btnHoverBg                           // #eef2f7 hover
+        : 'transparent';
+
+      // 텍스트 색상: atomic MCP
+      const color = isOn || isRangeStart || isRangeEnd ? T.textInverse  // white
+        : isDisabled ? T.textDisabled                                     // #8a949e
+        : isDayoff ? T.dayoffText                                         // #bd2c0f (MCP)
+        : isEvent && !isOn ? T.eventText                                  // #096ab3 (MCP)
+        : T.textBasic;                                                    // #1e2124
+
+      const isEventVisible = isEvent && !isOn && !isRangeStart && !isRangeEnd;
+
+      return (
+        <div
+          onClick={isDisabled ? undefined : onClick}
+          onMouseEnter={() => { setHov(true); onHover && onHover(); }}
+          onMouseLeave={() => setHov(false)}
+          style={{
+            width: CELL_W, height: CELL_W, flexShrink: 0,
+            position: 'relative', zIndex: 1,
+            borderRadius: br, background: bg,
+            cursor: isDisabled ? 'default' : 'pointer',
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            justifyContent: isToday ? 'flex-start' : 'center',
+            paddingTop: isToday ? 9 : 0,   // pt-[9px] (MCP today)
+            paddingBottom: isToday ? 3 : 0, // pb-[3px] (MCP today)
+            userSelect: 'none',
+          }}>
+          {/* 날짜 숫자: font-size/label/medium = 17px (MCP) */}
+          <span style={{
+            fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+            fontSize: 17, lineHeight: 1.5, fontWeight: 400,
+            color,
+            opacity: state === 'day' ? 0.8 : 1,  // MCP: day state has opacity-80
+            textDecoration: isEventVisible ? 'underline' : 'none',
+            marginBottom: isToday ? -3 : 0,  // mb-[-3px] (MCP today)
+          }}>{date}</span>
+
+          {/* 오늘 빨간 점: size-[4px], #d63d4a (MCP) */}
+          {isToday && (
+            <div style={{
+              width: 4, height: 4, borderRadius: 1000,
+              background: T.todayDot,  // #d63d4a (MCP)
+              marginBottom: -3, flexShrink: 0,
+            }}/>
+          )}
+
+          {/* 이벤트 레이블: 11px bold, #096ab3 (MCP atomic) */}
+          {isEventVisible && (
+            <div style={{
+              height: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <span style={{
+                fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+                fontSize: 11, fontWeight: 700,   // MCP: text-[11px] font-weight/bold
+                color: T.eventText,               // #096ab3 (MCP)
+                lineHeight: 1.5,
+              }}>이벤트</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ── 캘린더 ───────────────────────────────────────────
+    function Calendar({ mode }) {
+      const today = new Date();
+      const [year,   setYear]   = useState(today.getFullYear());
+      const [month,  setMonth]  = useState(today.getMonth());
+      const [sel,    setSel]    = useState(null);
+      const [range,  setRange]  = useState([null, null]);
+      const [hover,  setHover]  = useState(null);
+      const [yearOpen,  setYearOpen]  = useState(false);
+      const [monthOpen, setMonthOpen] = useState(false);
+
+      const isPeriod = mode === 'period';
+
+      // 달력 구성
+      const fd   = firstDay(year, month);
+      const dim  = daysInMonth(year, month);
+      const prev = daysInMonth(year, month - 1);
+
+      const cells = [];
+      for (let i=0; i<fd; i++)
+        cells.push({ date: new Date(year, month-1, prev-fd+i+1), out: true });
+      for (let d=1; d<=dim; d++)
+        cells.push({ date: new Date(year, month, d), out: false });
+      while (cells.length < 42)
+        cells.push({ date: new Date(year, month+1, cells.length-fd-dim+1), out: true });
+
+      const weeks = [];
+      for (let i=0; i<42; i+=7) weeks.push(cells.slice(i,i+7));
+
+      // 셀 상태
+      const [sDate, eDate] = range;
+      const sT = sDate ? sDate.getTime() : null;
+      const eT = eDate ? eDate.getTime()
+        : (hover && sT ? hover.getTime() : null);
+      const minT = sT && eT ? Math.min(sT, eT) : sT;
+      const maxT = sT && eT ? Math.max(sT, eT) : sT;
+
+      function cellState(cell) {
+        if (cell.out) return 'disabled';
+        if (!isPeriod) {
+          if (sel && isSame(cell.date, sel)) return 'on';
+          if (isSame(cell.date, today))      return 'today';
+          return 'day';
+        }
+        const t = cell.date.getTime();
+        if (sDate && isSame(cell.date, sDate) && (!eDate || sT <= eT)) return 'rangeStart';
+        if (sDate && eDate && isSame(cell.date, eDate) && sT > eT)      return 'rangeStart';
+        if (eDate && isSame(cell.date, eDate) && sT <= eT)               return 'rangeEnd';
+        if (sDate && !eDate && hover && isSame(cell.date, hover) && hover > sDate) return 'rangeEnd';
+        if (minT && maxT && t > minT && t < maxT)                        return 'keep';
+        if (isSame(cell.date, today)) return 'today';
+        return 'day';
+      }
+
+      function handleClick(cell) {
+        if (cell.out) return;
+        if (!isPeriod) { setSel(cell.date); return; }
+        const [s, e] = range;
+        if (!s || (s && e)) { setRange([cell.date, null]); setHover(null); }
+        else {
+          const sorted = cell.date < s ? [cell.date, s] : [s, cell.date];
+          setRange(sorted);
+          setHover(null);
+        }
+      }
+
+      // 연도/월 목록
+      const yearItems = Array.from({length:10}, (_,i) => {
+        const y = today.getFullYear() - i;
+        return { label: `${y}년`, value: y };
+      });
+      const monthItems = Array.from({length:12}, (_,i) => ({
+        label: `${i+1}월`, value: i,
+      }));
+
+      const prevMonth = () => { if (month===0){setYear(y=>y-1);setMonth(11);}else setMonth(m=>m-1); };
+      const nextMonth = () => { if (month===11){setYear(y=>y+1);setMonth(0);}else setMonth(m=>m+1); };
+
+      return (
+        <div style={{
+          width: CAL_W,   // 384px (MCP)
+          background: T.calBg,     // #eef2f7 (MCP)
+          border: `1px solid ${T.calBorder}`,   // #d6e0eb (MCP)
+          borderRadius: 12,        // --radius/xlarge2 (MCP)
+          overflow: 'hidden',
+          fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+        }}>
+
+          {/* 헤더: gap-[16px], px-[24px], py-[8px] (MCP) */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '8px 24px', gap: 16,
+          }}>
+            <ArrowBtn dir="left" onClick={prevMonth}/>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 0, flex: 1, justifyContent: 'center' }}>
+              <HeaderBtn
+                label={`${year}년`}
+                isOpen={yearOpen}
+                onClick={() => { setYearOpen(v=>!v); setMonthOpen(false); }}
+                dropdown={
+                  <Dropdown
+                    items={yearItems} selected={year}
+                    onSelect={v => { setYear(v); setYearOpen(false); }}
+                    onClose={() => setYearOpen(false)}
+                  />
+                }
+              />
+              <HeaderBtn
+                label={`${month+1}월`}
+                isOpen={monthOpen}
+                onClick={() => { setMonthOpen(v=>!v); setYearOpen(false); }}
+                dropdown={
+                  <Dropdown
+                    items={monthItems} selected={month}
+                    onSelect={v => { setMonth(v); setMonthOpen(false); }}
+                    onClose={() => setMonthOpen(false)}
+                  />
+                }
+              />
+            </div>
+            <ArrowBtn dir="right" onClick={nextMonth}/>
+          </div>
+
+          {/* 요일 헤더: h-[24px], px-[16px], justify-between (MCP) */}
+          <div style={{
+            display: 'flex', justifyContent: 'space-between',
+            padding: `0 ${H_PAD}px`, height: 24,
+          }}>
+            {DAYS_KO.map((d,i) => (
+              <div key={d} style={{
+                width: CELL_W, textAlign: 'center',
+                fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+                fontSize: 15, lineHeight: '24px',  // --font-size/label/small (MCP)
+                color: T.textBasic,
+              }}>{d}</div>
+            ))}
+          </div>
+
+          {/* 그리드: px-[16px], gap-[2px] (MCP) */}
+          <div style={{ padding: `16px ${H_PAD}px`, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {/* 월 레이블: --color/text/subtle, --font-size/heading/xxsmall (MCP) */}
+            <div style={{
+              display: 'flex', justifyContent: 'center',
+              paddingTop: 8, paddingBottom: 2,
+            }}>
+              <span style={{
+                fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+                fontSize: 15, fontWeight: 700,
+                color: T.textSubtle, lineHeight: 1.5,
+              }}>{year}년 {month+1}월</span>
+            </div>
+
+            {weeks.map((week, wi) => {
+              const conn = isPeriod ? calcRangeConnector(week, minT, maxT) : null;
+              return (
+                <div key={wi} style={{
+                  position: 'relative',
+                  display: 'flex', justifyContent: 'space-between',
+                }}>
+                  {/* Range 연결 배경: center-to-center, absolute, h-[44px] (MCP 명시 구조) */}
+                  {conn && (
+                    <div style={{
+                      position: 'absolute',
+                      top: 0, height: CELL_W,
+                      left: conn.left, width: conn.width,
+                      background: T.rangeBg,  // white (MCP --color/action/white)
+                      zIndex: 0,
+                    }}/>
+                  )}
+                  {week.map((cell, ci) => {
+                    const st    = cellState(cell);
+                    const isSun = !cell.out && cell.date.getDay() === 0;
+                    const isEv  = !cell.out && cell.date.getDate() === 4;
+                    return (
+                      <DayCell
+                        key={ci}
+                        date={cell.date.getDate()}
+                        state={st}
+                        isSun={isSun}
+                        isEvent={isEv}
+                        onClick={() => handleClick(cell)}
+                        onHover={() => isPeriod && !cell.out && setHover(cell.date)}
+                      />
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 구분선: border-t, #cdd1d5 (MCP) */}
+          <div style={{ height: 1, background: T.divider, margin: `0 0` }}/>
+
+          {/* 푸터: bg-white, px-[24px], py-[16px] (MCP) */}
+          <div style={{
+            background: '#ffffff',
+            padding: '16px 24px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            gap: 16,
+          }}>
+            {/* 오늘 버튼: text button, 15px (MCP) */}
+            <button
+              onClick={() => { setYear(today.getFullYear()); setMonth(today.getMonth()); }}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+                fontSize: 15, color: T.textBasic, padding: '0 2px',
+              }}>오늘</button>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {/* 취소: h-[40px], min-w-[64px], tertiary border #58616a (MCP) */}
+              <button
+                onClick={() => { setSel(null); setRange([null,null]); setHover(null); }}
+                style={{
+                  height: 40, minWidth: 64, padding: '0 12px',
+                  borderRadius: 6, border: `1px solid ${T.btnSecBorder}`,
+                  background: 'transparent', cursor: 'pointer',
+                  fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+                  fontSize: 15, color: T.textBasic,
+                }}>취소</button>
+              {/* 선택: h-[40px], min-w-[64px], #256ef4 (MCP) */}
+              <button style={{
+                height: 40, minWidth: 64, padding: '0 12px',
+                borderRadius: 6, border: 'none',
+                background: T.btnPrimary, cursor: 'pointer',
+                fontFamily: "'Pretendard GOV', 'Pretendard', -apple-system, sans-serif",
+                fontSize: 15, fontWeight: 400, color: T.textInverse,
+              }}>선택</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div>
+          <div class="section-label">Day Mode</div>
+          <div class="preview-row">
+            <div class="preview-item">
+              <div class="preview-item-label">날짜 선택</div>
+              <Calendar mode="day"/>
+            </div>
+          </div>
+          <div class="section-label">Period Mode</div>
+          <div class="preview-row">
+            <div class="preview-item">
+              <div class="preview-item-label">기간 선택 (시작 클릭 → 종료 클릭)</div>
+              <Calendar mode="period"/>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

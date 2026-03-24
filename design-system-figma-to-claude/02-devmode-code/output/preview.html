@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KRDS Calendar — 방법 2 Dev Mode (방법 1 레슨런 포함)</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f0f2f5; font-family: -apple-system, sans-serif; padding: 40px; min-height: 100vh; }
+    .page-title { font-size: 20px; font-weight: 700; color: #1e2124; margin-bottom: 6px; }
+    .page-sub { font-size: 14px; color: #6d7882; margin-bottom: 40px; }
+    .section-label { font-size: 13px; font-weight: 700; color: #6d7882; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .preview-row { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 48px; }
+    .preview-item { display: flex; flex-direction: column; gap: 12px; }
+    .preview-item-label { font-size: 13px; color: #464c53; font-weight: 600; }
+    .result-box { padding: 12px 16px; background: #fff; border-radius: 8px; border: 1px solid #e6e8ea; font-size: 14px; color: #1e2124; min-width: 384px; }
+    .result-box span { color: #256ef4; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="page-title">KRDS Calendar — 방법 2 (방법 1 레슨런 포함)</div>
+  <div class="page-sub">Dev Mode HTML + 방법 1에서 습득한 드롭다운 패턴 적용 / 순수 방법 2만 적용한 결과는 preview-devmode-pure.html 참고</div>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+
+    // ─── Dev Mode에서 추출한 토큰 ───────────────────────────────
+    const T = {
+      calendarBg:       '#EEF2F7',   // --color-surface-secondary-subtler
+      calendarBorder:   '#D6E0EB',   // --color-border-secondary-light
+      arrowBorder:      '#CDD1D5',   // --color-border-gray-light
+      divider:          '#CDD1D5',   // --color-divider-gray-light
+      footerBg:         '#ffffff',   // --color-surface-white
+      white:            '#ffffff',   // --color-action-white
+      textBasic:        '#1E2124',   // --color-text-basic
+      textSubtle:       '#464C53',   // --color-text-subtle
+      textDisabled:     '#8A949E',   // --color-text-disabled
+      textInverse:      '#ffffff',   // --color-text-inverse-static
+      textSecondary:    '#052B57',   // --color-text-secondary
+      iconGray:         '#33363D',   // --color-icon-gray
+      selectedBg:       '#063A74',   // --color-action-secondary-active
+      todayBg:          '#ffffff',   // --color-element-inverse
+      todayDot:         '#D63D4A',   // --color-element-point
+      btnPrimary:       '#256EF4',   // --color-button-primary-fill
+      btnTertiaryBdr:   '#58616A',   // --color-button-tertiary-border
+      headerBtnPressed: '#D6E0EB',   // --color-action-secondary-pressed
+      headerBtnHover:   '#EEF2F7',   // --color-action-secondary-hover
+    };
+
+    const DAYS_KO = ['일','월','화','수','목','금','토'];
+    const MONTHS_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+    // 셀 위치 계산 (Dev Mode 기준: grid inner 352px, 7셀×44px, space-between)
+    const CELL_W = 44;
+    const GRID_INNER = 352; // 384 - 16*2
+    const CELL_STEP = CELL_W + (GRID_INNER - CELL_W * 7) / 6; // ≈ 51.33px
+    const cellCenterX = (i) => i * CELL_STEP + CELL_W / 2;
+
+    function isSameDay(a, b) {
+      return a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate();
+    }
+    function getDaysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
+    function getFirstDay(y, m) { return new Date(y, m, 1).getDay(); }
+
+    // ─── range 연결 배경 계산 ──────────────────────────────────
+    function calcRangeConnector(week, sTime, eTime) {
+      if (!sTime || !eTime || sTime >= eTime) return null;
+      let leftIdx = -1, rightIdx = -1;
+      for (let i = 0; i < 7; i++) {
+        const t = week[i].date.getTime();
+        if (!week[i].out && t >= sTime && t <= eTime) {
+          if (leftIdx === -1) leftIdx = i;
+          rightIdx = i;
+        }
+      }
+      if (leftIdx === -1 || leftIdx >= rightIdx) return null;
+      return {
+        left:  cellCenterX(leftIdx),
+        width: cellCenterX(rightIdx) - cellCenterX(leftIdx),
+      };
+    }
+
+    // ─── 화살표 버튼 ──────────────────────────────────────────
+    function ArrowBtn({ dir, onClick }) {
+      const [hovered, setHovered] = useState(false);
+      return (
+        <button
+          onClick={onClick}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          style={{
+            width: 32, height: 32, borderRadius: 800, border: `0.8px solid ${T.arrowBorder}`,
+            background: hovered ? T.headerBtnHover : 'rgba(255,255,255,0)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            transition: 'background 0.1s',
+          }}
+        >
+          {/* Dev Mode 아이콘: rotate(90deg) transform 적용된 chevron */}
+          <div style={{ width: 19.2, height: 19.2, position: 'relative' }}>
+            <div style={{
+              width: 12.8, height: 7.68, position: 'absolute',
+              left: dir === 'left' ? 12.64 : 14.24, top: 3.2,
+              transform: dir === 'left' ? 'rotate(90deg)' : 'rotate(-90deg)',
+              transformOrigin: 'top left',
+              background: T.iconGray,
+              clipPath: 'polygon(0% 0%, 50% 100%, 100% 0%)',
+            }} />
+          </div>
+        </button>
+      );
+    }
+
+    // ─── 연도/월 드롭다운 (Select_text 패턴) ──────────────────
+    function SelectDropdown({ items, selectedValue, onSelect, onClose }) {
+      const ref = useRef(null);
+      useEffect(() => {
+        const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+      }, []);
+      return (
+        <div ref={ref} style={{
+          position: 'absolute', top: 57, zIndex: 20,
+          background: T.white, border: `1px solid ${T.arrowBorder}`,
+          borderRadius: 8, padding: 8,
+          boxShadow: '0px 0px 2px rgba(0,0,0,0.05), 0px 4px 8px rgba(0,0,0,0.08)',
+          minWidth: 120, maxHeight: 264, overflowY: 'auto',
+        }}>
+          {items.map(({ label, value }) => {
+            const isSel = value === selectedValue;
+            return (
+              <div key={value} onClick={() => { onSelect(value); onClose(); }}
+                style={{
+                  padding: '8px 8px', borderRadius: 6, cursor: 'pointer',
+                  background: isSel ? T.headerBtnHover : 'transparent',
+                  fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+                  fontSize: 17, lineHeight: 1.5,
+                  color: isSel ? T.textSecondary : T.textBasic,
+                  fontWeight: isSel ? 700 : 400, whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={e => { if (!isSel) e.currentTarget.style.background = T.headerBtnHover; }}
+                onMouseLeave={e => { if (!isSel) e.currentTarget.style.background = 'transparent'; }}
+              >{label}</div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    // ─── 헤더 연도/월 버튼 ────────────────────────────────────
+    function HeaderBtn({ label, isOpen, onClick, dropdownLeft, dropdownContent }) {
+      return (
+        <div style={{ position: 'relative' }}>
+          <button onClick={onClick} style={{
+            height: 40, padding: '0 8px', borderRadius: 6, border: 'none', cursor: 'pointer',
+            background: isOpen ? T.headerBtnPressed : 'rgba(255,255,255,0)',
+            display: 'flex', alignItems: 'center', gap: 4,
+            transition: 'background 0.1s',
+          }}>
+            <span style={{
+              fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+              fontSize: 19, fontWeight: 700, color: T.textBasic, lineHeight: '28.5px',
+            }}>{label}</span>
+            {/* Dev Mode 아이콘: 10.68×6.49px chevron */}
+            <div style={{ width: 16, height: 16, position: 'relative', flexShrink: 0 }}>
+              <div style={{
+                width: 10.68, height: 6.49, position: 'absolute',
+                left: 2.66, top: isOpen ? 9 : 5.33,
+                background: T.iconGray,
+                clipPath: 'polygon(0% 0%, 50% 100%, 100% 0%)',
+                transform: isOpen ? 'rotate(180deg)' : 'none',
+                transformOrigin: 'center',
+                transition: 'transform 0.15s',
+              }} />
+            </div>
+          </button>
+          {isOpen && dropdownContent}
+        </div>
+      );
+    }
+
+    // ─── 날짜 셀 ──────────────────────────────────────────────
+    function DayCell({ date, state, onClick, onHover }) {
+      const isDisabled  = state === 'disabled';
+      const isSelected  = state === 'on';
+      const isToday     = state === 'today';
+      const isRangeStart = state === 'rangeStart';
+      const isRangeEnd   = state === 'rangeEnd';
+      const isInRange    = state === 'inRange';
+
+      // Dev Mode 기준 border-radius
+      let borderRadius;
+      if (isRangeStart)    borderRadius = '1000px 0 0 1000px';
+      else if (isRangeEnd) borderRadius = '0 1000px 1000px 0';
+      else if (isInRange)  borderRadius = 0;
+      else                 borderRadius = 1000;
+
+      const bg = isSelected || isRangeStart || isRangeEnd
+        ? T.selectedBg
+        : isToday ? T.todayBg
+        : isInRange ? T.white
+        : 'rgba(255,255,255,0)';
+
+      const color = isSelected || isRangeStart || isRangeEnd
+        ? T.textInverse
+        : isDisabled ? T.textDisabled
+        : T.textBasic;
+
+      return (
+        <div
+          onClick={isDisabled ? undefined : onClick}
+          onMouseEnter={onHover}
+          style={{
+            width: CELL_W, height: CELL_W, flexShrink: 0,
+            borderRadius, background: bg, cursor: isDisabled ? 'default' : 'pointer',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            position: 'relative', zIndex: 1, userSelect: 'none',
+            paddingTop: isToday ? 9 : 0,
+            justifyContent: isToday ? 'flex-start' : 'center',
+          }}
+        >
+          <div style={{
+            fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+            fontSize: 17, fontWeight: 400, lineHeight: '25.5px',
+            color, textAlign: 'center',
+            opacity: (state === 'day' || state === 'inRange') ? 0.8 : 1,
+          }}>{date}</div>
+          {isToday && (
+            <div style={{ width: 4, height: 4, borderRadius: 1000, background: T.todayDot }} />
+          )}
+        </div>
+      );
+    }
+
+    // ─── 달력 본체 ────────────────────────────────────────────
+    function Calendar({ type = 'day', onResult }) {
+      const today = new Date();
+      const [vy, setVy] = useState(today.getFullYear());
+      const [vm, setVm] = useState(today.getMonth());
+      const [selected, setSelected] = useState(null);
+      const [rangeStart, setRangeStart] = useState(null);
+      const [rangeEnd, setRangeEnd] = useState(null);
+      const [hover, setHover] = useState(null);
+      const [picker, setPicker] = useState(null); // null | 'year' | 'month'
+      const isPeriod = type === 'period';
+
+      const prevMonth = () => { vm === 0 ? (setVy(y=>y-1), setVm(11)) : setVm(m=>m-1); };
+      const nextMonth = () => { vm === 11 ? (setVy(y=>y+1), setVm(0)) : setVm(m=>m+1); };
+      const goToday = () => { setVy(today.getFullYear()); setVm(today.getMonth()); setPicker(null); if (!isPeriod) setSelected(today); };
+      const togglePicker = (k) => setPicker(p => p === k ? null : k);
+
+      const handleClick = (date) => {
+        if (!isPeriod) {
+          setSelected(date);
+          onResult?.(`선택: ${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`);
+        } else {
+          if (!rangeStart || (rangeStart && rangeEnd)) {
+            setRangeStart(date); setRangeEnd(null); setHover(null);
+          } else {
+            const s = date < rangeStart ? date : rangeStart;
+            const e = date < rangeStart ? rangeStart : date;
+            setRangeStart(s); setRangeEnd(e);
+            const fmt = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+            onResult?.(`기간: ${fmt(s)} ~ ${fmt(e)}`);
+          }
+        }
+      };
+
+      const getState = (date, out) => {
+        if (out) return 'disabled';
+        const effEnd = rangeEnd ?? hover;
+        if (!isPeriod) {
+          if (selected && isSameDay(date, selected)) return 'on';
+          if (isSameDay(date, today)) return 'today';
+          return 'day';
+        }
+        if (rangeStart && isSameDay(date, rangeStart)) return 'rangeStart';
+        if (effEnd && rangeStart && isSameDay(date, effEnd) && !isSameDay(date, rangeStart)) return 'rangeEnd';
+        const sT = rangeStart?.getTime(), eT = effEnd?.getTime();
+        if (sT && eT && date.getTime() > Math.min(sT,eT) && date.getTime() < Math.max(sT,eT)) return 'inRange';
+        if (isSameDay(date, today)) return 'today';
+        return 'day';
+      };
+
+      // 주 배열 생성
+      const firstDay = getFirstDay(vy, vm);
+      const daysInMonth = getDaysInMonth(vy, vm);
+      const prevDays = getDaysInMonth(vy, vm === 0 ? 11 : vm - 1);
+      const cells = [];
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const m = vm === 0 ? 11 : vm - 1, y = vm === 0 ? vy - 1 : vy;
+        cells.push({ date: new Date(y, m, prevDays - i), out: true });
+      }
+      for (let d = 1; d <= daysInMonth; d++) cells.push({ date: new Date(vy, vm, d), out: false });
+      while (cells.length < 42) {
+        const d = cells.length - firstDay - daysInMonth + 1;
+        const m = vm === 11 ? 0 : vm + 1, y = vm === 11 ? vy + 1 : vy;
+        cells.push({ date: new Date(y, m, d), out: true });
+      }
+      const weeks = [];
+      for (let i = 0; i < 42; i += 7) weeks.push(cells.slice(i, i + 7));
+
+      const effEnd = rangeEnd ?? (isPeriod && rangeStart ? hover : null);
+      const sTime = rangeStart ? Math.min(rangeStart.getTime(), effEnd?.getTime() ?? Infinity) : null;
+      const eTime = effEnd ? Math.max(rangeStart?.getTime() ?? 0, effEnd.getTime()) : null;
+
+      const fmt = d => d ? `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}` : 'YYYY.MM.DD';
+
+      return (
+        <div style={{
+          width: 384, background: T.calendarBg,
+          border: `1px solid ${T.calendarBorder}`,
+          borderRadius: 12, display: 'flex', flexDirection: 'column',
+          alignItems: 'center', overflow: 'hidden', position: 'relative',
+          paddingTop: 16,
+        }}>
+
+          {/* ── 헤더 ── */}
+          <div style={{
+            alignSelf: 'stretch', padding: '8px 24px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16,
+          }}>
+            <ArrowBtn dir="left" onClick={prevMonth} />
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <HeaderBtn
+                label={`${vy}년`} isOpen={picker === 'year'}
+                onClick={() => togglePicker('year')}
+                dropdownContent={
+                  <SelectDropdown
+                    items={Array.from({length:11},(_,i)=>({label:`${vy-5+i}년`,value:vy-5+i}))}
+                    selectedValue={vy} onSelect={setVy} onClose={()=>setPicker(null)}
+                  />
+                }
+              />
+              <HeaderBtn
+                label={`${vm+1}월`} isOpen={picker === 'month'}
+                onClick={() => togglePicker('month')}
+                dropdownContent={
+                  <SelectDropdown
+                    items={MONTHS_KO.map((name,i)=>({label:name,value:i}))}
+                    selectedValue={vm} onSelect={setVm} onClose={()=>setPicker(null)}
+                  />
+                }
+              />
+            </div>
+            <ArrowBtn dir="right" onClick={nextMonth} />
+          </div>
+
+          {/* ── 요일 헤더 ── */}
+          <div style={{
+            alignSelf: 'stretch', height: 24, padding: '0 16px',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          }}>
+            {DAYS_KO.map(d => (
+              <div key={d} style={{
+                width: CELL_W, textAlign: 'center',
+                fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+                fontSize: 15, fontWeight: 400, lineHeight: '22.5px', color: T.textBasic,
+              }}>{d}</div>
+            ))}
+          </div>
+
+          {/* ── 날짜 그리드 ── */}
+          <div style={{
+            alignSelf: 'stretch', padding: '16px 16px', paddingTop: 0,
+            display: 'flex', flexDirection: 'column', gap: 2,
+          }} onMouseLeave={() => setHover(null)}>
+
+            {/* 월 레이블 */}
+            <div style={{ paddingTop: 8, paddingBottom: 0, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{
+                fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+                fontSize: 15, fontWeight: 700, lineHeight: '22.5px', color: T.textSubtle,
+              }}>{vy}년 {vm+1}월</span>
+            </div>
+
+            {weeks.map((week, wi) => {
+              const connector = isPeriod && sTime && eTime ? calcRangeConnector(week, sTime, eTime) : null;
+              return (
+                <div key={wi} style={{
+                  alignSelf: 'stretch', position: 'relative',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                }}>
+                  {/* range 연결 배경 (절대 위치 흰 사각형) */}
+                  {connector && (
+                    <div style={{
+                      position: 'absolute', top: 0, height: CELL_W,
+                      left: connector.left, width: connector.width,
+                      background: T.white, pointerEvents: 'none', zIndex: 0,
+                    }} />
+                  )}
+                  {week.map((cell, di) => (
+                    <DayCell
+                      key={di}
+                      date={cell.date.getDate()}
+                      state={getState(cell.date, cell.out)}
+                      onClick={() => !cell.out && handleClick(cell.date)}
+                      onHover={() => isPeriod && rangeStart && !rangeEnd && !cell.out ? setHover(cell.date) : undefined}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* ── Period 날짜 입력 ── */}
+          {isPeriod && (
+            <div style={{
+              alignSelf: 'stretch', padding: 16,
+              borderTop: `1px solid ${T.divider}`, background: T.white,
+              display: 'flex', gap: 8, alignItems: 'flex-end',
+            }}>
+              {[{ label: '시작일', date: rangeStart }, { label: '종료일', date: rangeEnd }].map((f, i) => (
+                <React.Fragment key={f.label}>
+                  {i === 1 && (
+                    <div style={{ width: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 20 }}>
+                      <div style={{ height: 1, width: '100%', background: T.textSubtle }} />
+                    </div>
+                  )}
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <span style={{
+                      fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+                      fontSize: 15, color: T.textSubtle, lineHeight: '22.5px',
+                    }}>{f.label}</span>
+                    <div style={{
+                      height: 40, border: `1px solid ${T.btnTertiaryBdr}`, borderRadius: 6,
+                      background: T.white, display: 'flex', alignItems: 'center', padding: '0 16px',
+                      fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+                      fontSize: 15, lineHeight: '22.5px',
+                      color: f.date ? T.textBasic : T.textDisabled,
+                    }}>{fmt(f.date)}</div>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+
+          {/* ── 푸터 ── */}
+          <div style={{
+            alignSelf: 'stretch', padding: '16px 24px',
+            borderTop: `1px solid ${T.divider}`, background: T.white,
+            display: 'flex', alignItems: 'center', gap: 16,
+          }}>
+            <button onClick={goToday} style={{
+              height: 24, padding: '0 2px', background: 'rgba(255,255,255,0)', border: 'none',
+              cursor: 'pointer', borderRadius: 4,
+              fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+              fontSize: 15, fontWeight: 400, color: T.textBasic, lineHeight: '22.5px',
+            }}>오늘</button>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+              <button style={{
+                height: 40, minWidth: 64, padding: '0 12px', borderRadius: 6,
+                border: `1px solid ${T.btnTertiaryBdr}`, background: 'rgba(255,255,255,0)',
+                cursor: 'pointer',
+                fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+                fontSize: 15, fontWeight: 400, color: T.textBasic, lineHeight: '22.5px',
+              }}>취소</button>
+              <button style={{
+                height: 40, minWidth: 64, padding: '0 12px', borderRadius: 6,
+                border: 'none', background: T.btnPrimary,
+                cursor: 'pointer',
+                fontFamily: "'Pretendard GOV', -apple-system, sans-serif",
+                fontSize: 15, fontWeight: 400, color: T.textInverse, lineHeight: '22.5px',
+              }}>선택</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [dayResult, setDayResult] = useState('날짜를 선택하세요');
+      const [periodResult, setPeriodResult] = useState('기간을 선택하세요');
+      return (
+        <div>
+          <div className="section-label">Day 모드 — 단일 날짜 선택</div>
+          <div className="preview-row">
+            <div className="preview-item">
+              <div className="preview-item-label">type="day"</div>
+              <Calendar type="day" onResult={setDayResult} />
+              <div className="result-box">결과: <span>{dayResult}</span></div>
+            </div>
+          </div>
+          <div className="section-label">Period 모드 — 기간 선택</div>
+          <div className="preview-row">
+            <div className="preview-item">
+              <div className="preview-item-label">type="period"</div>
+              <Calendar type="period" onResult={setPeriodResult} />
+              <div className="result-box">결과: <span>{periodResult}</span></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
